@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  hashedPassword String
+  events         Event[] // Optional: If you want a back-reference
+  comments       Comment[] // One user can have multiple comments
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  name        String
+  date        DateTime
+  distance    Int?
+  ticketPrice Float?
+  location    Address   @relation(fields: [locationId], references: [id])
+  locationId  Int
+  User        User?     @relation(fields: [userId], references: [id])
+  userId      Int?
+  // Relations
+  comments    Comment[]
+}
+
+model Address {
+  id        Int     @id @default(autoincrement())
+  firstLine String
+  city      String
+  postcode  String
+  events    Event[] // Optional: If you want a back-reference
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+
+  // Relations
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
+  user    User? @relation(fields: [userId], references: [id])
+  userId  Int?
+}
