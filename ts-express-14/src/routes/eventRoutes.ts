@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {getAllEvents, getSingleEvent, createEvent } from '../controllers/event.controller'
 import { createComment, getComments  } from '../controllers/comment.controller';
 import { authenticateToken } from '../middlewares/util-functions';
-
+import { signUpForEvent, getParticipantsByEvent, unsignFromEvent } from '../controllers/participant.controller';
 
 
 const eventRouter = Router();
@@ -12,14 +12,19 @@ eventRouter.get("/:id", getSingleEvent)
 eventRouter.post("/",  createEvent ) //authenticateToken
 
 //comments
+eventRouter.post("/:eventId/comments", authenticateToken, createComment) //authenticateToken
+eventRouter.get("/:eventId/comments", getComments) 
+
+//particpants
+eventRouter.get("/:eventId/participants", getParticipantsByEvent);
+eventRouter.post("/:eventId/participants", authenticateToken, signUpForEvent);
+eventRouter.delete("/:eventId/participants", authenticateToken, unsignFromEvent);// user cancels his particpation
+
 //middleware to check and debug
-// eventRouter.use((req, res, next) => {
-//   console.log("Incoming request:", req.method, req.url, req.params);
-//   next();
-// });
-eventRouter.post("/:id/comments", authenticateToken, createComment) //authenticateToken
-eventRouter.get("/:id/comments", getComments) 
-
-
+eventRouter.use((req, res, next) => {
+    console.log("Incoming request:", req.method, req.url, req.params);
+    next();
+  });
+  
 
 export default eventRouter;

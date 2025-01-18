@@ -26,6 +26,7 @@ if (!jwtSecret) {
   }
 
 export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("auth headers from ", req.headers.authorization)
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -44,13 +45,14 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
 
  //fetch usr from db
     const user = await prisma.user.findUnique({where: { id: decoded.id}});
-
+   
     if(!user) {
       return res.status(404).json({error: "User not found" });
     }
 
     // Attach user to the request object
     req.user = { id: user.id, email: user.email };
+    console.log("req.user Set As:", req.user);
     next();
 
   } catch (err){

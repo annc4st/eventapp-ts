@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use('/users', userRouter);
 app.use('/events', eventRouter);
 app.use('/locations', addressRouter);
-// app.use('/comments', commentRouter);
+ 
 
 // Catch unregistered routes
 app.all('*', (req, res) => {

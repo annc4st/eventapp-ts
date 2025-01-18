@@ -14,25 +14,27 @@ datasource db {
 }
 
 model User {
-  id             Int       @id @default(autoincrement())
-  email          String    @unique
+  id             Int           @id @default(autoincrement())
+  email          String        @unique
   hashedPassword String
   events         Event[] // Optional: If you want a back-reference
   comments       Comment[] // One user can have multiple comments
+  participants   Participant[] // Link to participants
 }
 
 model Event {
-  id          Int       @id @default(autoincrement())
-  name        String
-  date        DateTime
-  distance    Int?
-  ticketPrice Float?
-  location    Address   @relation(fields: [locationId], references: [id])
-  locationId  Int
-  User        User?     @relation(fields: [userId], references: [id])
-  userId      Int?
+  id           Int           @id @default(autoincrement())
+  name         String
+  date         DateTime
+  distance     Int?
+  ticketPrice  Float?
+  location     Address       @relation(fields: [locationId], references: [id])
+  locationId   Int
+  User         User?         @relation(fields: [userId], references: [id])
+  userId       Int?
   // Relations
-  comments    Comment[]
+  comments     Comment[]
+  participants Participant[] // Link to participants
 }
 
 model Address {
@@ -53,4 +55,15 @@ model Comment {
   eventId Int
   user    User? @relation(fields: [userId], references: [id])
   userId  Int?
+}
+
+model Participant {
+  id      Int   @id @default(autoincrement())
+  // Relations
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
+  user    User  @relation(fields: [userId], references: [id])
+  userId  Int
+
+  @@unique([eventId, userId]) // Ensures a user can't sign up for the same event twice
 }
