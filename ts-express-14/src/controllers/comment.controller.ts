@@ -1,22 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import prisma from "../../prisma/client";
-
-const validateEvent = async (eventId: number) => {
-  const event = await prisma.event.findUnique({ where: { id: eventId } });
-  return event;
-};
-
-const validateUser = async (userNum : number| undefined) => {
-  if (!userNum) {
-    console.error("validateUser: userNum is undefined");
-    return null;
-  }
-  const user = await prisma.user.findUnique({ where: { id: userNum },
-   });
-  return user;
-}
+import { validateUser, validateEvent } from "../middlewares/validators";
 
 
+//add user as author to event 
 export const createComment = async (req: Request, res: Response, next: NextFunction) => {
     const { eventId } = req.params; //id of the event
     //comment object

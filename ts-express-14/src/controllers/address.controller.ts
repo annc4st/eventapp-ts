@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../../prisma/client";
-import { validateAddress } from "../middlewares/util-functions"
+import { validateAddress } from "../middlewares/validators"
 
 export const createAddress = async (req: Request, res: Response) => {
   try {

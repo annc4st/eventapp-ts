@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {createAddress, getAddress, getAllAddresses} from '../controllers/address.controller'
-import { validateAddress } from '../middlewares/util-functions'
+import { validateAddress } from '../middlewares/validators'
 
     const addressRouter = Router();
 
