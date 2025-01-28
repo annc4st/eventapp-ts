@@ -51,6 +51,18 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const logoutUser = createAsyncThunk(
+  "user/logout",
+  async ( _, { dispatch} ) => {
+    // Remove user data from local storage
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+     // Dispatch the logout action to clear state
+     dispatch(logout());
+  }
+)
+
 // Slice definition
 const userSlice = createSlice({
   name: "user",
@@ -91,6 +103,14 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
         console.log("Login failed:", state.error); // Debug log
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.loading = false;
+        state.user = null;
+        state.token = null;
       });
   },
 });

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
 
+
 export interface Location {
     id: number;
     firstLine:  string;
@@ -14,16 +15,16 @@ export interface Location {
     loading: boolean;
     error: string | null;
   }
-
+// Initial state
   const initialState: LocationState = {
     locations: [],
     loading: false,
     error: null,
   }
 
-// fetch all locations 
+// Thunk to fetch all locations 
 
-export const fetchLocations = createAsyncThunk("locations/", async ( _, {rejectWithValue}) => {
+export const fetchLocations = createAsyncThunk("locations/fetchAll", async ( _, {rejectWithValue}) => {
     try {
         const response = await api.get("/locations");
         return response.data; // Expecting an array of locations
@@ -32,7 +33,7 @@ export const fetchLocations = createAsyncThunk("locations/", async ( _, {rejectW
     }
 });
 
-//fetch single location
+//Thunk to fetch single location
 export const fetchLocationById = createAsyncThunk("locations/fetchById", async (id: number, { rejectWithValue }) => {
     try {
       const response = await api.get(`/locations/${id}`);
@@ -42,7 +43,7 @@ export const fetchLocationById = createAsyncThunk("locations/fetchById", async (
     }
   });
 
-  // Create a new event
+  // Thunk to Create a new event
   export const createLocation = createAsyncThunk(
     "locations/create",
     async (locationData: Omit<Location, "id">, { rejectWithValue }) => {
@@ -54,11 +55,16 @@ export const fetchLocationById = createAsyncThunk("locations/fetchById", async (
       }
     });
     
-//create location slice
+// location slice
 const locationSlice = createSlice({
     name: "locations",
     initialState,
-    reducers: {},
+    reducers: {
+      //optimistic update
+      optimisticAdd(state, action) {
+        state.locations.unshift(action.payload);
+    },
+  },
 
     extraReducers: (builder) => {
         builder
@@ -74,8 +80,20 @@ const locationSlice = createSlice({
             state.loading = false;
             state.error = action.payload as string;
           })
+      // CREATE location
+          .addCase(createLocation.pending, (state) => {
+            state.loading = false;
+            state.error = null;
+          })
           .addCase(createLocation.fulfilled, (state, action) => {
-            state.locations.push(action.payload);
+            state.loading = false;
+        // No need to push again, as we already updated optimistically
+            // state.locations.push(action.payload);
+          })
+          .addCase(createLocation.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload as string;
+            // Optional: Rollback optimistic update if needed
           })
           .addCase(fetchLocationById.fulfilled, (state, action) => {
             const index = state.locations.findIndex((loc) => loc.id === action.payload.id);
@@ -93,4 +111,5 @@ const locationSlice = createSlice({
     }
 })
 
+export const { optimisticAdd } = locationSlice.actions;
 export default locationSlice.reducer;

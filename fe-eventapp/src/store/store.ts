@@ -24,6 +24,12 @@ const persistedReducer = persistReducer(persistConfig, userReducer);
       singleEvent: singleEventReducer,
       // participants: participantReducer,
     },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+        },
+      }),
   });
 
   export const persistor = persistStore(store);
