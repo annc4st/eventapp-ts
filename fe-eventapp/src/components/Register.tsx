@@ -1,27 +1,78 @@
-import React, {useState} from "react";
+import { Formik, FormikHelpers, Form, Field, ErrorMessage,} from "formik";
+import * as Yup from "yup";
+import { Button } from "@radix-ui/themes";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from '../store/userSlice';
 import { RootState, AppDispatch } from '../store/store';
+import { useNavigate, Link } from "react-router-dom";
 
+
+interface UserData {
+  email: string;
+  password: string;
+}
 
 export const Register = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+
     const dispatch = useDispatch<AppDispatch>();
     const { loading, error } = useSelector((state: RootState) => state.user);
+    const navigate = useNavigate();
 
-    const handleRegister= () => {
-        dispatch(registerUser({ email, password }));
+    const initialValues: UserData = {
+      email: "",
+      password: "",
+    };
+
+    const validationSchema = Yup.object().shape({
+      email: Yup.string().email("please enter valid email").required("Required"),
+      password: Yup.string().required("Required"),
+
+    });
+    
+    const handleRegister= async (values: UserData,
+      { setSubmitting }: FormikHelpers<UserData>
+    ) => {
+      try {
+          await dispatch(registerUser(values));
+          navigate("/events");
+      } catch (error){
+        console.log("Registration failed:", error);
+    } finally {
+      setSubmitting(false);
+    }
       };
 
         return (
-            <div>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-              <button onClick={handleRegister} disabled={loading}>Register</button>
-              {error && <p>{error}</p>}
-            </div>
-          );
-    
+          <>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleRegister}
+        validationSchema={validationSchema}
+      >
+        {(props) => (
+          <Form>
+            <Field
+              label="email"
+              name="email"
+              placeholder="Enter email"
+              required
+              helperText={<ErrorMessage name="email" />}
+            />
+            <Field
+              label="password"
+              name="password"
+              placeholder="Enter password"
+              type="password"
+              required
+              helperText={<ErrorMessage name="password" />}
+            />
+            <Button type="submit" variant="solid" disabled={props.isSubmitting}>
+              {props.isSubmitting ? "Loading" : "Sign in"}
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </>
+  );  
 }
  

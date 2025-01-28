@@ -31,7 +31,7 @@ function App() {
      <Route path="/events/:id" element={<EventPage />} />
      <Route path="/events/create" element = {<CreateEvent />} />
      <Route path="/locations" element = {<LocationsList />} />
-     {/* <Route path="/locations/create" element = {<CreateLocation />} /> */}
+     <Route path="/locations/create" element = {<CreateLocation />} />
    </Routes>
    </Theme>
    </Provider>

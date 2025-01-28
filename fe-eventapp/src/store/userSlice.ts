@@ -18,10 +18,8 @@ const initialState: UserState = {
 // Register a new user
 export const registerUser = createAsyncThunk(
   "user/register",
-  async (
-    userData: { email: string; password: string },
-    { rejectWithValue }
-  ) => {
+  async ( userData: { email: string; password: string },
+    { rejectWithValue }) => {
     try {
       const response = await api.post("/auth/register", userData);
       console.log("response register: ", response.data);
@@ -82,7 +80,8 @@ const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
+        // state.user = action.payload.user;
+        state.user = { id: action.payload.id, email: action.payload.email };
         state.token = action.payload.token;
       })
       .addCase(registerUser.rejected, (state, action) => {
