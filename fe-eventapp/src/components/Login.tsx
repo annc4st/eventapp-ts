@@ -58,6 +58,7 @@ export const Login = () => {
               required
               helperText={<ErrorMessage name="email" />}
             />
+            <ErrorMessage name="email" component="div" />
             <Field
               label="password"
               name="password"
@@ -66,6 +67,7 @@ export const Login = () => {
               required
               helperText={<ErrorMessage name="password" />}
             />
+            <ErrorMessage name="password" component="div" />
             <Button type="submit" variant="solid" disabled={props.isSubmitting}>
               {props.isSubmitting ? "Loading" : "Sign in"}
             </Button>

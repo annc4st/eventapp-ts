@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "./store/store";
 import "@radix-ui/themes/styles.css";
+import {Theme} from "@radix-ui/themes"
 
 
 createRoot(document.getElementById('root')!).render(
@@ -14,7 +15,9 @@ createRoot(document.getElementById('root')!).render(
      <BrowserRouter>
     <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
+      <Theme>
     <App />
+    </Theme>
     </PersistGate>
 
     </Provider>

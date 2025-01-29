@@ -31,7 +31,7 @@ export const CreateEvent: React.FC = () => {
     const {user, loading: userLoading, error : userError} = useSelector((state: RootState) => state.user);
     const { locations, loading: locationsLoading, error: locationsError} = useSelector((state: RootState) => state.locations);
 
-    console.log("User from Redux:", user); // Debug log
+    // console.log("User from Redux:", user); // Debug log
 
   const initialValues: EventData = {
     name: "",
@@ -80,6 +80,7 @@ export const CreateEvent: React.FC = () => {
       ...values,
       distance: Number(values.distance),
       ticketPrice: Number(values.ticketPrice),
+      locationId: Number(values.locationId),
     };
     console.log("Submitting parsed values:", parsedValues);
      
@@ -121,7 +122,7 @@ export const CreateEvent: React.FC = () => {
             <ErrorMessage name="ticketPrice" component="div" className="error" />
 
             <label htmlFor="locationId">Choose location</label>
-            <Field as="select" id="locationId" name="locationId" placeholder="Location" >
+            <Field  type="number" as="select" id="locationId" name="locationId" placeholder="Location" >
             <option value="" label="Select Location" />
             {locations.map((location) => (
               <option key={location.id} value={location.id}>
@@ -137,12 +138,11 @@ export const CreateEvent: React.FC = () => {
 
       </Formik>
 
-      {/* <div>
+      <div>
             <p>
-              If you cannot find the location, create it first{" "}
-              <Link to={"/create-location"}>here</Link>.
+              If you cannot find the location, <Link to={"/create-location"}>Add Location</Link>
             </p>
-          </div> */}
+          </div>
     </div>
   );
 };

@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
+import { RootState } from "./store";
 
 export interface Comment {
   id: number;
   content: string;
-  createdAt: string;
   eventId: number;
   userId?: number;
 }
@@ -38,11 +38,20 @@ export const fetchCommentsByEventId = createAsyncThunk(
 
 export const addComment = createAsyncThunk(
   "comments/create",
-  async (commentData: Omit<Comment, "id">, { rejectWithValue }) => {
+  async (commentData: Omit<Comment, "id">, { rejectWithValue, getState }) => {
     try {
+      const state = getState() as RootState; 
+      const token = state.user.token; // Adjust based on where your token is stored
+      if (!token) {
+        return rejectWithValue("Unauthorized: No authentication token found");
+      }
+      
       const response = await api.post(
         `/events/${commentData.eventId}/comments`,
-        commentData
+        commentData, 
+        {
+          headers: { Authorization: `Bearer ${token}` },
+      }
       );
       return response.data;
     } catch (error: any) {
@@ -56,7 +65,12 @@ export const addComment = createAsyncThunk(
 const commentSlice = createSlice({
   name: "comments",
   initialState,
-  reducers: {},
+  reducers: {
+    //optimistic update
+    optimisticAdd(state, action) {
+      state.comments.unshift(action.payload);
+  },
+},
 
   extraReducers: (builder) => {
     builder
@@ -72,12 +86,16 @@ const commentSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+
+      //CREATE Comment
       .addCase(addComment.pending, (state) => {
-        state.loading = true;
+        state.loading = false;
         state.error = null;
       })
       .addCase(addComment.fulfilled, (state, action) => {
-        state.comments.push(action.payload);
+        state.loading = false;
+        // No need to push again, as we already updated optimistically
+        // state.comments.push(action.payload); 
       })
       .addCase(addComment.rejected, (state, action) => {
         state.loading = false;
@@ -86,4 +104,5 @@ const commentSlice = createSlice({
   },
 });
 
+export const { optimisticAdd } = commentSlice.actions;
 export default commentSlice.reducer;

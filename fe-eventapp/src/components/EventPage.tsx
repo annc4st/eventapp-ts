@@ -5,11 +5,13 @@ import { fetchSingleEvent } from "../store/singleEventSlice";
 import { fetchCommentsByEventId } from "../store/commentSlice";
 import { fetchLocations } from "../store/locationSlice";
 import { RootState, AppDispatch } from "../store/store";
+import { CreateComment } from "./CreateComment";
 
 export const EventPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { id } = useParams<{ id: string }>();
   const eventId = Number(id);
+  const {user } = useSelector((state: RootState) => state.user);
 
   const {
     singleEvent,
@@ -77,8 +79,10 @@ export const EventPage: React.FC = () => {
           ))
         ) : (
           <p>No comments yet. Be the first to comment!</p>
+         
         )}
       </div>
+      { user ? <CreateComment eventId = {singleEvent?.id ?? -1}/>  : <p> You need to sign in to post a comment</p>  }
     </div>
   );
 };

@@ -43,7 +43,7 @@ export const fetchLocationById = createAsyncThunk("locations/fetchById", async (
     }
   });
 
-  // Thunk to Create a new event
+  // Thunk to Create a new lcation
   export const createLocation = createAsyncThunk(
     "locations/create",
     async (locationData: Omit<Location, "id">, { rejectWithValue }) => {

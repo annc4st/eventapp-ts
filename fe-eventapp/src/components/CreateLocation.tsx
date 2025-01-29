@@ -2,16 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Formik,
-  FormikHelpers,
-  FormikProps,
-  Form,
-  Field,
-  FieldProps,
-  ErrorMessage,
+  Formik, FormikHelpers, Form,
+  Field, ErrorMessage,
 } from "formik";
 import * as Yup from "yup";
-import { object, string, number, date, InferType } from "yup";
+import { object, string } from "yup";
 import { postcodeValidator } from "postcode-validator";
 import { optimisticAdd, createLocation } from "../store/locationSlice";
 import { AppDispatch } from "../store/store";
