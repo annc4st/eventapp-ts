@@ -5,6 +5,7 @@ import { fetchLocations } from "../store/locationSlice";
 import { RootState, AppDispatch } from "../store/store";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {Box, Card, Container, Flex, Heading, Text} from "@radix-ui/themes";
+import { Link } from "react-router-dom";
 
 
 
@@ -53,6 +54,7 @@ export const EventList: React.FC = () => {
             return (
         
               <Box style={{ background: "var(--gray-a2)", borderRadius: "var(--radius-3)" }} width="300px" p="1" m="4">
+              <Link to={`/events/${event.id}`}>
               <li key={event.id}>
                 <h2>{event.name}</h2>
                 <Text as="div" size="2">
@@ -69,7 +71,7 @@ export const EventList: React.FC = () => {
                   <Text as="div" color="gray"> Loading location details...
                   </Text>
                 )}
-              </li>  
+              </li>  </Link>
               </Box>
  
             );

@@ -4,6 +4,7 @@ import eventReducer from './eventSlice';
 import locationReducer from './locationSlice';
 import commentReducer from './commentSlice'
 import singleEventReducer from './singleEventSlice';
+import participantReducer from './participantSlice'
 
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Defaults to localStorage for web
@@ -22,7 +23,7 @@ const persistedReducer = persistReducer(persistConfig, userReducer);
       locations: locationReducer,
       comments: commentReducer,
       singleEvent: singleEventReducer,
-      // participants: participantReducer,
+      participants: participantReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

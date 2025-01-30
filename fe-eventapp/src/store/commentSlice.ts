@@ -3,6 +3,7 @@ import api from "../utils/api";
 import { RootState } from "./store";
 
 export interface Comment {
+  createdAt: string | number | Date;
   id: number;
   content: string;
   eventId: number;

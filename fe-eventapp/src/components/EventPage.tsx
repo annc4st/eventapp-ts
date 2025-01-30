@@ -6,20 +6,24 @@ import { fetchCommentsByEventId } from "../store/commentSlice";
 import { fetchLocations } from "../store/locationSlice";
 import { RootState, AppDispatch } from "../store/store";
 import { CreateComment } from "./CreateComment";
+import { SignUpParticipant } from "./SignUpParticipant";
+import { fetchParticipants } from "../store/participantSlice";
+import Person3Icon from "@mui/icons-material/Person3";
+import { UpdateEvent} from "./UpdateEvent";
+
+
 
 export const EventPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { id } = useParams<{ id: string }>();
   const eventId = Number(id);
-  const {user } = useSelector((state: RootState) => state.user);
+  const {user} = useSelector((state: RootState) => state.user);
 
-  const {
-    singleEvent,
+  const { singleEvent,
     loading: singleEventLoading,
     error: singleEventError,
   } = useSelector((state: RootState) => state.singleEvent);
-  const {
-    comments,
+  const { comments,
     loading: commentLoading,
     error: commentError,
   } = useSelector((state: RootState) => state.comments);
@@ -29,16 +33,22 @@ export const EventPage: React.FC = () => {
     error: locationsError,
   } = useSelector((state: RootState) => state.locations);
 
-  // Fetch events when component mounts
+  const { participants, participantCount,  
+    loading: participantLoading, 
+    error: participantError } = useSelector((state: RootState) => state.participants);
+    
+    // Fetch events when component mounts
   useEffect(() => {
     dispatch(fetchSingleEvent(eventId));
     dispatch(fetchLocations());
     dispatch(fetchCommentsByEventId(eventId));
+    dispatch(fetchParticipants(eventId));
+
   }, [dispatch, eventId]);
 
   // Combine loading states and errors;
-  const loading = singleEventLoading || locationsLoading || commentLoading;
-  const error = singleEventError || locationsError || commentError;
+  const loading = singleEventLoading || locationsLoading || commentLoading || participantLoading;
+  const error = singleEventError || locationsError || commentError || participantError;
 
   // Find location by ID
   const getLocationDetails = (locationId: number) => {
@@ -46,6 +56,9 @@ export const EventPage: React.FC = () => {
   };
 
   const location = getLocationDetails(singleEvent?.locationId ?? -1);
+
+  
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -66,6 +79,16 @@ export const EventPage: React.FC = () => {
           ) : (
             <p>Loading location details...</p>
           )}
+
+<div >
+  <span >{participantCount}</span>
+  <Person3Icon style={{ verticalAlign: 'middle', color: "#646cff" }} />
+</div>
+
+<div><UpdateEvent eventId={singleEvent?.id ?? -1} /></div>
+         
+
+{ user ? <SignUpParticipant eventId = {singleEvent?.id ?? -1} /> : <p> You need to sign in to register for the event</p>}
         </>
       )}
       <div>

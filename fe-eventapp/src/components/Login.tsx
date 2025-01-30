@@ -15,7 +15,7 @@ interface UserData {
 export const Login = () => {
 
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error } = useSelector((state: RootState) => state.user);
+  // const {user, loading, error } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
   const initialValues: UserData = {
@@ -30,11 +30,20 @@ export const Login = () => {
 
   const handleLogin = async (
     values: UserData,
-    { setSubmitting }: FormikHelpers<UserData>
+    { setSubmitting, setErrors }: FormikHelpers<UserData>
   ) => {
     try {
-      await dispatch(loginUser(values));
+      const resultAction = await dispatch(loginUser(values));
+    if (loginUser.fulfilled.match(resultAction)) {
       navigate("/events");
+    }  else {
+      if (resultAction.payload) {
+        setErrors({ email: resultAction.payload as string });
+      } else {
+        setErrors({ email: "Login failed. Please try again." });
+      }
+    }
+    
     } catch (error) {
       console.log("Login failed:", error);
     } finally {
@@ -49,7 +58,7 @@ export const Login = () => {
         onSubmit={handleLogin}
         validationSchema={validationSchema}
       >
-        {(props) => (
+        {(props ) => (
           <Form>
             <Field
               label="email"
@@ -58,7 +67,7 @@ export const Login = () => {
               required
               helperText={<ErrorMessage name="email" />}
             />
-            <ErrorMessage name="email" component="div" />
+              <ErrorMessage name="email" component="div" />
             <Field
               label="password"
               name="password"
@@ -66,7 +75,7 @@ export const Login = () => {
               type="password"
               required
               helperText={<ErrorMessage name="password" />}
-            />
+            />       
             <ErrorMessage name="password" component="div" />
             <Button type="submit" variant="solid" disabled={props.isSubmitting}>
               {props.isSubmitting ? "Loading" : "Sign in"}
