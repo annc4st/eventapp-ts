@@ -9,7 +9,7 @@ interface SignUpParticipantProps {
 
 export const SignUpParticipant: React.FC<SignUpParticipantProps> = ({ eventId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { user, token } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const participants = useSelector((state: RootState) => state.participants.participants);
 
   if (!user) return null; // Prevent rendering if user is not logged in

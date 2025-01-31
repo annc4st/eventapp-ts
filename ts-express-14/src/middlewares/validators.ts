@@ -25,12 +25,14 @@ export const validateEvent = async (eventId: number) => {
     return event;
   };
 
-  export const validateUser = async (userNum : number| undefined) => {
-    if (!userNum) {
+
+  export const validateUser = async (userId : number) => {
+
+    if (!userId) {
       console.error("validateUser: userNum is undefined");
       return null;
     }
-    const user = await prisma.user.findUnique({ where: { id: userNum },
+    const user = await prisma.user.findUnique({ where: { id: userId },
      });
     return user;
   }

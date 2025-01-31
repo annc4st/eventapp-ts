@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import prisma from "../../prisma/client";
-import { eventNames } from "process";
-import { validateUser, validateEvent } from "../middlewares/validators";
+import {validateUser,  validateEvent } from "../middlewares/validators";
+
+
 
 export const getAllEvents = async (
   req: Request,
@@ -51,12 +52,21 @@ export const createEvent = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    const { name, date, distance, ticketPrice, locationId } = req.body;
 
-    // Assuming date is provided as "2025-01-13T10:00:00" (ISO format including time)
+    const { name, date, distance, ticketPrice, locationId } = req.body;
+    console.log("user found ?? ", req.user?.id)
+    const userId = req.user?.id;
+    
+    // checking whether user exists
+    const userExists = await validateUser(userId);
+    if (!userExists) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    try {
+      // Assuming date is provided as "2025-01-13T10:00:00" (ISO format including time)
     const eventDate = new Date(date);
-    // Check if the date is valid
+ 
     if (isNaN(eventDate.getTime())) {
       return res.status(400).json({ error: "Invalid date format" });
     }
@@ -75,6 +85,7 @@ export const createEvent = async (
         distance,
         ticketPrice,
         locationId: parsedLocationId,
+        userId,
       },
     });
     res.status(201).json(newEvent);
@@ -85,6 +96,7 @@ export const createEvent = async (
   }
 };
 
+
 export const updateEvent = async (
   req: Request,
   res: Response,
@@ -93,6 +105,8 @@ export const updateEvent = async (
   try {
     const { id } = req.params;
     const { name, date, distance, ticketPrice, locationId } = req.body;
+    const updatingUserId = req.user?.id;
+    console.log("updatingUserId >> ", updatingUserId)
 
     // Convert id to a number
     const numericEventId = parseInt(id, 10);
@@ -105,6 +119,11 @@ export const updateEvent = async (
     const eventExists = await validateEvent(numericEventId);
     if (!eventExists) {
       return res.status(404).json({ error: "Event not found" });
+    }
+
+    // check if updatingUser is the owner of the event
+    if(eventExists.userId !== updatingUserId) {
+      return res.status(403).json({ error: "You are not authorized to update this event" });
     }
 
     // Prepare the data object for updating
@@ -130,8 +149,90 @@ export const updateEvent = async (
     });
     res.status(200).json(updatedEvent);
   } catch (err) {
-    console.error("Error posting event:", err);
+    console.error("Error updating event:", err);
     res.status(500).json({ error: "Internal server error", details: err });
     next(err);
   }
 };
+
+
+// add onDelete: Cascade to particpants on schema and migrate to make it possible
+// export const deleteEvent = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const { id } = req.params;
+//     const updatingUserId = req.user?.id;
+    
+//     // Convert id to a number
+//     const numericEventId = parseInt(id, 10);
+
+//     if (isNaN(numericEventId)) {
+//       return res.status(400).json({ error: "Invalid event ID format" });
+//     }
+
+//     //cehck whether event exists
+//     const eventExists = await validateEvent(numericEventId);
+//     if (!eventExists) {
+//       return res.status(404).json({ error: "Event not found" });
+//     }
+
+//        // check if updatingUser is the owner of the event
+//        if(eventExists.userId !== updatingUserId) {
+//         return res.status(403).json({ error: "You are not authorized to update this event" });
+//       }
+
+//     //Delete
+//     const deletedEvent = await prisma.event.delete({
+//       where: { id: numericEventId ,
+//       },
+//     });
+//     res.status(200).json(deletedEvent);
+//   } catch (err) {
+//     console.error("Error deleting event:", err);
+//     res.status(500).json({ error: "Internal server error", details: err });
+//     next(err);
+//   }
+// };
+
+
+// MANUAL DELETE OF Comments and participants in order to delete event
+// const deleteEvent = async (req: Request, res: Response, next: NextFunction) => {
+//   const { id } = req.params;
+//   const userId = req.user.id;
+
+//   const numericEventId = parseInt(id, 10);
+//   if (isNaN(numericEventId)) {
+//     return res.status(400).json({ error: "Invalid event ID format" });
+//   }
+
+//   const event = await prisma.event.findUnique({
+//     where: { id: numericEventId },
+//     select: { userId: true },
+//   });
+
+//   if (!event) {
+//     return res.status(404).json({ error: "Event not found" });
+//   }
+
+//   if (event.userId !== userId) {
+//     return res.status(403).json({ error: "You are not authorized to delete this event" });
+//   }
+
+//   try {
+//     await prisma.$transaction([
+//       prisma.comment.deleteMany({ where: { eventId: numericEventId } }),
+//       prisma.participant.deleteMany({ where: { eventId: numericEventId } }),
+//       // Delete other related records as needed
+//       prisma.event.delete({ where: { id: numericEventId } }),
+//     ]);
+
+//     res.status(200).json({ message: "Event and related records deleted successfully" });
+//   } catch (err) {
+//     console.error("Error deleting event:", err);
+//     res.status(500).json({ error: "Internal server error", details: err });
+//     next(err);
+//   }
+// };

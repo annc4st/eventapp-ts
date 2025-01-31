@@ -9,11 +9,12 @@ const eventRouter = Router();
 
 eventRouter.get("/", getAllEvents )
 eventRouter.get("/:id", getSingleEvent)
-eventRouter.post("/",  createEvent ) //authenticateToken
-eventRouter.patch("/:id", updateEvent)
+eventRouter.post("/", authenticateToken, createEvent ) //authenticateToken
+eventRouter.patch("/:id", authenticateToken, updateEvent)
+
 
 //comments
-eventRouter.post("/:eventId/comments", authenticateToken, createComment) //authenticateToken
+eventRouter.post("/:eventId/comments", authenticateToken, createComment) 
 eventRouter.get("/:eventId/comments", getComments)
 
 //particpants

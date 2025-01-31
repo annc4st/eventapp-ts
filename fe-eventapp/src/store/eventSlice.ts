@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
+import { RootState } from "./store";
 
 
 export interface Event {
@@ -9,7 +10,7 @@ export interface Event {
   ticketPrice?: number;
   date: string;
   locationId: number;
-  // userId?: number;
+  userId?: number;
 }
 
 // Define the shape of the slice's state
@@ -42,11 +43,24 @@ export const fetchEvents = createAsyncThunk(
 // Create a new event
 export const createEvent = createAsyncThunk(
   "events/create",
-  async (eventData: Omit<Event, "id">, { rejectWithValue }) => {
+  async (eventData: Omit<Event, "id">, { rejectWithValue, getState }) => {
     try {
-      const response = await api.post("/events", eventData);
+      const state = getState() as RootState; 
+        const token = state.user?.token; // Adjust based on where your token is stored
+        if (!token) {
+          return rejectWithValue("Unauthorized: No authentication token found");
+        }
+
+      const response = await api.post("/events", eventData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+      }
+      );
+              console.log("Posting Event:", eventData);
+console.log("Sending POST request to:", `/events/`);
       return response.data; // Expecting the created event
     } catch (error: any) {
+      console.error("Error posting event:", error.response?.data);
       return rejectWithValue(
         error.response.data.message || "Failed to create event"
       );

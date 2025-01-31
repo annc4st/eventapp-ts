@@ -30,10 +30,10 @@ model Event {
   ticketPrice  Float?
   location     Address       @relation(fields: [locationId], references: [id])
   locationId   Int
-  User         User?         @relation(fields: [userId], references: [id])
+  user         User?         @relation(fields: [userId], references: [id])
   userId       Int?
   // Relations
-  comments     Comment[]
+  comments     Comment[]  
   participants Participant[] // Link to participants
 }
 
@@ -51,7 +51,7 @@ model Comment {
   createdAt DateTime @default(now())
 
   // Relations
-  event   Event @relation(fields: [eventId], references: [id])
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId Int
   user    User? @relation(fields: [userId], references: [id])
   userId  Int?
@@ -60,7 +60,7 @@ model Comment {
 model Participant {
   id      Int   @id @default(autoincrement())
   // Relations
-  event   Event @relation(fields: [eventId], references: [id])
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId Int
   user    User  @relation(fields: [userId], references: [id])
   userId  Int

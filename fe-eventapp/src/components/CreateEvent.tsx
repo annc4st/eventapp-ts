@@ -1,20 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Formik,
-  FormikHelpers,
-  FormikProps,
-  Form,
-  Field,
-  FieldProps,
-  ErrorMessage, 
-} from "formik";
-import * as Yup from "yup";
-import { object, string, number, date, InferType,  } from "yup";
+import { Formik, FormikHelpers, FormikProps, Form, Field, ErrorMessage } from "formik";
+import { object, string, number } from "yup";
 import { createEvent } from "../store/eventSlice";
 import { RootState, AppDispatch } from "../store/store";
 import { fetchLocations } from "../store/locationSlice";
+
 
 
 interface EventData {
@@ -23,23 +15,25 @@ interface EventData {
   ticketPrice?: number;
   date: string;
   locationId: number;
-  // userId?: number;
+  userId?: number;
 }
+
 
 export const CreateEvent: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const {user, loading: userLoading, error : userError} = useSelector((state: RootState) => state.user);
+    const { user } = useSelector((state: RootState) => state.user);
     const { locations, loading: locationsLoading, error: locationsError} = useSelector((state: RootState) => state.locations);
+    const navigate = useNavigate();
 
-    // console.log("User from Redux:", user); // Debug log
-
+    if (!user) navigate("/login");  // Prevent rendering if user is not logged in
+    
   const initialValues: EventData = {
     name: "",
     distance: 0,
     ticketPrice: 0,
     date: new Date().toISOString().slice(0, 16), // Format as YYYY-MM-DD
     locationId: 1,
-    // userId: user?.id
+    userId: user?.id
   };
 
   const eventSchema = object().shape({
@@ -51,10 +45,21 @@ export const CreateEvent: React.FC = () => {
       "valid-date",
       "Please provide a valid date and time",
       (value) => !isNaN(new Date(value || "").getTime())
+    )
+    .test(
+      "not-past-date",
+      "Event date cannot be in the past",
+      (value) => {
+        const selectedDate = new Date(value);
+        const currentDate = new Date();
+        // Set time of the current date to 00:00:00 to only compare the date (not the time)
+        currentDate.setHours(0, 0, 0, 0);
+        return selectedDate >= currentDate; // Ensure the selected date is not in the past
+      }
     ),
     ticketPrice: number()
       .min(0, "Ticket price must be a positive number")
-      .required("Ticket price is required").positive(),
+      .required("Ticket price is required"), // ".positive()," -- removed to allow 0 price
     locationId: number().required("Location is required"),
   });
 
@@ -63,17 +68,7 @@ export const CreateEvent: React.FC = () => {
       dispatch(fetchLocations());
   }, [dispatch]);
 
-//toadd
-  // const userId = useSelector((state: RootState) => state.user.user?.id);
-  // useEffect(() => {
-  //   if (!user) {
-  //     console.log("User not found in Redux store.");
-  //   } else {
-  //     console.log("User found:", user);
-  //   }
-  // }, [user]);
-
-
+ 
   const handleSubmit = async (values: EventData,  { setSubmitting, resetForm }: FormikHelpers<EventData>) => {
      
     const parsedValues = {
@@ -86,7 +81,8 @@ export const CreateEvent: React.FC = () => {
      
       try {
         await dispatch(createEvent(values));
-        await resetForm();
+        // await resetForm();
+        navigate("/events")
         setSubmitting(false);
       } catch (error) {
         console.error(error);

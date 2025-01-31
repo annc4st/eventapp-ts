@@ -4,7 +4,7 @@ import { fetchEvents } from "../store/eventSlice";
 import { fetchLocations } from "../store/locationSlice";
 import { RootState, AppDispatch } from "../store/store";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import {Box, Card, Container, Flex, Heading, Text} from "@radix-ui/themes";
+import {Box, Container, Flex, Heading, Text} from "@radix-ui/themes";
 import { Link } from "react-router-dom";
 
 
@@ -48,14 +48,17 @@ export const EventList: React.FC = () => {
       {error && <Text color="red">{error}</Text>}
       {!loading && !error && events.length === 0 && <p>No events available.</p>}
       {!loading && !error && events.length > 0 && (
-        <ul>
+       <ul>
           {events.map((event) => {
             const location = getLocationDetails(event.locationId);
             return (
-        
-              <Box style={{ background: "var(--gray-a2)", borderRadius: "var(--radius-3)" }} width="300px" p="1" m="4">
-              <Link to={`/events/${event.id}`}>
-              <li key={event.id}>
+              
+              <Box style={{ background: "var(--gray-a2)", 
+              borderRadius: "var(--radius-3)" }} 
+              width="300px" p="1" m="4" 
+              key={event.id} >
+               <Link to={`/events/${event.id}`}>
+               <li>
                 <h2>{event.name}</h2>
                 <Text as="div" size="2">
                 <p>Date: {new Date(event.date).toLocaleDateString()}</p>
@@ -71,8 +74,10 @@ export const EventList: React.FC = () => {
                   <Text as="div" color="gray"> Loading location details...
                   </Text>
                 )}
-              </li>  </Link>
+                </li>
+              </Link>
               </Box>
+  
  
             );
           })}

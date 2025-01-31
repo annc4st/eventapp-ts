@@ -44,8 +44,7 @@ const userExists = await validateUser(userId);
 }
 
 export const getComments = async (req: Request, res: Response, next: NextFunction) => {
-  console.log("req.params; ", req.params)
-    const { eventId } = req.params; 
+     const { eventId } = req.params; 
    
     try {
         // Convert id to a number

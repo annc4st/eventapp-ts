@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
+import { RootState } from "./store";
 
 
 // Event Interface
@@ -45,22 +46,35 @@ export const fetchSingleEvent = createAsyncThunk(
 // Update an existing event
 export const updateSingleEvent = createAsyncThunk(
     "event/update",
-    async (eventData: Event, { rejectWithValue }) => {
+    async (eventData: Event, { rejectWithValue, getState }) => {
       try {
-        const response = await api.patch(`/events/${eventData.id}`, eventData);
+        const state = getState() as RootState; 
+        const token = state.user?.token; // Adjust based on where your token is stored
+        if (!token) {
+          return rejectWithValue("Unauthorized: No authentication token found");
+        }
+        const response = await api.patch(`/events/${eventData.id}`, eventData,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+        }
+        );
+//         console.log("Updating Event:", eventData);
+// console.log("Sending PATCH request to:", `/events/${eventData.id}`);
         return response.data; // Expecting the updated event
       } catch (error: any) {
+        console.error("Error updating event:", error.response?.data);
         return rejectWithValue(
           error.response.data.message || "Failed to update single event"
         );
       }
     });
   
-
   const singleEventSlice = createSlice({
     name: "singleEvent",
     initialState,
+     
     reducers: {},
+    
     extraReducers: (builder) => {
       builder
         .addCase(fetchSingleEvent.pending, (state) => {

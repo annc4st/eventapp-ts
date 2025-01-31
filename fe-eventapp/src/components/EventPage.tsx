@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { fetchSingleEvent } from "../store/singleEventSlice";
 import { fetchCommentsByEventId } from "../store/commentSlice";
 import { fetchLocations } from "../store/locationSlice";
@@ -9,9 +9,7 @@ import { CreateComment } from "./CreateComment";
 import { SignUpParticipant } from "./SignUpParticipant";
 import { fetchParticipants } from "../store/participantSlice";
 import Person3Icon from "@mui/icons-material/Person3";
-import { UpdateEvent} from "./UpdateEvent";
-
-
+ 
 
 export const EventPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -57,7 +55,6 @@ export const EventPage: React.FC = () => {
 
   const location = getLocationDetails(singleEvent?.locationId ?? -1);
 
-  
 
 
   if (loading) return <div>Loading...</div>;
@@ -68,6 +65,10 @@ export const EventPage: React.FC = () => {
       {singleEvent && (
         <>
           <h2>{singleEvent.name}</h2>
+          {user?.id === singleEvent.userId && (
+        <Link to={`/events/${singleEvent.id}/update`}>Update Event</Link>
+      )}
+           
           <p>Date: {new Date(singleEvent.date).toLocaleDateString()}</p>
           <p>Distance: {singleEvent.distance} km</p>
           <p>Price: {singleEvent.ticketPrice}</p>
@@ -80,15 +81,15 @@ export const EventPage: React.FC = () => {
             <p>Loading location details...</p>
           )}
 
-<div >
+{ participantCount > 0 ? (<div >
   <span >{participantCount}</span>
   <Person3Icon style={{ verticalAlign: 'middle', color: "#646cff" }} />
 </div>
-
-<div><UpdateEvent eventId={singleEvent?.id ?? -1} /></div>
-         
-
+) : (
+  <p> No participants yet. </p>
+)}
 { user ? <SignUpParticipant eventId = {singleEvent?.id ?? -1} /> : <p> You need to sign in to register for the event</p>}
+
         </>
       )}
       <div>
