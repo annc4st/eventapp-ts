@@ -1,23 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import { check, validationResult } from "express-validator";
 import { Request, Response, NextFunction } from 'express';
 import jwt, {JwtPayload} from 'jsonwebtoken';
 import prisma from '../../prisma/client';
-
-export const validateAddress = [
-  check("firstLine").notEmpty().withMessage("First line is required"),
-  check("city").notEmpty().withMessage("City is required"),
-  check("postcode").notEmpty().withMessage("Postcode is required"),
-  (req: Request, res: Response, next: Function) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
-];
-
 
 
 const jwtSecret = process.env.SECRET;
@@ -59,5 +44,4 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
     console.error("Error verifying token:", err);
     res.status(403).json({ error: "Invalid token" });
   }
-  
 };

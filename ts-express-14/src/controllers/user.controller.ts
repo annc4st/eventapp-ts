@@ -46,7 +46,7 @@ export const registerUser = async (req: Request, res: Response) => {
             jwtSecret,
             { expiresIn: '1h' });
 
-        res.status(201).json({ email: newUser.email, token });
+        res.status(201).json({ id: newUser.id, email: newUser.email, token });
     } catch (err) {
         console.error(err);
         res.status(400).json({ error: err });
@@ -86,7 +86,7 @@ export const login = async (req: Request, res: Response) => {
             jwtSecret,
             { expiresIn: '1h', });
         // Respond with user details and token
-        res.status(200).json({ email: userExists.email, token });
+        res.status(200).json({ id: userExists.id, email: userExists.email, token });
     } catch (error) {
         console.log("Login error:", error);
         res.status(500).json({ error: 'Internal server error' });
