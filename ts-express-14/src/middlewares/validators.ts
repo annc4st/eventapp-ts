@@ -36,3 +36,13 @@ export const validateEvent = async (eventId: number) => {
      });
     return user;
   }
+
+
+  export const validateGroup = async (groupId: number) => {
+    const group = await prisma.group.findUnique({
+      where: {
+        id: groupId
+      }
+    });
+    return group;
+  }

@@ -47,7 +47,7 @@ export const signUpForEvent = async (
 };
 
 
-export const getParticipantsByEvent =async (
+export const getParticipantsByEvent = async (
     req: Request,
     res: Response,
     next: NextFunction) => {

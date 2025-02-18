@@ -10,6 +10,8 @@ import userRouter from './routes/userRoutes';
 import eventRouter from './routes/eventRoutes';
 import addressRouter from './routes/addressRoutes';
 import adminRouter from './routes/adminRoutes';
+import groupRouter from './routes/groupRoutes';
+
 
 
 export const app = express();
@@ -34,6 +36,7 @@ app.use('/auth', userRouter);
 app.use('/events', eventRouter);
 app.use('/locations', addressRouter);
 app.use('/admin', adminRouter);
+app.use('/groups', groupRouter);
  
 
 // Catch unregistered routes

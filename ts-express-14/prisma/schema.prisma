@@ -20,6 +20,9 @@ model User {
   events         Event[] // Optional: If you want a back-reference
   comments       Comment[] // One user can have multiple comments
   participants   Participant[] // Link to participants
+
+  ownedGroups    Group[]       @relation("AdminGroups") // Groups where the user is an admin
+  memberships    GroupMembership[] // Groups where the user is a member
 }
 
 model Event {
@@ -35,6 +38,8 @@ model Event {
   // Relations
   comments     Comment[]  
   participants Participant[] // Link to participants
+  groupId      Int?          // Optional: If event is for a group
+  group        Group?        @relation(fields: [groupId], references: [id])
 }
 
 model Address {
@@ -66,4 +71,33 @@ model Participant {
   userId  Int
 
   @@unique([eventId, userId]) // Ensures a user can't sign up for the same event twice
+}
+
+model Group {
+  id           Int              @id @default(autoincrement())
+  groupName    String           @unique
+  description  String?
+  adminId      Int              // User who created the group
+  admin        User             @relation("AdminGroups", fields: [adminId], references: [id])
+  members      GroupMembership[]
+  events       Event[]          // Events restricted to this group
+  createdAt    DateTime         @default(now())
+}
+
+model GroupMembership {
+  id        Int    @id @default(autoincrement())
+  groupId   Int
+  userId    Int
+  status    MembershipStatus @default(PENDING) // PENDING, APPROVED, REJECTED
+
+  group     Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId]) // Ensures a user can't join the same group twice
+}
+
+enum MembershipStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
