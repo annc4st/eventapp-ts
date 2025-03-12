@@ -5,6 +5,9 @@ import locationReducer from './locationSlice';
 import commentReducer from './commentSlice'
 import singleEventReducer from './singleEventSlice';
 import participantReducer from './participantSlice'
+import singleGroupReducer from './singleGroupSlice'
+import groupReducer from './groupSlice';
+
 
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Defaults to localStorage for web
@@ -24,7 +27,11 @@ const persistedReducer = persistReducer(persistConfig, userReducer);
       comments: commentReducer,
       singleEvent: singleEventReducer,
       participants: participantReducer,
+      // groups: 
+      groups: groupReducer,
+      singleGroup: singleGroupReducer,
     },
+
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {

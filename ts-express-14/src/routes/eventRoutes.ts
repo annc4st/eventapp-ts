@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {getAllEvents, getSingleEvent, createEvent, updateEvent} from '../controllers/event.controller'
+import {getAllEvents, getFutureEvents, getSingleEvent, createEvent, updateEvent} from '../controllers/event.controller'
 import { createComment, getComments  } from '../controllers/comment.controller';
 import { authenticateToken } from '../middlewares/authenticate';
 import { signUpForEvent, getParticipantsByEvent, unsignFromEvent } from '../controllers/participant.controller';
@@ -7,7 +7,8 @@ import { signUpForEvent, getParticipantsByEvent, unsignFromEvent } from '../cont
 
 const eventRouter = Router();
 
-eventRouter.get("/", getAllEvents )
+eventRouter.get("/", getFutureEvents )
+eventRouter.get("/past", getAllEvents)
 eventRouter.get("/:id", getSingleEvent)
 eventRouter.post("/", authenticateToken, createEvent ) //authenticateToken
 eventRouter.patch("/:id", authenticateToken, updateEvent)

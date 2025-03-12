@@ -27,13 +27,14 @@ export const Header = () => {
         </Link>{" "}
         <Link to="/events/create">Post Event</Link>
         <Link to="/locations">Venues</Link>
+        <Link to="/groups">Groups</Link>
         <Person3Icon fontSize="large" sx={{ color: "#213547" }} />{" "}
       
      
    
       {user && (
         <div>
-          <p>Welcome, {user.email}</p>
+          <p>Welcome, {user.email.split('@')[0]}</p>
           <LogoutBtn />
         </div>
       )}

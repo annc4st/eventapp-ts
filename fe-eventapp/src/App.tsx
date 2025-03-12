@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import  store from "./store/store";
 import { LocationsList } from "./components/LocationsList";
 import  {UpdateEvent } from "./components/UpdateEvent";
+import { GroupsList } from "./components/GroupsList";
 
 
 function App() {
@@ -35,6 +36,9 @@ function App() {
      <Route path="/events/create" element = {<CreateEvent />} />
      <Route path="/locations" element = {<LocationsList />} />
      <Route path="/locations/create" element = {<CreateLocation />} />
+     <Route path="/groups" element={ <GroupsList/>}  />
+
+     
 
    </Routes>
    </Theme>

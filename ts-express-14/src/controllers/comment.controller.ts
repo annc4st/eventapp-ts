@@ -59,9 +59,21 @@ export const getComments = async (req: Request, res: Response, next: NextFunctio
             return res.status(404).json({ error: "Event not found" });
           }
 
-        const comments = await prisma.comment.findMany({where: {eventId: numericEventId },
+        const comments = await prisma.comment.findMany({
+          where: {eventId: numericEventId },
+          include: {
+            user: {
+              select: {email: true}
+            }
+          }
         });
-        res.status(200).json(comments);
+
+        // Trim emails 
+        const trimmedComments = comments.map(comment => ({
+          ...comment,
+          partEmail:  comment.user?.email?.split('@')[0] || "Anonymous"
+        }));
+        res.status(200).json(trimmedComments);
     } catch (err) {
         console.error(err);
         res.status(400).json({ error: err });

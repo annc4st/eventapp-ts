@@ -5,22 +5,26 @@ import { object, string } from "yup";
 import { optimisticAdd, addComment } from "../store/commentSlice";
 import { RootState, AppDispatch } from "../store/store";
 
-interface CommentData {
+interface ICommentData {
   content: string;
   eventId: number;
   userId: number;
 }
 
-export const CreateComment: React.FC = ({ eventId }) => {
+interface CommentProps {
+  eventId: number;
+}
+
+export const CreateComment: React.FC<CommentProps> = ({ eventId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { user, token } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
 
   if (!user) return null; // Prevent rendering if user is not logged in
 
-  const initialValues: CommentData = {
+  const initialValues: ICommentData = {
     content: "",
-    eventId: eventId,
-    userId: user.id,
+    eventId,
+    userId: user?.id,
   };
 
   const commentSchema = object().shape({
@@ -28,16 +32,26 @@ export const CreateComment: React.FC = ({ eventId }) => {
   });
 
   const handleSubmit = async (
-    values: CommentData,
-    { setSubmitting, resetForm }: FormikHelpers<CommentData>
+    values: ICommentData,
+    { setSubmitting, resetForm }: FormikHelpers<ICommentData>
   ) => {
 
     const tempId = Date.now(); // Generate a temporary unique ID
-    const newComment = {id: tempId,  ...values};
+    const tempUserEmail = user.email.split('@')[0]; // temporary author
+    //userId: tempUser,
+    const newComment = {
+      id: tempId, 
+      partEmail: tempUserEmail, // Add partEmail
+      createdAt: new Date().toISOString(), 
+      ...values
+    };
+
+    console.log("Crating comment : ", newComment)
+
     // Optimistic update
     dispatch(optimisticAdd(newComment));
     try {
-      await dispatch(addComment(values));
+      await dispatch(addComment(newComment));
       await resetForm();
       setSubmitting(false);
     } catch (error) {

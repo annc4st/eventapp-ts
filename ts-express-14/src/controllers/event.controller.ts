@@ -19,6 +19,28 @@ export const getAllEvents = async (
   }
 };
 
+export const getFutureEvents = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const events = await prisma.event.findMany({
+      where: {
+        date: {
+          gte: new Date(),
+        }
+      }
+    });
+    res.status(200).json(events);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err });
+    next(err);
+  }
+};
+
+
 export const getSingleEvent = async (
   req: Request,
   res: Response,

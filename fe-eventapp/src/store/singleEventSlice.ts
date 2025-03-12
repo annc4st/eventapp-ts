@@ -32,7 +32,7 @@ export interface Event {
 export const fetchSingleEvent = createAsyncThunk(
     "event/fetchSingle",
     async (id: number, { rejectWithValue }) => {
-        try {
+    try {
              
       const response = await api.get(`/events/${id}`);
       return response.data;

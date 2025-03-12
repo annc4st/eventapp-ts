@@ -12,7 +12,7 @@ import { optimisticAdd, createLocation } from "../store/locationSlice";
 import { AppDispatch } from "../store/store";
 
 
-interface LocationData {
+interface ILocationData {
   firstLine: string;
   city: string;
   postcode: string;
@@ -28,7 +28,7 @@ export const CreateLocation: React.FC = () => {
   // } = useSelector((state: RootState) => state.user);
 
 
-  const initialValues: LocationData = {
+  const initialValues: ILocationData = {
     firstLine: "",
     city: "",
     postcode: "",
@@ -48,8 +48,8 @@ export const CreateLocation: React.FC = () => {
   });
 
   const handleSubmit = async (
-    values: LocationData,
-    { setSubmitting, resetForm }: FormikHelpers<LocationData>
+    values: ILocationData,
+    { setSubmitting, resetForm }: FormikHelpers<ILocationData>
   ) => {
     const tempId = Date.now(); // Generate a temporary unique ID
     const newLocation = { id: tempId, ...values };

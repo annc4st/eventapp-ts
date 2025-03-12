@@ -8,7 +8,9 @@ export interface Comment {
   content: string;
   eventId: number;
   userId?: number;
+  partEmail?: string; 
 }
+
 
 // Define the shape of the slice's state
 export interface CommentState {
@@ -22,6 +24,7 @@ const initialState: CommentState = {
   loading: false,
   error: null,
 };
+
 // fetch all
 export const fetchCommentsByEventId = createAsyncThunk(
   "comments/fetchAll",

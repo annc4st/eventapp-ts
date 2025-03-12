@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import prisma from "../../prisma/client";
 import { validateUser, validateGroup } from "../middlewares/validators";
 
+// POST /groups/
 export const createGroup = async (
   req: Request,
   res: Response,
@@ -32,6 +33,7 @@ export const createGroup = async (
   }
 };
 
+// GET /groups/:groupId
 export const viewGroup = async (
   req: Request,
   res: Response,
@@ -72,8 +74,8 @@ export const getAllGroups = async (
     next(err);
   }
 };
-// POST /groups/:id/join → Request to join a group
 
+// POST /groups/:id/join → Request to join a group
 export const requestJoin = async (
   req: Request,
   res: Response,
@@ -109,6 +111,7 @@ export const requestJoin = async (
     next(err);
   }
 };
+
 // GET groups/:groupId/members
 export const getMembersByGroup = async (
   req: Request,
