@@ -23,6 +23,8 @@ model User {
 
   ownedGroups    Group[]       @relation("AdminGroups") // Groups where the user is an admin
   memberships    GroupMembership[] // Groups where the user is a member
+
+  GroupNews       GroupNews[]
 }
 
 model Event {
@@ -82,6 +84,8 @@ model Group {
   members      GroupMembership[]
   events       Event[]          // Events restricted to this group
   createdAt    DateTime         @default(now())
+
+  GroupNews    GroupNews[]
 }
 
 model GroupMembership {
@@ -97,6 +101,25 @@ model GroupMembership {
 }
 
 enum MembershipStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model GroupNews {
+  id        Int    @id @default(autoincrement())
+  newsName  String
+  content   String
+  createdAt DateTime @default(now())
+  newsImg   String? // Nullable - If no image is uploaded
+  // status NewsStatus @default(PENDING) // Default: News needs approval
+  groupId   Int
+  userId    Int   //author
+  group     Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum NewsStatus {
   PENDING
   APPROVED
   REJECTED
