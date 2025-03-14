@@ -103,9 +103,7 @@ export const requestJoin = async (
 
     // 🛑 Prevent admin from requesting to join their own group
     if (groupExists.adminId == userId) {
-      return res
-        .status(400)
-        .json({ error: "Admin cannot request to join their own group" });
+      return res.status(400).json({ error: "Admin cannot request to join their own group" });
     }
     // 🛑 Check if the user is already a member or has a pending request
     const currentRequest = await prisma.groupMembership.findUnique({
@@ -114,14 +112,11 @@ export const requestJoin = async (
       },
     });
 
-    console.log("currentRequest >> ", currentRequest);
+    console.log("POST /groups/:groupId/join currentRequest >> ", currentRequest);
 
     if (currentRequest) {
-      return res
-        .status(400)
-        .json({
-          error:
-            currentRequest.status == "PENDING"
+      return res.status(400)
+        .json({ error: currentRequest.status == "PENDING"
               ? "Join request already pending"
               : "User is already a member of the group",
         });
@@ -151,8 +146,8 @@ export const getMembersByGroup = async (
 ) => {
   // console.log("Incoming params:", req.params); // Debug log
   const { groupId } = req.params;
-
   const numericGroupId = parseInt(groupId, 10);
+
 
   if (isNaN(numericGroupId)) {
     return res.status(400).json({ error: "Invalid group ID format" });
@@ -235,6 +230,8 @@ export const adminInviteToJoin = async (
     next(err);
   }
 };
+
+
 
 //GET PEnding requests  groups/:groupId/pending-requests
 
@@ -319,7 +316,7 @@ export const memberApprovedByAdmin = async (
   }
 };
 
-//DELETE /groups/:groupid/reject/:userId → Reject a member
+//Patch /groups/:groupid/reject/:userId → Reject a member
 
 export const rejectMember = async (
   req: Request,
@@ -370,6 +367,66 @@ export const rejectMember = async (
     next(err);
   }
 };
+
+// User LEAVES group
+// DELETE /groups/:groupId/leave → Invite a user
+
+export const leaveGroup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+
+  const userId = req.user?.id;
+  const { groupId } = req.params;
+
+  const numericGroupId = parseInt(groupId, 10);
+  const numericUserId = parseInt(userId, 10);
+
+  if (isNaN(numericGroupId) || isNaN(numericUserId)) {
+    return res
+      .status(400)
+      .json({ error: "Invalid group ID or user ID format" });
+  }
+
+  const groupExists = await validateGroup(numericGroupId);
+    if (!groupExists) return res.status(404).json({ error: "Group not found" });
+
+    const userExists = await validateUser(numericUserId);
+    if (!userExists) {
+      return res.status(404).json({ error: "User not found" });
+    }
+try { 
+  // check if user is group member status "APPROVED"
+ // Check if user is a member
+  const isMember = await prisma.groupMembership.findFirst({
+    where: {
+        groupId: numericGroupId,
+        userId: numericUserId,
+        status: "APPROVED",
+      },
+  });
+
+  console.log("check whether approvedMmeber ", isMember)
+  //  get id of th emembership out of isMember
+
+  if(!isMember){
+    return res.status(404).json({ error: "User was not approved member" });
+  }
+
+  // remove
+    await prisma.groupMembership.delete({
+    where: { id: isMember.id },
+  });
+  
+console.log("deleted membership id ", isMember.id )
+  res.status(200).json({ message: `Successfully left the group userid ${isMember.userId} ` })
+}  catch (err) {
+  console.error("Error leaving group :", err);
+  res.status(500).json({ error: "Failed to leave group" });
+  next(err);
+}
+}
 
 // GET membershipStats  groups/:groupId/membership
 export const groupMembershipStats = async (
