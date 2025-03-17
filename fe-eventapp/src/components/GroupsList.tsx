@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchGroups } from "../store/groupSlice";
 import { RootState, AppDispatch } from "../store/store";
 import { CreateGroup } from "./CreateGroup";
+import { Link } from "react-router-dom";
+
+
 
 export const GroupsList = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,9 +40,9 @@ export const GroupsList = () => {
               <div key={g.id}>
                 <h3>{g.groupName}</h3>
                 <p>{g.description}</p>
-                {/* <p><em>created on {g.createdAt.split('T')[0]}</em></p> */}
-                <button>Join</button>
-                <button>To group page</button>
+               
+               {/* Number of members */}
+                <Link to={`/groups/${g.id}`}><button>To group page</button></Link>
                 {/* to add joining func */}
               </div>
             );

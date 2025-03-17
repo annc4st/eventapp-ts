@@ -13,6 +13,8 @@ import  store from "./store/store";
 import { LocationsList } from "./components/LocationsList";
 import  {UpdateEvent } from "./components/UpdateEvent";
 import { GroupsList } from "./components/GroupsList";
+import { GroupPage } from "./components/GroupPage";
+
 
 
 function App() {
@@ -37,7 +39,8 @@ function App() {
      <Route path="/locations" element = {<LocationsList />} />
      <Route path="/locations/create" element = {<CreateLocation />} />
      <Route path="/groups" element={ <GroupsList/>}  />
-
+     <Route path="/groups/:groupId" element={ <GroupPage/>}  />
+     
      
 
    </Routes>

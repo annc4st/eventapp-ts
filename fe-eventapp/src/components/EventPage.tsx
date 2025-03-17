@@ -34,7 +34,7 @@ export const EventPage: React.FC = () => {
     error: participantError,
   } = useSelector((state: RootState) => state.participants);
 
-  // Fetch events when component mounts
+  // Fetch event when component mounts
   useEffect(() => {
     dispatch(fetchSingleEvent(eventId));
     dispatch(fetchLocations());

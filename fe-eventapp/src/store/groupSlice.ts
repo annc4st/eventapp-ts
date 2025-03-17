@@ -13,7 +13,6 @@ export interface IGroup {
 }
 
 // Define the shape of the slice's state
-
 export interface GroupState {
   groups: IGroup[];
   groupCount: number;

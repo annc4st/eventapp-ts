@@ -7,6 +7,7 @@ import singleEventReducer from './singleEventSlice';
 import participantReducer from './participantSlice'
 import singleGroupReducer from './singleGroupSlice'
 import groupReducer from './groupSlice';
+import groupMembershipReducer from './groupMembershipSlice'
 
 
 import { persistStore, persistReducer } from "redux-persist";
@@ -27,9 +28,11 @@ const persistedReducer = persistReducer(persistConfig, userReducer);
       comments: commentReducer,
       singleEvent: singleEventReducer,
       participants: participantReducer,
+
       // groups: 
       groups: groupReducer,
       singleGroup: singleGroupReducer,
+      groupMembership: groupMembershipReducer,
     },
 
     middleware: (getDefaultMiddleware) =>

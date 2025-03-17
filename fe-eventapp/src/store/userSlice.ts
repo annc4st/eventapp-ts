@@ -4,6 +4,7 @@ import api from "../utils/api";
 interface UserState {
   user: { id: number; email: string } | null;
   token: string | null;
+  tokenExpiresAt: string | null; //to track token expiration
   loading: boolean;
   error: string | null;
 }
@@ -11,6 +12,7 @@ interface UserState {
 const initialState: UserState = {
   user: null,
   token: null,
+  tokenExpiresAt: null,
   loading: false,
   error: null,
 };
@@ -55,6 +57,7 @@ export const logoutUser = createAsyncThunk(
     // Remove user data from local storage
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("tokenExpiresAt");
 
      // Dispatch the logout action to clear state
      dispatch(logout());
@@ -80,9 +83,9 @@ const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        // state.user = action.payload.user;
         state.user = { id: action.payload.id, email: action.payload.email };
         state.token = action.payload.token;
+        state.tokenExpiresAt = action.payload.expiresAt;  // <-- Store expiration time
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -96,6 +99,7 @@ const userSlice = createSlice({
         state.loading = false;
         state.user = { id: action.payload.id, email: action.payload.email };
         state.token = action.payload.token;
+        state.tokenExpiresAt = action.payload.expiresAt;  // <-- Store expiration time
         console.log("Login success: User updated", state.user); // Debug log
       })
       .addCase(loginUser.rejected, (state, action) => {

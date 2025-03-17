@@ -67,7 +67,7 @@ export const Register = () => {
               helperText={<ErrorMessage name="password" />}
             />
             <Button type="submit" variant="solid" disabled={props.isSubmitting}>
-              {props.isSubmitting ? "Loading" : "Sign in"}
+              {props.isSubmitting ? "Loading" : "Sign Up"}
             </Button>
           </Form>
         )}

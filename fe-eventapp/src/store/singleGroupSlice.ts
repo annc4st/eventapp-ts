@@ -4,7 +4,7 @@ import { RootState } from "./store"; // for update can only author/owner
 
 
 export interface Group {
-  id: number;
+  groupId: number;
   groupName: string;
   description?: string;
   adminId: number;
@@ -12,14 +12,22 @@ export interface Group {
   createdAt: string;
 }
 
+// Member type
+export interface Member {
+    id: number;
+    email: string;
+  }
+
 // Define the shape of the slice's state
   interface SingleGroupState {
     singleGroup: Group | null;
+    members: Member [];
     loading: boolean;
     error: string | null;
   }
   const initialState: SingleGroupState = {
     singleGroup: null,
+    members: [],
     loading: false,
     error: null,
   };
@@ -28,9 +36,9 @@ export interface Group {
 export const fetchSingleGroup = createAsyncThunk (
     "group/fetchSingle",
     // id or groupId ???
-    async (id: number, { rejectWithValue}) => {
+    async (groupId: number, { rejectWithValue}) => {
         try {
-            const response = await api.get (`/groups/${id}`)
+            const response = await api.get(`/groups/${groupId}`)
             console.log("view single group ", response.data)
             return response.data;
         } catch (error: any) {
@@ -38,6 +46,20 @@ export const fetchSingleGroup = createAsyncThunk (
         }
     }
 )
+
+// Fetch groupmembers
+export const fetchGroupMembers = createAsyncThunk (
+    "group/fetchMembers",
+    async (groupId: number, { rejectWithValue}) => {
+        try {
+            const response = await api.get(`/groups/${groupId}/members`)
+            console.log("group members" , response.data.members)
+            return response.data.members;
+        } catch(error: any){
+            return rejectWithValue(error.response?.data.message || error.message)
+        }
+    })
+
 // update group
 
 const singleGroupSlice = createSlice(
@@ -60,6 +82,18 @@ const singleGroupSlice = createSlice(
                 state.loading = false;
                 state.error = action.payload as string;
             })
+            .addCase(fetchGroupMembers.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchGroupMembers.fulfilled, (state, action) => {
+                state.loading = false;
+                state.members = action.payload;
+            })
+            .addCase(fetchGroupMembers.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
+
         }
     }
 
