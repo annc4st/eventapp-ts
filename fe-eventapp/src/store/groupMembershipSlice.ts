@@ -13,11 +13,13 @@ export interface IGroupMembership {
   groupId: number;
   userId: number;
   status: MembershipStatus;
-  user?: { id: number; email: string }; // Include user details
+  user?: { id: number; email: string };  
 }
+
 
 // Define the shape of the slice's state
 export interface GroupMembershipState {
+  memberships: IGroupMembership[]; // Holds all group memberships
   pendingRequests: IGroupMembership[];
   approvedMembers: IGroupMembership[];
   loading: boolean;
@@ -25,6 +27,7 @@ export interface GroupMembershipState {
 }
 // Initial state
 const initialState: GroupMembershipState = {
+  memberships: [],
   pendingRequests: [],
   approvedMembers: [],
   loading: false,
@@ -58,6 +61,8 @@ export const requestToJoinGroup = createAsyncThunk<
   }
 });
 
+
+
 // Fetch pending requests thunk
 export const fetchingPendingRequests = createAsyncThunk<
 IGroupMembership[], // Expected return type
@@ -84,8 +89,7 @@ IGroupMembership[], // Expected return type
 })
 
 
-
-// groupAdmin approved request
+// groupAdmin approves request
 export const approveMemberRequest = createAsyncThunk<
   IGroupMembership, // Expected return type
   { groupId: number; userId: number }, // Payload type
@@ -107,8 +111,7 @@ export const approveMemberRequest = createAsyncThunk<
     } catch (error: any) {
       return rejectWithValue( error.response?.data?.message || "Failed to approve user");
     }
-  }
-);
+  });
 
 // groupAdmin invites user
 export const inviteUserToGroup = createAsyncThunk<
@@ -133,13 +136,12 @@ export const inviteUserToGroup = createAsyncThunk<
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Failed to invite user");
     }
-  }
-);
+  });
 
 
 // User leaves the group
 export const leaveGroup = createAsyncThunk<
-IGroupMembership,
+IGroupMembership,  
 number, // Payload type (groupId)
 { state: RootState }>( 
   "group/leaveGroup",
@@ -150,34 +152,22 @@ number, // Payload type (groupId)
       if (!token) return rejectWithValue("Unauthorized");
 
       const response = await api.delete(`/groups/${groupId}/leave`,
-        { headers: { Authorization: `Bearer ${token}` }}
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      console.log("Leaving user:", response.data);
+      console.log("Leaving user (slice):", response.data);
       return response.data;
     }
     catch(error: any) {
       return rejectWithValue(error.response?.data?.message || "Failed to leave the group");
     }
-  }
-)
+  });
 
 
 // 🔹 Group Membership Slice
 const groupMembershipSlice = createSlice({
     name: "groupMembership",
     initialState,
-    reducers: {
-      groupMemberLeft: (state, action: PayloadAction<number>) => {
-        // Remove the user from members immediately
-        console.log("Leave group payload:", action.payload);
-        state.approvedMembers = state.approvedMembers.filter(member => member.userId !== action.payload);
-      },
-      groupMemberRejoined: (state, action: PayloadAction<number>) => {
-        // Restore user if the leave group request fails
-        state.approvedMembers.push({ id: action.payload } as IGroupMembership);
-      },
-    },
+    reducers: { },
     extraReducers: (builder) => {
       builder
 // 1 Request to Join Group
@@ -214,6 +204,7 @@ const groupMembershipSlice = createSlice({
           state.loading = false;
           state.error = action.payload as string;
         })
+ 
 // 4 Fetching pending requests
         .addCase(fetchingPendingRequests.fulfilled, (state, action) => {
           state.loading = false;
@@ -221,22 +212,25 @@ const groupMembershipSlice = createSlice({
           console.log("Updated Redux state with pending requests:", state.pendingRequests);
         })
   
-// 5 Leave the group
+// 5 Leave the group - do not need this ?
     .addCase(leaveGroup.fulfilled, (state, action) => {
       console.log("Leave group payload:", action.payload); // This is groupId
-      const currentUserId =  state.approvedMembers.find((member) => member.userId)?.userId;
-      console.log(currentUserId)
-      if (!currentUserId) {
-        console.warn("No user ID found in state, skipping optimistic update");
-        return;
-      }
-
-      // Remove the current user from approvedMembers
-  state.approvedMembers = state.approvedMembers.filter( (member) => member.userId !== currentUserId);
+      const userId = action.payload.userId; 
+      if (!userId) return;
+  
+      state.approvedMembers = state.approvedMembers.filter( (member) => member.userId !== userId);
+    })
       
+    .addCase(leaveGroup.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(leaveGroup.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string;
     });
-    },
+  }
+    
   });
   
-   export const { groupMemberLeft, groupMemberRejoined } = groupMembershipSlice.actions;
-   export default groupMembershipSlice.reducer;
+  export default groupMembershipSlice.reducer;

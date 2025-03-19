@@ -3,6 +3,7 @@ import prisma from "../../prisma/client";
 import { validateUser, validateGroup } from "../middlewares/validators";
 import { MembershipStatus } from "@prisma/client";
 
+
 // POST /groups/
 export const createGroup = async (
   req: Request,
@@ -128,6 +129,7 @@ export const requestJoin = async (
         user: { connect: { id: userId } },
       },
     });
+    console.log("this is newMemberRequest from controller ", newMemberRequest)
     res.status(201).json(newMemberRequest);
   } catch (err) {
     console.error("Error requesting memebership:", err);
@@ -398,8 +400,7 @@ export const leaveGroup = async (
     }
 try { 
   // check if user is group member status "APPROVED"
- // Check if user is a member
-  const isMember = await prisma.groupMembership.findFirst({
+   const isMember = await prisma.groupMembership.findFirst({
     where: {
         groupId: numericGroupId,
         userId: numericUserId,
@@ -408,7 +409,7 @@ try {
   });
 
   console.log("check whether approvedMmeber ", isMember)
-  //  get id of th emembership out of isMember
+  //  get id of the membership out of isMember
 
   if(!isMember){
     return res.status(404).json({ error: "User was not approved member" });
@@ -420,7 +421,7 @@ try {
   });
   
 console.log("deleted membership id ", isMember.id )
-  res.status(200).json({ message: `Successfully left the group userid ${isMember.userId} ` })
+  res.status(200).json({ deletedUser: isMember.userId, message: `Successfully left the group userid ${isMember.userId} ` })
 }  catch (err) {
   console.error("Error leaving group :", err);
   res.status(500).json({ error: "Failed to leave group" });

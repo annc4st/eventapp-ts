@@ -7,13 +7,7 @@ export const UserProfile = () => {
 
     return (
         <div>
-          {user.isAuthenticated ? (
-            <div>
-              <h1>Welcome, {user.name}</h1>
-            </div>
-          ) : (
-            <h1>Please log in</h1>
-          )}
+       
         </div>
       );
 
