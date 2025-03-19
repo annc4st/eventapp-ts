@@ -8,6 +8,8 @@ import participantReducer from './participantSlice'
 import singleGroupReducer from './singleGroupSlice'
 import groupReducer from './groupSlice';
 import groupMembershipReducer from './groupMembershipSlice'
+import groupNewsReducer from './groupNewsSlice'
+import singleNewsReducer from './singleNewsSlice'
 
 
 import { persistStore, persistReducer } from "redux-persist";
@@ -19,6 +21,7 @@ const persistConfig = {
 };
 
 const persistedReducer = persistReducer(persistConfig, userReducer);
+
 
  const store = configureStore({
     reducer: {
@@ -33,6 +36,8 @@ const persistedReducer = persistReducer(persistConfig, userReducer);
       groups: groupReducer,
       singleGroup: singleGroupReducer,
       groupMembership: groupMembershipReducer,
+      groupNews: groupNewsReducer,
+      singleNews: singleNewsReducer,
     },
 
     middleware: (getDefaultMiddleware) =>
@@ -40,7 +45,7 @@ const persistedReducer = persistReducer(persistConfig, userReducer);
         serializableCheck: {
           ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
         },
-      }),
+      }), // Attach token expiration check,
   });
 
   export const persistor = persistStore(store);

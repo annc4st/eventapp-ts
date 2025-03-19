@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
 
 interface UserState {
@@ -77,6 +77,7 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+// REGISTER
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -91,6 +92,7 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+// LOGIN
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -101,6 +103,7 @@ const userSlice = createSlice({
         state.token = action.payload.token;
         state.tokenExpiresAt = action.payload.expiresAt;  // <-- Store expiration time
         console.log("Login success: User updated", state.user); // Debug log
+        console.log("tokenExpiresAt ", state.tokenExpiresAt)
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -114,7 +117,17 @@ const userSlice = createSlice({
         state.loading = false;
         state.user = null;
         state.token = null;
-      });
+        state.tokenExpiresAt = null; // Reset expiration
+      })
+      .addMatcher(
+        (action) => action.type.endsWith("/rejected") && action.payload === "Token expired",
+        (state) => {
+          state.user = null;
+          state.token = null;
+          state.tokenExpiresAt = null;
+          console.warn("Token expired, user logged out");
+        }
+      );
   },
 });
 

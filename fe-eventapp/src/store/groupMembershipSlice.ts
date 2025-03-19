@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, isRejectedWithValue, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import { RootState } from "./store";
 
@@ -39,7 +39,8 @@ export const requestToJoinGroup = createAsyncThunk<
   IGroupMembership,
   number, // Payload type (groupId)
   { state: RootState }
->("group/requestToJoin", async (groupId, { rejectWithValue, getState }) => {
+>("group/requestToJoin", 
+  async (groupId, { rejectWithValue, getState }) => {
   try {
     const token = getState().user?.token;
     if (!token) {

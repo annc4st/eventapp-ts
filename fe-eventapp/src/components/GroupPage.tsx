@@ -11,6 +11,8 @@ import {
   fetchingPendingRequests,
 } from "../store/groupMembershipSlice";
 import { logoutUser } from "../store/userSlice";
+import Button from '@mui/material/Button';
+
 
 export const GroupPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -153,8 +155,9 @@ export const GroupPage: React.FC = () => {
 
               {/*  User is a member - show "Leave Group" button */}
               {isMember && !isAdmin && (
-                <button
+                <Button variant="outlined"
                   onClick={() => handleLeaveGroup(numericGroupId)}
+                  className="btn-delete"
                   disabled={isLeaving || leaveSuccess}
                   style={{
                     opacity: isLeaving ? 0.7 : 1,
@@ -167,18 +170,18 @@ export const GroupPage: React.FC = () => {
                     : leaveSuccess
                     ? "Left ✅"
                     : "Leave Group"}
-                </button>
+                </Button>
               )}
 
               {/* User is not a member - show "Join Group" button */}
               {isUserLogged && !isMember && !hasPendingRequest && !isAdmin && (
                 <>
-                  <button
+                  <Button variant="contained" color="success"
                     onClick={() => handleRequestJoin(numericGroupId)}
                     className="btn-join"
                   >
                     Join {singleGroup.groupName}
-                  </button>
+                  </Button>
                   <ToastContainer />
                 </>
               )}
