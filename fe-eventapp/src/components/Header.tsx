@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "@radix-ui/themes/styles.css";
 // import { FaceIcon, HomeIcon } from "@radix-ui/react-icons"
 import HomeIcon from "@mui/icons-material/Home";
@@ -6,18 +6,37 @@ import Person3Icon from "@mui/icons-material/Person3";
 
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../store/userSlice";
+import { loginUser, logoutUser } from "../store/userSlice";
 import { RootState, AppDispatch } from "../store/store";
 import { LogoutBtn } from "./LogoutBtn";
 import { Box, Card, TabNav, Flex, Text } from "@radix-ui/themes";
+import Button from '@mui/material/Button'
+
+
 
 export const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    user,
-    loading: userLoading,
-    error: userError,
-  } = useSelector((state: RootState) => state.user);
+
+
+ const navigate = useNavigate();
+  
+  const { user, tokenExpiresAt } = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    if (tokenExpiresAt) {
+      console.log("tokenExpiresAt >> ", tokenExpiresAt)
+      const expirationTime = new Date(tokenExpiresAt).getTime();
+      console.log("expirationTime >> ", expirationTime)
+      const currentTime = Date.now();
+
+      if(currentTime >= expirationTime){
+        console.warn("Token expired! Logging out...");
+        dispatch(logoutUser()); // Clear user from Redux & persisted storage
+        alert("Your session has expired. Please log in again.");
+        navigate("/login"); // Redirect to login
+      }
+    }
+  }, [tokenExpiresAt, dispatch, navigate])
 
   return (
     <>
@@ -32,24 +51,21 @@ export const Header = () => {
       
      
    
-      {user && (
-        <div>
-          <p>Welcome, {user.email.split('@')[0]}</p>
-          <LogoutBtn />
-        </div>
-      )}
-
-      {!user && (
-        <div>
-          {/* <p>Welcome, Stranger!</p> */}
-          <Link to={"/login"}>
-            <button>Login</button>
-          </Link>
-          <Link to={"/register"}>
-            <button>Register</button>
-          </Link>
-        </div>
-      )}
+      {user ? (
+      <div>
+      <p>Welcome, {user.email.split("@")[0]}</p>
+      <Button onClick={() => dispatch(logoutUser())}>Logout</Button>
+    </div>
+  ) : (
+    <div>
+      <Link to="/login">
+        <Button>Login</Button>
+      </Link>
+      <Link to="/register">
+        <Button>Register</Button>
+      </Link>
+    </div>
+  )}
       </Flex>
     </>
   );

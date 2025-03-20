@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 
 
 
+
 export const EventList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   // Extract events state from Redux
@@ -44,7 +45,7 @@ export const EventList: React.FC = () => {
         <Flex direction= "column" pb="4" pt="4">
          {/* <h1> Events</h1> */}
          <Heading> Events </Heading>
-      {loading && <Text color="gray">Loading events ...</Text>}
+      {loading && <Text color="gray">Loading events...</Text>}
       {error && <Text color="red">{error}</Text>}
       {!loading && !error && events.length === 0 && <p>No events available.</p>}
       {!loading && !error && events.length > 0 && (
@@ -57,9 +58,9 @@ export const EventList: React.FC = () => {
               borderRadius: "var(--radius-3)" }} 
               width="300px" p="1" m="4" 
               key={event.id} >
-               <Link to={`/events/${event.id}`}>
+               
                <li>
-                <h2>{event.name}</h2>
+               <Link to={`/events/${event.id}`}> <h2>{event.name}</h2>  </Link>
                 <Text as="div" size="2">
                 <p>Date: {new Date(event.date).toLocaleDateString()}</p>
                 <p>Distance: {event.distance} km</p>
@@ -75,7 +76,7 @@ export const EventList: React.FC = () => {
                   </Text>
                 )}
                 </li>
-              </Link>
+              {/* </Link> */}
               </Box>
   
  

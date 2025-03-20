@@ -12,6 +12,7 @@ import {
 } from "../store/groupMembershipSlice";
 import { logoutUser } from "../store/userSlice";
 import Button from '@mui/material/Button';
+import { GroupNewsList } from "./GroupNewsList";
 
 
 export const GroupPage: React.FC = () => {
@@ -192,6 +193,10 @@ export const GroupPage: React.FC = () => {
                   Your request to join is pending
                 </button>
               )}
+            </div>
+
+            <div>
+              <GroupNewsList groupId = {numericGroupId} />
             </div>
 
             {/* for admin eyes only - pending requests */}

@@ -15,12 +15,22 @@ import  {UpdateEvent } from "./components/UpdateEvent";
 import { GroupsList } from "./components/GroupsList";
 import { GroupPage } from "./components/GroupPage";
 
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchAllUsers } from "./store/allUsersSlice";
+import { AppDispatch } from "./store/store";
+
 
 
 
 function App() {
-  
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchAllUsers());
+  }, [dispatch]);
+  
   return (
     <>
       <Provider store={store}>

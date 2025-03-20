@@ -1,11 +1,14 @@
 import { Formik, FormikHelpers, Form, Field, ErrorMessage,} from "formik";
 import * as Yup from "yup";
 // import { Grid, Paper, Avatar, TextField, Button, Typography } from '@mui/material' // link
-import { Button } from "@radix-ui/themes";
+
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../store/userSlice";
 import { RootState, AppDispatch } from "../store/store";
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+
 
 interface UserData {
   email: string;
@@ -60,6 +63,7 @@ export const Login = () => {
       >
         {(props ) => (
           <Form>
+             <Stack spacing={2} direction="column">
             <Field
               label="email"
               name="email"
@@ -77,9 +81,10 @@ export const Login = () => {
               helperText={<ErrorMessage name="password" />}
             />       
             <ErrorMessage name="password" component="div" />
-            <Button type="submit" variant="solid" disabled={props.isSubmitting}>
+            <Button variant="contained" type="submit"  disabled={props.isSubmitting}>
               {props.isSubmitting ? "Loading" : "Sign in"}
             </Button>
+            </Stack>
           </Form>
         )}
       </Formik>

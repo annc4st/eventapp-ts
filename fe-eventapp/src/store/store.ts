@@ -10,22 +10,25 @@ import groupReducer from './groupSlice';
 import groupMembershipReducer from './groupMembershipSlice'
 import groupNewsReducer from './groupNewsSlice'
 import singleNewsReducer from './singleNewsSlice'
+import allUsersReducer from './allUsersSlice'
 
 
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // Defaults to localStorage for web
+// import { persistStore, persistReducer } from "redux-persist";
+// import storage from "redux-persist/lib/storage"; // Defaults to localStorage for web
 
-const persistConfig = {
-  key: "root",
-  storage,
-};
+// const persistConfig = {
+//   key: "root",
+//   storage,
+// };
 
-const persistedReducer = persistReducer(persistConfig, userReducer);
+// const persistedReducer = persistReducer(persistConfig, userReducer);
 
 
  const store = configureStore({
     reducer: {
-      user: persistedReducer,
+      // user: persistedReducer,
+      user: userReducer,
+      users: allUsersReducer,
       events: eventReducer,
       locations: locationReducer,
       comments: commentReducer,
@@ -40,15 +43,15 @@ const persistedReducer = persistReducer(persistConfig, userReducer);
       singleNews: singleNewsReducer,
     },
 
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
-        },
-      }), // Attach token expiration check,
+    // middleware: (getDefaultMiddleware) =>
+    //   getDefaultMiddleware({
+    //     serializableCheck: {
+    //       ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+    //     },
+    //   }).concat(tokenMiddleware), // Attach token expiration check
   });
 
-  export const persistor = persistStore(store);
+  // export const persistor = persistStore(store);
   // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
