@@ -1,11 +1,19 @@
+/* import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css'; */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Roboto, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87); // blue
-  background-color: #242424; //almost black
+  color: rgba(255, 255, 255, 0.87); 
+  background-color: #242424; 
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,13 +21,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff; // darker lilac
-  text-decoration: none; //inherit;
+body, p, a, ul, li {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
 }
+li {
+  list-style-type: none;
+}
+
+ 
 a:hover {
-  color:rgb(59, 95, 192); //lilac
+  color:rgb(59, 95, 192); 
 }
 
 body {
@@ -41,19 +54,19 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a; // black
+  background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff; //lilac
+  border-color:rgb(211, 181, 148); 
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-//remove ul dots
+/* //remove ul dots */
 ul, li {
   text-decoration: none;
 }
@@ -62,13 +75,13 @@ li {
 }
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547; // very dark blue alost black
+    color: #213547; 
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color:rgb(218, 121, 31);
   }
   button {
-    background-color: #f9f9f9; //white
+    background-color: #f9f9f9; 
   }
 }

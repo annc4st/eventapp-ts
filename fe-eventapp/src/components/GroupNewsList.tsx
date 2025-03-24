@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { fetchGroupNewsByGroupId } from "../store/groupNewsSlice";
 import { Box, Container, Flex, Heading, Text } from "@radix-ui/themes";
+import Typography from "@mui/material/Typography";
 
 interface GroupNewsListProps {
   groupId: number; // or string, depending on your actual type
@@ -39,7 +40,7 @@ export const GroupNewsList: React.FC<GroupNewsListProps> = ({ groupId }) => {
               <div key={news.id}>
                 <p>{news.newsName}</p>
                 <p>{`${news.createdAt.split("T")[0]}`}</p>
-                <p>{news.content}</p>
+                <Typography noWrap >{news.content}</Typography>
                 <p>
                   Authored by:{" "}
                   <em>

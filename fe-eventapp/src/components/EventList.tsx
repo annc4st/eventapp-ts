@@ -3,12 +3,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchEvents } from "../store/eventSlice";
 import { fetchLocations } from "../store/locationSlice";
 import { RootState, AppDispatch } from "../store/store";
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import {Box, Container, Flex, Heading, Text} from "@radix-ui/themes";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { red } from "@mui/material/colors";
+import { Link as MuiLink } from "@mui/icons-material/Link";
+
 import { Link } from "react-router-dom";
+import Grid from "@mui/material/Grid2";
+import {
+  Box,
+  Paper,
+  Container,
+  styled,
+  CardHeader,
+  Card,
+  Avatar,
+  CardContent,
+  Typography,
+  Button,
+} from "@mui/material";
 
-
-
+// const Item = styled(Paper)(({ theme }) => ({
+//   backgroundColor: '#fff',
+//   ...theme.typography.body2,
+//   padding: theme.spacing(1),
+//   textAlign: 'center',
+//   color: theme.palette.text.secondary,
+//   ...theme.applyStyles('dark', {
+//     backgroundColor: '#1A2027',
+//   }),
+// }));
 
 export const EventList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,6 +42,7 @@ export const EventList: React.FC = () => {
     loading: eventsLoading,
     error: eventsError,
   } = useSelector((state: RootState) => state.events);
+
   const {
     locations,
     loading: locationsLoading,
@@ -40,52 +65,68 @@ export const EventList: React.FC = () => {
   };
 
   return (
-    <div>
-      <Container size="2">
-        <Flex direction= "column" pb="4" pt="4">
-         {/* <h1> Events</h1> */}
-         <Heading> Events </Heading>
-      {loading && <Text color="gray">Loading events...</Text>}
-      {error && <Text color="red">{error}</Text>}
+    <Container>
+   
+      {loading && <p color="gray">Loading events...</p>}
+      {error && <p color="red">{error}</p>}
       {!loading && !error && events.length === 0 && <p>No events available.</p>}
+
       {!loading && !error && events.length > 0 && (
-       <ul>
-          {events.map((event) => {
-            const location = getLocationDetails(event.locationId);
-            return (
+       
               
-              <Box style={{ background: "var(--gray-a2)", 
-              borderRadius: "var(--radius-3)" }} 
-              width="300px" p="1" m="4" 
-              key={event.id} >
-               
-               <li>
-               <Link to={`/events/${event.id}`}> <h2>{event.name}</h2>  </Link>
-                <Text as="div" size="2">
-                <p>Date: {new Date(event.date).toLocaleDateString()}</p>
-                <p>Distance: {event.distance} km</p>
-                <p>Price: £ {event.ticketPrice}</p>
-                </Text>
-                {location ? (
-                   <Text as="div" color="gray">
-                    <LocationOnIcon sx={{color: '#646cff'}} />{" "}
-                    {`${location.firstLine}, ${location.city}, ${location.postcode}`}
-                   </Text>
-                ) : (
-                  <Text as="div" color="gray"> Loading location details...
-                  </Text>
+                <Grid container 
+                  spacing={{xs: 2, md: 3}}
+                  columns={{ xs: 4, sm: 8, md: 12 }}
+                  // rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                >
+                  {events.map((event) => {
+                    const location = getLocationDetails(event.locationId);
+                    return (
+                      // sx={{maxWidth: 345}}
+                      <Grid key={event.id} xs={12} sm={6} md={4} > 
+                      <Card  elevation={3}
+                      sx={{
+                        height: "100%",  
+                    
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                      > 
+                        <CardHeader
+                          avatar={
+                            <Avatar
+                              sx={{ bgcolor: red[500] }}
+                              aria-label="category"
+                            > Cat
+                            </Avatar>
+                          }
+                          title={event.name}
+                          subheader={`Distance: ${event.distance} km `}
+                        ></CardHeader>
+
+                        <CardContent sx={{ flexGrow: 1 }}>
+                          {location ? (
+                            <Typography variant="body2" sx={{ color: "text.secondary" }} >
+                              <LocationOnIcon />
+                              {`${location.firstLine}, ${location.city}, ${location.postcode}`}
+                            </Typography>
+                          ) : (
+                            <Typography>Loading location details...</Typography>
+                          )}
+                        </CardContent>
+                         {/* Flex container for button and icon */}
+                          <Box sx={{ display: "flex", justifyContent: "space-between", p: 1 }}>
+                            <Link to={`/events/${event.id}`}>
+                              <Button size="medium">Go to Event</Button>
+                            </Link>
+                            <FavoriteIcon sx={{marginRight:2}}/>
+                        </Box>
+                      </Card>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
                 )}
-                </li>
-              {/* </Link> */}
-              </Box>
-  
- 
-            );
-          })}
-        </ul>
-      )}
-      </Flex>
-      </Container>
-    </div>
+              </Container>
   );
 };

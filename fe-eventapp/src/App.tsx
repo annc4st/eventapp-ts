@@ -1,6 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Theme, ThemePanel } from '@radix-ui/themes';
-import './App.css'
 import { Login } from './components/Login'
 import { Register } from './components/Register'
 import { EventList } from './components/EventList'
@@ -9,9 +7,9 @@ import {CreateEvent } from "./components/CreateEvent";
 import { Header } from "./components/Header";
 import {CreateLocation} from "./components/CreateLocation"
 import { Provider } from "react-redux";
-import  store from "./store/store";
+import store from "./store/store";
 import { LocationsList } from "./components/LocationsList";
-import  {UpdateEvent } from "./components/UpdateEvent";
+import {UpdateEvent } from "./components/UpdateEvent";
 import { GroupsList } from "./components/GroupsList";
 import { GroupPage } from "./components/GroupPage";
 
@@ -19,6 +17,8 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchAllUsers } from "./store/allUsersSlice";
 import { AppDispatch } from "./store/store";
+import theme from './theme'
+import { ThemeProvider } from '@mui/material'
 
 
 
@@ -34,11 +34,9 @@ function App() {
   return (
     <>
       <Provider store={store}>
-      
-     <Theme accentColor="purple" grayColor="slate" 
-     panelBackground="solid" scaling="100%" radius="medium" >
-      {/* <ThemePanel /> */}
-        <Header />
+ 
+     <ThemeProvider theme={theme}>
+      <Header />
      <Routes>
      <Route path ="/login" element={<Login />} />
      <Route path="/register" element={<Register />} />
@@ -53,11 +51,8 @@ function App() {
 
      <Route path="/groups/:groupId" element={ <GroupPage/>}  />
 
-     
-     
-
    </Routes>
-   </Theme>
+   </ThemeProvider>
    </Provider>
     </>
   )
