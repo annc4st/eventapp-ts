@@ -6,16 +6,16 @@ const theme = createTheme({
   cssVariables: true,
   palette: {
     primary: {
-      main: '#c7165d',
-      light: '#FF8A65',  
-      dark: '#D84315',
+      main:  '#015668', //dark teal
+      light: '#FFD369', //yellow
+      dark: '#263F44' //dark
     
     },
     secondary: {
-      main:'#787376',
-      light: '#F5EBFF',
-      dark: '#A673D3',
-      contrastText: '#47008F',
+      main: '#575456', //gray
+      light:'#FFF1CF', //light yellow
+      dark: '#A673D3', //?
+      contrastText: '#FFA725'
     },
     error: {
       main: red.A400,
@@ -43,6 +43,11 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: '#f8f9fa', // Matches `panelBackground="solid"`
+         "& input:-webkit-autofill": {
+                      "-webkit-box-shadow": "0 0 0px 100px #FFF inset", //  autofill bg  
+                      "-webkit-text-fill-color": "#575456 !important", // autofill text color 
+                      caretColor: "#575456", // Cursor color
+          },
         },
       },
     },

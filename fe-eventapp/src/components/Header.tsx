@@ -1,26 +1,26 @@
 import React, { useEffect } from "react";
-import HomeIcon from "@mui/icons-material/Home";
-import Person3Icon from "@mui/icons-material/Person3";
 
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, logoutUser } from "../store/userSlice";
+import { logoutUser } from "../store/userSlice";
 import { RootState, AppDispatch } from "../store/store";
- 
 import { red } from "@mui/material/colors";
  
 import Button from '@mui/material/Button';
 import { useTheme } from "@mui/material/styles";
+import { Avatar, AppBar, Toolbar, Box, IconButton, Typography } from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
+import GroupsIcon from "@mui/icons-material/Groups";
+import EventIcon from "@mui/icons-material/Event";
+import AddIcon from "@mui/icons-material/Add";
+import Person3Icon from "@mui/icons-material/Person3";
 
-import { Stack, Avatar } from "@mui/material";
- 
 
 
 
-export const Header = () => {
+export const Header: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
  const navigate = useNavigate();
-
  const theme = useTheme(); // Access theme inside the component
   
   const { user, tokenExpiresAt } = useSelector((state: RootState) => state.user);
@@ -42,39 +42,53 @@ export const Header = () => {
   }, [tokenExpiresAt, dispatch, navigate])
 
   return (
-    <>
-  <Stack direction="row" spacing={2}>
-        <Link to="/events">
-          <HomeIcon sx={{ color: theme.palette.primary.dark, fontSize: "large" }} />{" "}
-        </Link>{" "}
-        <Link to="/events/create">Post Event</Link>
-        <Link to="/locations">Venues</Link>
-        <Link to="/groups">Groups</Link>
-        {/* <Person3Icon  color="secondary" fontSize="large" />{" "} */}
-        <Avatar
-        sx={{ bgcolor: red[500] }}
-        aria-label="category"
-        >{user ? (`${user.email.split('')[0].toUpperCase()}`) : '?'}
-        </Avatar>
-      
-     
-   
-      {user ? (
-          <div>
-          {/* <p>Welcome, {user.email.split("@")[0]}</p> */}
-          <Button onClick={() => dispatch(logoutUser())}>Logout</Button>
-        </div>
-      ) : (
-        <div>
-          <Link to="/login">
-            <Button>Login</Button>
-          </Link>
-          <Link to="/register">
-            <Button>Register</Button>
-          </Link>
-        </div>
-      )}
- </Stack>
-    </>
+    <AppBar position="relative" sx={{ bgcolor: theme.palette.primary.main }}>
+
+      <Toolbar sx={{ justifyContent: "space-between", alignItems: "center" }}>
+
+        {/* Left side - Logo and Home Link */}
+        <Box display="flex" alignItems="center" gap={2}>
+               <Typography variant="h6" component={Link} to="/events" sx={{ textDecoration: "none", color: "white", fontWeight: "bold" }}>
+            EventHub
+          </Typography>
+        </Box>
+
+
+        {/* Middle - Navigation Links */}
+        <Box display="flex" gap={3}>
+          <Button component={Link} to="/events/create" startIcon={<AddIcon />} sx={{ color: "white" }}>
+            Post Event
+          </Button>
+          <Button component={Link} to="/locations" startIcon={<EventIcon />} sx={{ color: "white" }}>
+            Venues
+          </Button>
+          <Button component={Link} to="/groups" startIcon={<GroupsIcon />} sx={{ color: "white" }}>
+            Groups
+          </Button>
+        </Box>
+
+
+        {/* Right side - User Avatar & Authentication */}
+        <Box display="flex" alignItems="center" gap={2}>
+          {user ? (
+            <>
+              <Avatar sx={{ bgcolor: theme.palette.secondary.main }}>{user.email[0].toUpperCase()}</Avatar>
+              <Button onClick={() => dispatch(logoutUser())} sx={{ color: "white" }}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button component={Link} to="/login" sx={{ color: "white" }}>
+                Login
+              </Button>
+              <Button component={Link} to="/register" variant="contained" color="secondary">
+                Register
+              </Button>
+            </>
+          )}
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 };

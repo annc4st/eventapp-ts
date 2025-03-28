@@ -65,32 +65,45 @@ export const EventList: React.FC = () => {
   };
 
   return (
-    <Container>
+   <>
    
       {loading && <p color="gray">Loading events...</p>}
       {error && <p color="red">{error}</p>}
       {!loading && !error && events.length === 0 && <p>No events available.</p>}
 
       {!loading && !error && events.length > 0 && (
-       
-              
+        <div>
+        <Container maxWidth="sm">
+          <Typography variant="h3" component="h1" sx={{color: 'primary.dark' }}
+            align="center"
+            gutterBottom
+            margin={2}
+            > Events </Typography>
+  
+            <Typography variant="h5" component="h2" sx={{color: 'secondary.main'}}  margin={2} gutterBottom  align="center">
+              Here you can find all events that we have and and you can sign up for one or more of them.
+            </Typography>
+          </Container>
+  
+
+          <Box sx={{ flexGrow: 1 }}>
                 <Grid container 
                   spacing={{xs: 2, md: 3}}
                   columns={{ xs: 4, sm: 8, md: 12 }}
-                  // rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 >
                   {events.map((event) => {
                     const location = getLocationDetails(event.locationId);
                     return (
-                      // sx={{maxWidth: 345}}
-                      <Grid key={event.id} xs={12} sm={6} md={4} > 
+           
+                      <Grid key={event.id} size={{ xs: 2, sm: 4, md: 4 }} > 
                       <Card  elevation={3}
-                      sx={{
-                        height: "100%",  
+                      
+                      // sx={{
+                      //   height: "100%",  
                     
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
+                      //   display: "flex",
+                      //   flexDirection: "column",
+                      // }}
                       > 
                         <CardHeader
                           avatar={
@@ -100,11 +113,12 @@ export const EventList: React.FC = () => {
                             > Cat
                             </Avatar>
                           }
+                          sx={{color: 'primary.dark' }}
                           title={event.name}
                           subheader={`Distance: ${event.distance} km `}
                         ></CardHeader>
-
-                        <CardContent sx={{ flexGrow: 1 }}>
+{/* sx={{ flexGrow: 1 }} */}
+                        <CardContent >
                           {location ? (
                             <Typography variant="body2" sx={{ color: "text.secondary" }} >
                               <LocationOnIcon />
@@ -125,8 +139,13 @@ export const EventList: React.FC = () => {
                       </Grid>
                     );
                   })}
+                  
                 </Grid>
-                )}
-              </Container>
+                </Box>
+                
+                </div>
+               )}
+                </>
+         
   );
 };

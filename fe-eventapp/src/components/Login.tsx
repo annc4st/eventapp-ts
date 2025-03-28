@@ -1,29 +1,15 @@
 import { Formik, FormikHelpers, Form, Field, ErrorMessage,} from "formik";
 import * as Yup from "yup";
-// import { Grid, Paper, Avatar, TextField, Button, Typography } from '@mui/material' // link
+import { Paper, Avatar, Box, TextField, Card, Stack, Button, Typography, Container, FormControl, FormLabel} from '@mui/material' // link
 
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../store/userSlice";
 import { RootState, AppDispatch } from "../store/store";
-
-
-
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Divider from '@mui/material/Divider';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import { Link as MuiLink}  from '@mui/material/Link';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
+ 
+import { Link as MuiLink}  from '@mui/material';
 import { styled } from '@mui/material/styles';
-import AppTheme from '../shared-theme/AppTheme';
+
 
 
 interface UserData {
@@ -31,53 +17,39 @@ interface UserData {
   password: string;
 }
 
-const Card = styled(MuiCard)(({ theme }) => ({
+const MyCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignSelf: 'center',
   width: '100%',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
-  margin: 'auto',
+  margin: 'auto', // places in the center vertically
   [theme.breakpoints.up('sm')]: {
     maxWidth: '450px',
   },
-  boxShadow:
-    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-  ...theme.applyStyles('dark', {
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-  }),
+ 
 }));
 
-const SignInContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
-}));
+const MyStack = styled(Stack)(({theme}) => ({
+ height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
+ minHeight: '100%',
+ padding: 2,
 
+ '&::before': {
+content: '""',  // Creates an empty element
+display: 'block', // Makes it visible (default is inline)
+position: 'absolute',  // Positions it relative to SignInContainer
+zIndex: -1,  // Sends it behind the main content
+inset: 0,  // Stretches it to fill the parent container
+ 
+},
+} ))
+ 
 
 export const Login = () => {
 
   const dispatch = useDispatch<AppDispatch>();
-  // const {user, loading, error } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
   const initialValues: UserData = {
@@ -86,7 +58,7 @@ export const Login = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email("please enter valid email").required("Required"),
+    email: Yup.string().email("Please enter a valid email").required("Required"),
     password: Yup.string().required("Required"),
   });
 
@@ -115,40 +87,74 @@ export const Login = () => {
 
   return (
     <>
-     <SignInContainer direction="column" justifyContent="space-between">
+     <MyStack direction="column" justifyContent="space-between" >
+     <MyCard variant="outlined">
+
+     <Typography
+            component="h1"
+            variant="h3"
+            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+          >
+            Sign in
+          </Typography>
+          
+ {/* Formik Form */}
       <Formik
         initialValues={initialValues}
         onSubmit={handleLogin}
         validationSchema={validationSchema}
       >
         {(props ) => (
-          <Form>
-             <Stack spacing={2} direction="column">
+             <Form style={{ display: "flex", flexDirection: "column", gap: 16 }}> 
+
+     {/* Email Field */}      
+     <FormControl > 
+     <FormLabel htmlFor="email">Email</FormLabel>
             <Field
-              label="email"
-              name="email"
-              placeholder="Enter email"
-              required
-              helperText={<ErrorMessage name="email" />}
+            as={TextField}
+            id="email"
+            name="email"
+            type="email"
+            placeholder="your@email.com"
+            fullWidth
+            variant="outlined" 
+            required
             />
-              <ErrorMessage name="email" component="div" />
-            <Field
-              label="password"
-              name="password"
-              placeholder="Enter password"
-              type="password"
-              required
-              helperText={<ErrorMessage name="password" />}
-            />       
-            <ErrorMessage name="password" component="div" />
-            <Button variant="contained" type="submit"  disabled={props.isSubmitting}>
+              <ErrorMessage name="email" component="div" style={{ color: "red" }}/>
+              </FormControl>
+
+{/* Password Field */}
+      <FormControl>
+      <FormLabel htmlFor="password">Password</FormLabel>
+                <Field
+                  as={TextField}
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="••••••"
+                  fullWidth
+                  variant="outlined"             
+                />
+                <ErrorMessage name="password" component="div" style={{ color: "red" }} />
+              </FormControl>
+   {/* Submit Button */}
+            <Button variant="contained" type="submit" 
+            fullWidth sx={{ alignSelf: "center", mt: 2 }} disabled={props.isSubmitting}>
               {props.isSubmitting ? "Loading" : "Sign in"}
             </Button>
-            </Stack>
+
+            <Typography textAlign="center" mt={2}>
+          Don't have an account?{" "}
+          <MuiLink href="/register" variant="body2">
+            Sign up
+          </MuiLink>
+        </Typography>
+          
           </Form>
         )}
       </Formik>
-      </SignInContainer>
+      </MyCard>
+      </MyStack>
     </>
   );
 };
