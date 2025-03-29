@@ -8,6 +8,12 @@ import { SignUpParticipant } from "./SignUpParticipant";
 import { fetchParticipants } from "../store/participantSlice";
 import { Comments } from "./Comments";
 import Person3Icon from "@mui/icons-material/Person3";
+import { Box, Container, Paper, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import GroupsIcon from "@mui/icons-material/Groups";
 
 export const EventPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -57,45 +63,91 @@ export const EventPage: React.FC = () => {
 
   return (
     <>
-      <div>
+      {" "}
+      <Container maxWidth="lg">
+        {/* <div> */}
+
         {singleEvent && (
-          <>
-            <h2>{singleEvent.name}</h2>
+          <Grid container spacing={2}>
+            <Grid size={12}>
+              <Typography variant="h2" gutterBottom>
+                {singleEvent.name}
+              </Typography>
+            </Grid>
+
+            <Grid size={6}>
+              <Box>
+                <Typography>
+                  <CalendarMonthIcon />{" "}
+                  {new Date(singleEvent.date).toLocaleDateString()} at{" "}
+                  {new Date(singleEvent.date)
+                    .toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })
+                    .toLowerCase()}
+                </Typography>
+              </Box>
+
+              <Box>
+                {" "}
+                <Typography>Distance: {singleEvent.distance} km</Typography>
+              </Box>
+
+              <Box>
+                <Typography> About this event: </Typography>
+
+                <Typography>
+                  Category: <DirectionsRunIcon />
+                </Typography>
+
+                {location ? (
+                  <Typography>
+                    <LocationOnIcon />
+                    {`${location.firstLine}, ${location.city}, ${location.postcode}`}
+                  </Typography>
+                ) : (
+                  <Typography>Loading location details..</Typography>
+                )}
+              </Box>
+            </Grid>
+            <Grid size={4}>
+              <Box>
+                {participantCount > 0 ? (
+                  <div>
+                    <GroupsIcon />
+                    <Typography> {participantCount}</Typography>
+                  </div>
+                ) : (
+                  <Typography> No participants yet. </Typography>
+                )}
+
+                <Typography>Buy ticket</Typography>
+
+                {user ? (
+                  <SignUpParticipant eventId={singleEvent?.id ?? -1} />
+                ) : (
+                  <Typography>
+                    {" "}
+                    You need to sign in to register for the event
+                  </Typography>
+                )}
+              </Box>
+            </Grid>
+
             {user?.id === singleEvent.userId && (
               <Link to={`/events/${singleEvent.id}/update`}>Update Event</Link>
             )}
-
-            <p>Date: {new Date(singleEvent.date).toLocaleDateString()}</p>
-            <p>Distance: {singleEvent.distance} km</p>
-            <p>Price: {singleEvent.ticketPrice}</p>
-            {location ? (
-              <p>
-                Location:{" "}
-                {`${location.firstLine}, ${location.city}, ${location.postcode}`}
-              </p>
-            ) : (
-              <p>Loading location details...</p>
-            )}
-
-            {participantCount > 0 ? (
-              <div>
-                <span>{participantCount}</span>
-                <Person3Icon
-                  style={{ verticalAlign: "middle", color: "#646cff" }}
-                />
-              </div>
-            ) : (
-              <p> No participants yet. </p>
-            )}
-            {user ? (
-              <SignUpParticipant eventId={singleEvent?.id ?? -1} />
-            ) : (
-              <p> You need to sign in to register for the event</p>
-            )}
-          </>
+          </Grid>
         )}
-      </div>
-      <Comments eventId={singleEvent?.id} />
+
+        <Grid size={12}>
+        <Comments eventId={singleEvent?.id} />
+        </Grid>
+
+ 
+      </Container>
     </>
   );
 };

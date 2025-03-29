@@ -5,6 +5,7 @@ import { fetchCommentsByEventId } from "../store/commentSlice";
 import { CreateComment } from "./CreateComment";
 
 
+
 interface CommentProps {
     eventId: number;
   }

@@ -73,17 +73,18 @@ export const EventList: React.FC = () => {
 
       {!loading && !error && events.length > 0 && (
         <div>
-        <Container maxWidth="sm">
-          <Typography variant="h3" component="h1" sx={{color: 'primary.dark' }}
+        <Container maxWidth="lg">
+          <Typography variant="h3" component="h1" sx={{color: 'primary.dark', mt: 2}}
             align="center"
+            
             gutterBottom
-            margin={2}
             > Events </Typography>
   
-            <Typography variant="h5" component="h2" sx={{color: 'secondary.main'}}  margin={2} gutterBottom  align="center">
+            <Typography sx={{color: 'secondary.main', align: 'left', mb: 2 }}  
+            gutterBottom >
               Here you can find all events that we have and and you can sign up for one or more of them.
             </Typography>
-          </Container>
+          
   
 
           <Box sx={{ flexGrow: 1 }}>
@@ -97,18 +98,11 @@ export const EventList: React.FC = () => {
            
                       <Grid key={event.id} size={{ xs: 2, sm: 4, md: 4 }} > 
                       <Card  elevation={3}
-                      
-                      // sx={{
-                      //   height: "100%",  
-                    
-                      //   display: "flex",
-                      //   flexDirection: "column",
-                      // }}
                       > 
                         <CardHeader
                           avatar={
                             <Avatar
-                              sx={{ bgcolor: red[500] }}
+                              sx={{ bgcolor: 'primary.light' }}
                               aria-label="category"
                             > Cat
                             </Avatar>
@@ -121,7 +115,7 @@ export const EventList: React.FC = () => {
                         <CardContent >
                           {location ? (
                             <Typography variant="body2" sx={{ color: "text.secondary" }} >
-                              <LocationOnIcon />
+                              <LocationOnIcon sx={{color: "secondary.contrastText"}}/>
                               {`${location.firstLine}, ${location.city}, ${location.postcode}`}
                             </Typography>
                           ) : (
@@ -142,7 +136,7 @@ export const EventList: React.FC = () => {
                   
                 </Grid>
                 </Box>
-                
+                </Container>
                 </div>
                )}
                 </>

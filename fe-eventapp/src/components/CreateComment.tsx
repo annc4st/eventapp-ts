@@ -4,6 +4,8 @@ import { Formik, FormikHelpers, Form,
 import { object, string } from "yup";
 import { optimisticAdd, addComment } from "../store/commentSlice";
 import { RootState, AppDispatch } from "../store/store";
+import { Button, FormControl, FormLabel, TextField } from "@mui/material";
+
 
 interface ICommentData {
   content: string;
@@ -64,23 +66,32 @@ export const CreateComment: React.FC<CommentProps> = ({ eventId }) => {
     <>
       {user && (
         <div>
-          <h3>Post a Comment</h3>
+          {/* <h3>Post a Comment</h3> */}
           <Formik
             initialValues={initialValues}
             validationSchema={commentSchema}
             onSubmit={handleSubmit}
           >
             {({ isSubmitting }) => (
-              <Form>
-                <Field id="content" name="content" />
+              <Form style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <FormControl > 
+                <FormLabel htmlFor="content">Post Comment</FormLabel>
+                <Field 
+                 as={TextField}
+                 id="content" name="content" 
+                 fullWidth
+                 variant="outlined" 
+                 required
+                 />
                 <ErrorMessage
                   name="content"
                   component="div"
-                  className="error"
+                  style={{ color: "red" }}
                 />
-                <button type="submit" disabled={isSubmitting}>
+                    </FormControl>
+                <Button  variant="contained" type="submit" disabled={isSubmitting}>
                   {isSubmitting ? "Submitting..." : "Submit"}
-                </button>
+                </Button>
               </Form>
             )}
           </Formik>

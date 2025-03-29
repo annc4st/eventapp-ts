@@ -19,6 +19,7 @@ import { fetchAllUsers } from "./store/allUsersSlice";
 import { AppDispatch } from "./store/store";
 import theme from "./theme";
 import { ThemeProvider, Container, CssBaseline } from "@mui/material";
+import NavBar from "./components/NavBar";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,7 +34,8 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline>
           <Container maxWidth="lg">
-          <Header />
+          {/* <Header /> */}
+          <NavBar />
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
