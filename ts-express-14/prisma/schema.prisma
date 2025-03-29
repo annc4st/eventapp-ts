@@ -21,10 +21,11 @@ model User {
   comments       Comment[] // One user can have multiple comments
   participants   Participant[] // Link to participants
 
-  ownedGroups    Group[]       @relation("AdminGroups") // Groups where the user is an admin
-  memberships    GroupMembership[] // Groups where the user is a member
+  ownedGroups Group[]           @relation("AdminGroups") // Groups where the user is an admin
+  memberships GroupMembership[] // Groups where the user is a member
 
-  GroupNews       GroupNews[]
+  GroupNews  GroupNews[]
+  EventLikes EventLikes[]
 }
 
 model Event {
@@ -38,10 +39,11 @@ model Event {
   user         User?         @relation(fields: [userId], references: [id])
   userId       Int?
   // Relations
-  comments     Comment[]  
+  comments     Comment[]
   participants Participant[] // Link to participants
-  groupId      Int?          // Optional: If event is for a group
+  groupId      Int? // Optional: If event is for a group
   group        Group?        @relation(fields: [groupId], references: [id])
+  EventLikes   EventLikes[]
 }
 
 model Address {
@@ -76,26 +78,26 @@ model Participant {
 }
 
 model Group {
-  id           Int              @id @default(autoincrement())
-  groupName    String           @unique
-  description  String?
-  adminId      Int              // User who created the group
-  admin        User             @relation("AdminGroups", fields: [adminId], references: [id])
-  members      GroupMembership[]
-  events       Event[]          // Events restricted to this group
-  createdAt    DateTime         @default(now())
+  id          Int               @id @default(autoincrement())
+  groupName   String            @unique
+  description String?
+  adminId     Int // User who created the group
+  admin       User              @relation("AdminGroups", fields: [adminId], references: [id])
+  members     GroupMembership[]
+  events      Event[] // Events restricted to this group
+  createdAt   DateTime          @default(now())
 
-  GroupNews    GroupNews[]
+  GroupNews GroupNews[]
 }
 
 model GroupMembership {
-  id        Int    @id @default(autoincrement())
-  groupId   Int
-  userId    Int
-  status    MembershipStatus @default(PENDING) // PENDING, APPROVED, REJECTED
+  id      Int              @id @default(autoincrement())
+  groupId Int
+  userId  Int
+  status  MembershipStatus @default(PENDING) // PENDING, APPROVED, REJECTED
 
-  group     Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([groupId, userId]) // Ensures a user can't join the same group twice
 }
@@ -107,20 +109,29 @@ enum MembershipStatus {
 }
 
 model GroupNews {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   newsName  String
   content   String
   createdAt DateTime @default(now())
   newsImg   String? // Nullable - If no image is uploaded
   // status NewsStatus @default(PENDING) // Default: News needs approval
   groupId   Int
-  userId    Int   //author
-  group     Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int //author
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum NewsStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+model EventLikes {
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId  Int
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId]) // Ensures a user can't like the same event twice
 }

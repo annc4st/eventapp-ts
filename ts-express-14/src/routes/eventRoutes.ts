@@ -4,6 +4,8 @@ import { createComment, getComments  } from '../controllers/comment.controller';
 import { authenticateToken } from '../middlewares/authenticate';
 import { signUpForEvent, getParticipantsByEvent, unsignFromEvent } from '../controllers/participant.controller';
 
+import { getLikesOfEvent, toggleLike } from '../controllers/likes.controller';
+
 
 const eventRouter = Router();
 
@@ -22,6 +24,12 @@ eventRouter.get("/:eventId/comments", getComments)
 eventRouter.get("/:eventId/participants", getParticipantsByEvent);
 eventRouter.post("/:eventId/participants", authenticateToken, signUpForEvent);
 eventRouter.delete("/:eventId/participants", authenticateToken, unsignFromEvent);// user cancels his particpation
+
+
+//likes
+eventRouter.get("/:eventId/likes", getLikesOfEvent) ;
+eventRouter.patch("/:eventId/likes", authenticateToken, toggleLike);
+
 
 
 //middleware to check and debug
