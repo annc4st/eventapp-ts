@@ -76,7 +76,7 @@ export const createEvent = async (
 ) => {
 
     const { name, date, distance, ticketPrice, locationId } = req.body;
-    console.log("user found ?? ", req.user?.id)
+    // console.log("user found ?? ", req.user?.id)
     const userId = req.user?.id;
     
     // checking whether user exists
@@ -128,7 +128,7 @@ export const updateEvent = async (
     const { id } = req.params;
     const { name, date, distance, ticketPrice, locationId } = req.body;
     const updatingUserId = req.user?.id;
-    console.log("updatingUserId >> ", updatingUserId)
+    // console.log("updatingUserId >> ", updatingUserId)
 
     // Convert id to a number
     const numericEventId = parseInt(id, 10);

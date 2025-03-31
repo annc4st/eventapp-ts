@@ -11,7 +11,7 @@ if (!jwtSecret) {
   }
 
 export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
-  console.log("auth headers from ", req.headers.authorization)
+  // console.log("auth headers from ", req.headers.authorization)
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -26,7 +26,7 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
   try {
     // Verify the JWT token
     const decoded = jwt.verify(token, jwtSecret) as { id: number; email: string };
-    console.log("Token verified, user ID:", decoded.id);
+    // console.log("Token verified, user ID:", decoded.id);
 
  //fetch usr from db
     const user = await prisma.user.findUnique({where: { id: decoded.id}});
@@ -37,7 +37,7 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
 
     // Attach user to the request object
     req.user = { id: user.id, email: user.email };
-    console.log("req.user Set As:", req.user);
+    // console.log("req.user Set As:", req.user);
     next();
 
   } catch (err){

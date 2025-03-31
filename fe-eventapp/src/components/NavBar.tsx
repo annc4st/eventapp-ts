@@ -29,6 +29,7 @@ import MenuItem from "@mui/material/MenuItem";
 import LightModeIcon from "@mui/icons-material/LightModeRounded";
 import { gray } from "../shared-theme/themePrimitives";
 
+
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -167,7 +168,8 @@ export default function NavBar() {
               </>
             ) : (
               <>
-                <Button color="primary" variant="text" size="small">
+                <Button component={Link} to="/login" color="primary" 
+                variant="text" size="small">
                   Sign in
                 </Button>
                 <Button

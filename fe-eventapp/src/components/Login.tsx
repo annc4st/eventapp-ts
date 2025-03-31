@@ -69,7 +69,8 @@ export const Login = () => {
     try {
       const resultAction = await dispatch(loginUser(values));
     if (loginUser.fulfilled.match(resultAction)) {
-      navigate("/events");
+      // navigate("/events");
+      navigate(-1); // go back to the previous page
     }  else {
       if (resultAction.payload) {
         setErrors({ email: resultAction.payload as string });

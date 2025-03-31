@@ -3,18 +3,19 @@ import { grey, red } from '@mui/material/colors';
 
 
 const theme = createTheme({
+  
   cssVariables: true,
   palette: {
     primary: {
       main:  '#015668', //dark teal
-      light: '#FFD369', //yellow
+      light: '#3698ad', //yellow #3698ad
       dark: '#263F44' //dark
     
     },
     secondary: {
       main: '#575456', //gray
       light:'#FFF1CF', //light yellow
-      dark: '#263F44',
+       dark: '#f0aa32', //'#FFD369', //dark yellow
       contrastText: '#FFA725'
     },
     error: {
@@ -35,6 +36,17 @@ const theme = createTheme({
     fontWeightMedium: 600,
     fontWeightBold: 700,
   },
+  spacing: 8,
+
+  // ✅ Add a custom spacing object
+  // customSpacing: {
+  //   xs: 4,  // 4px
+  //   sm: 8,  // 8px
+  //   md: 16, // 16px
+  //   lg: 24, // 24px
+  //   xl: 32, // 32px
+  // },
+
   shape: {
     borderRadius: 8, // Medium border-radius
   },

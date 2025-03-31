@@ -1,7 +1,10 @@
 import { RootState, AppDispatch } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { optimisticAdd, signUpForEvent } from "../store/participantSlice";
-import { Button } from "@mui/material";
+import Button from '@mui/material/Button';
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
+import { Box } from "@mui/material";
+
  
 
 interface SignUpParticipantProps {
@@ -39,10 +42,14 @@ export const SignUpParticipant: React.FC<SignUpParticipantProps> = ({ eventId })
   };
 
   return (
-    <div>
-        <Button onClick={handleSignUp} disabled={!user || isAlreadySignedUp}>
-        {isAlreadySignedUp ? 'Already Registered' : 'Sign Up'}
+    <Box>
+        <Button  variant="contained" size="large" 
+        sx={{bgcolor: 'secondary.dark'}}
+        onClick={handleSignUp} disabled={!user || isAlreadySignedUp} 
+        startIcon={<DirectionsRunIcon />}
+        >
+           {isAlreadySignedUp ? 'Already Registered' : 'Sign Up'}
         </Button>
-    </div>
+        </Box>
   );
 };

@@ -7,13 +7,19 @@ import { RootState, AppDispatch } from "../store/store";
 import { SignUpParticipant } from "./SignUpParticipant";
 import { fetchParticipants } from "../store/participantSlice";
 import { Comments } from "./Comments";
+
+import {Link as MuiLink} from '@mui/material/Link'
 import Person3Icon from "@mui/icons-material/Person3";
-import { Box, Container, Paper, Typography } from "@mui/material";
+import { Box, Container, Typography, Button } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GroupsIcon from "@mui/icons-material/Groups";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import RouteIcon from '@mui/icons-material/Route';
+
+
 
 export const EventPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -63,90 +69,127 @@ export const EventPage: React.FC = () => {
 
   return (
     <>
-      {" "}
+      
       <Container maxWidth="lg">
-        {/* <div> */}
-
-        {singleEvent && (
+          {singleEvent && (
           <Grid container spacing={2}>
-            <Grid size={12}>
-              <Typography variant="h2" gutterBottom>
-                {singleEvent.name}
-              </Typography>
+            <Grid size={{ xs: 12 }}>
+                <Typography variant="h2" gutterBottom>
+                  {singleEvent.name}
+                </Typography>
+
+                {/* If user is author/owner of the event */}
+                {user?.id === singleEvent.userId && (
+                  <Box>
+               <Link to={`/events/${singleEvent.id}/update`} style={{textDecoration: 'none'}} >
+                    <Button> Update Event</Button>
+                    </Link>
+             
+                  </Box>
+                )}
+
             </Grid>
 
-            <Grid size={6}>
-              <Box>
-                <Typography>
-                  <CalendarMonthIcon />{" "}
-                  {new Date(singleEvent.date).toLocaleDateString()} at{" "}
-                  {new Date(singleEvent.date)
-                    .toLocaleTimeString("en-US", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    })
-                    .toLowerCase()}
-                </Typography>
+
+
+            {/* Left Column: Event Details */}
+            <Grid size={{xs: 12, md: 6}}>  
+              <Box sx={{mb: 2, mt: 2}}>
+                <Typography  >
+                  <CalendarMonthIcon />{" "} Date {"  "}
+                  {new Date(singleEvent.date).toLocaleDateString()} {" "}
+                  </Typography>
+              </Box>
+
+              <Box sx={{mb: 2, mt: 2}}>
+                    <Typography> <AccessTimeIcon />{" "}
+                    {new Date(singleEvent.date)
+                      .toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                      .toLowerCase()}
+                  </Typography>
+              </Box>
+
+              <Box sx={{mb: 2, mt: 2}}>
+                  <Typography><RouteIcon/> {" "} Distance: {singleEvent.distance} km</Typography>
               </Box>
 
               <Box>
-                {" "}
-                <Typography>Distance: {singleEvent.distance} km</Typography>
-              </Box>
-
-              <Box>
-                <Typography> About this event: </Typography>
+                <Typography variant="h6"> About this event: </Typography>
 
                 <Typography>
                   Category: <DirectionsRunIcon />
                 </Typography>
 
                 {location ? (
-                  <Typography>
-                    <LocationOnIcon />
-                    {`${location.firstLine}, ${location.city}, ${location.postcode}`}
-                  </Typography>
+                     <Box sx={{mb: 2, mt: 2}}>
+                      <Typography sx={{mb: 1, mt: 1}}> Address </Typography>
+
+                      <Typography sx={{color: 'secondary.main'  , border: 1, borderRadius: '16px', padding: "8px", borderColor: "primary.light"}}>
+                        <LocationOnIcon />{"  "} 
+                        {`${location.firstLine}, ${location.city}, ${location.postcode}`}
+                      </Typography>
+                  </Box>
                 ) : (
                   <Typography>Loading location details..</Typography>
                 )}
               </Box>
-            </Grid>
-            <Grid size={4}>
-              <Box>
-                {participantCount > 0 ? (
-                  <div>
-                    <GroupsIcon />
-                    <Typography> {participantCount}</Typography>
-                  </div>
+{/*Participants */}
+              {participantCount > 0 ? (
+               <Box>
+              
+                    <Typography> <GroupsIcon sx={{color: 'secondary.dark'}} /> 
+                    {" "} {participantCount} {(participantCount == 1) ? "participant" : "participants"} 
+                    </Typography>
+                  </Box>
                 ) : (
+                  <Box>
                   <Typography> No participants yet. </Typography>
+                  </Box>
                 )}
+            </Grid>
 
-                <Typography>Buy ticket</Typography>
+
+  {/* Right Column:   Registration */}
+ 
+            <Grid size={{xs: 12, md: 6}}>
+             <Box sx={{
+              // color: 'secondary.main', border: 1, borderRadius: '16px', padding: "16px", 
+              // borderColor: "primary.light",
+              display: 'flex', 
+              gap: 2,
+      flexDirection: 'row', // Stack items vertically
+      alignItems: 'center', // Center items horizontally
+      // justifyContent: 'center', // Center items vertically
+      // textAlign: 'center', // Center text
+      spacing: 2
+      }}>
+             <Typography>Price  </Typography> 
+             <Typography sx ={{border: 1, borderRadius: '8px', pl: "16px", pr: '16px', 
+              borderColor: "primary.light", }}>£{singleEvent.ticketPrice} </Typography>
+                {/* <Typography  gutterBottom sx={{color: 'primary.main'}}
+                variant='h5'
+                >Buy ticket</Typography> */}
 
                 {user ? (
                   <SignUpParticipant eventId={singleEvent?.id ?? -1} />
                 ) : (
+                   
                   <Typography>
                     {" "}
-                    You need to sign in to register for the event
+                    You need to <Link to={`/login`} style={{textDecoration: 'none', color:'#3698ad'}} >sign in </Link>to register for the event
                   </Typography>
+               
                 )}
               </Box>
             </Grid>
-
-            {user?.id === singleEvent.userId && (
-              <Link to={`/events/${singleEvent.id}/update`}>Update Event</Link>
-            )}
           </Grid>
         )}
 
-        <Grid size={12}>
         <Comments eventId={singleEvent?.id} />
-        </Grid>
-
- 
       </Container>
     </>
   );
