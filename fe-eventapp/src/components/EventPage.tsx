@@ -70,11 +70,12 @@ export const EventPage: React.FC = () => {
   return (
     <>
       
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" >
+ 
           {singleEvent && (
-          <Grid container spacing={2}>
+          <Grid container spacing={5}>
             <Grid size={{ xs: 12 }}>
-                <Typography variant="h2" gutterBottom>
+                <Typography variant="h2" gutterBottom sx={{mt: 2, color: "secondary.main"}}>
                   {singleEvent.name}
                 </Typography>
 
@@ -128,7 +129,7 @@ export const EventPage: React.FC = () => {
                      <Box sx={{mb: 2, mt: 2}}>
                       <Typography sx={{mb: 1, mt: 1}}> Address </Typography>
 
-                      <Typography sx={{color: 'secondary.main'  , border: 1, borderRadius: '16px', padding: "8px", borderColor: "primary.light"}}>
+                      <Typography sx={{color: 'secondary.main', border: 1, borderRadius: '16px', padding: "8px", borderColor: "primary.light"}}>
                         <LocationOnIcon />{"  "} 
                         {`${location.firstLine}, ${location.city}, ${location.postcode}`}
                       </Typography>
@@ -137,26 +138,28 @@ export const EventPage: React.FC = () => {
                   <Typography>Loading location details..</Typography>
                 )}
               </Box>
-{/*Participants */}
+
+            </Grid>
+
+
+  {/* Right Column:   Registration */}
+ 
+            <Grid size={{xs: 12, md: 6}} >
+              {/*Participants */}
               {participantCount > 0 ? (
-               <Box>
+               <Box sx={{mb: 2, mt: 2}}>
               
                     <Typography> <GroupsIcon sx={{color: 'secondary.dark'}} /> 
                     {" "} {participantCount} {(participantCount == 1) ? "participant" : "participants"} 
                     </Typography>
                   </Box>
                 ) : (
-                  <Box>
+                  <Box sx={{mb: 2, mt: 2}}>
                   <Typography> No participants yet. </Typography>
                   </Box>
                 )}
-            </Grid>
 
-
-  {/* Right Column:   Registration */}
- 
-            <Grid size={{xs: 12, md: 6}}>
-             <Box sx={{
+             <Box sx={{mb: 2, mt: 2,
               // color: 'secondary.main', border: 1, borderRadius: '16px', padding: "16px", 
               // borderColor: "primary.light",
               display: 'flex', 
@@ -169,10 +172,13 @@ export const EventPage: React.FC = () => {
       }}>
              <Typography>Price  </Typography> 
              <Typography sx ={{border: 1, borderRadius: '8px', pl: "16px", pr: '16px', 
-              borderColor: "primary.light", }}>£{singleEvent.ticketPrice} </Typography>
-                {/* <Typography  gutterBottom sx={{color: 'primary.main'}}
+              borderColor: "primary.light", }}>£ {singleEvent.ticketPrice} </Typography>
+
+              </Box>
+              <Box sx={{mb: 2, mt: 2}}>
+                <Typography  gutterBottom sx={{color: 'primary.main'}}
                 variant='h5'
-                >Buy ticket</Typography> */}
+                >Buy ticket</Typography>
 
                 {user ? (
                   <SignUpParticipant eventId={singleEvent?.id ?? -1} />
@@ -188,9 +194,10 @@ export const EventPage: React.FC = () => {
             </Grid>
           </Grid>
         )}
-
-        <Comments eventId={singleEvent?.id} />
       </Container>
+
+
+      <Comments eventId={singleEvent?.id} />
     </>
   );
 };

@@ -49,7 +49,6 @@ export const getSingleEvent = async (
   const { id } = req.params;
 
   try {
-    // Convert id to a number
     const numericId = parseInt(id, 10);
 
     if (isNaN(numericId)) {
@@ -79,7 +78,6 @@ export const createEvent = async (
     // console.log("user found ?? ", req.user?.id)
     const userId = req.user?.id;
     
-    // checking whether user exists
     const userExists = await validateUser(userId);
     if (!userExists) {
       return res.status(404).json({ error: "User not found" });
@@ -128,9 +126,7 @@ export const updateEvent = async (
     const { id } = req.params;
     const { name, date, distance, ticketPrice, locationId } = req.body;
     const updatingUserId = req.user?.id;
-    // console.log("updatingUserId >> ", updatingUserId)
 
-    // Convert id to a number
     const numericEventId = parseInt(id, 10);
 
     if (isNaN(numericEventId)) {

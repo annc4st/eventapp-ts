@@ -52,7 +52,7 @@ export const getParticipantsByEvent = async (
     res: Response,
     next: NextFunction) => {
 
-        console.log("Incoming params:", req.params); // Debug log
+        // console.log("Incoming params:", req.params); // Debug log
  const { eventId } = req.params; //id of the event
  
   // Convert id to a number
@@ -121,7 +121,7 @@ export const unsignFromEvent = async (
         },
       });
 
-      console.log("particpants found ? ", participant)
+      // console.log("particpants found ? ", participant)
   
       if (!participant) {
         return res.status(404).json({ error: "You are not signed up for this event" });
@@ -180,7 +180,7 @@ export const unsignFromEvent = async (
         },
       });
 
-      console.log("particpants found ? ", participant)
+      // console.log("particpants found ? ", participant)
   
       if (!participant) {
         return res.status(404).json({ error: "User is not signed up for this event" });
