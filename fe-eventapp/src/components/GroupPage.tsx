@@ -12,6 +12,10 @@ import {
 } from "../store/groupMembershipSlice";
 import { logoutUser } from "../store/userSlice";
 import Button from '@mui/material/Button';
+import { GroupNewsList } from "./GroupNewsList";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+
 
 
 export const GroupPage: React.FC = () => {
@@ -77,6 +81,7 @@ export const GroupPage: React.FC = () => {
     await dispatch(requestToJoinGroup(numericGroupId));
     dispatch(fetchingPendingRequests(numericGroupId)); //   update pending requests
     toast.success("Request to join sent!");
+    
   };
 
   const handleLeaveGroup = async (numericGroupId: number) => {
@@ -90,14 +95,21 @@ export const GroupPage: React.FC = () => {
       setLeaveSuccess(true); // Show success message
     } catch (error) {
       console.error("Failed to leave group:", error);
-      alert("Failed to leave the group.");
+      // alert("Failed to leave the group.");
+      <Alert severity="warning">Failed to leave the group.</Alert>
+
     } finally {
       setIsLeaving(false);
     }
   };
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (error){
+    return ( <Alert severity="error">
+      <AlertTitle>Error</AlertTitle>{error}
+      </Alert>
+  )}
+
 
   return (
     <>
@@ -192,6 +204,10 @@ export const GroupPage: React.FC = () => {
                   Your request to join is pending
                 </button>
               )}
+            </div>
+
+            <div>
+              <GroupNewsList groupId = {numericGroupId} />
             </div>
 
             {/* for admin eyes only - pending requests */}

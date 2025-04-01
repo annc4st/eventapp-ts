@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { RootState, AppDispatch } from "../store/store";
 import { fetchCommentsByEventId } from "../store/commentSlice";
 import { CreateComment } from "./CreateComment";
+import { Box, Button, Container, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+
 
 
 interface CommentProps {
@@ -26,23 +30,45 @@ export const Comments: React.FC<CommentProps> = ({ eventId }) => {
   if (error) return <p>Error loading comments: {error}</p>;
 
   return (
-    <div>
-      <h3>Comments</h3>
+ 
+    <Container maxWidth="lg" >
+      <Grid container spacing={2}>
+       <Grid size={{xs: 12, md: 6}}>
+      <Typography variant="h4" sx={{ color: 'secondary.dark'}}>Comments</Typography>
+
+
       {comments.length > 0 ? (
         comments.map((c) => (
-          <div key={c.id}>
-            <p>{c.content}</p>
-            <p>author: {c.partEmail}</p>
-            <p>Posted: {new Date(c.createdAt).toLocaleDateString()}</p>
-          </div>
+          <Box key={c.id} sx={{ mb: 2, mt: 2,
+            border: '1px', borderRadius: '8px', bgcolor:'secondary.light', padding: '8px'}}>
+             <Box sx={{ mb: 2 }}><Typography>{c.content}</Typography></Box>
+
+             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography sx={{color: 'secondary.main', fontSize: '12px'}}>{c.partEmail}</Typography>
+            <Typography sx={{color: 'secondary.main', fontSize: '12px', pr: '16px'}}>{new Date(c.createdAt).toLocaleDateString()}</Typography>
+            </Box>
+          </Box>
         ))
       ) : (
-        <p>No comments yet. Be the first to comment!</p>
+        <Box sx={{ mb: 2, mt: 2,
+        borderRadius: '8px', bgcolor:'secondary.light', padding: '8px'}}>
+        <Typography>No comments yet. Be the first to comment!</Typography>
+        </Box>
       )}
+
+
       {user ? ( <CreateComment eventId={eventId} />
       ) : (
-        <p>You need to sign in to post a comment</p>
+        <Typography sx={{color: 'secondary.main', 
+          border: 1, borderRadius: '8px', borderColor: "primary.light", padding: '8px'
+        }}>
+          You need to <Link to={`/login`} style={{textDecoration: 'none', color:'#3698ad'}}
+         >sign in</Link> to post a comment</Typography>
+        
       )}
-    </div>
+      </Grid>
+      </Grid>
+    </Container>
+    // </>
   );
 };
