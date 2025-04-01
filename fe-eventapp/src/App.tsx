@@ -4,7 +4,7 @@ import { Register } from "./components/Register";
 import { EventList } from "./components/EventList";
 import { EventPage } from "./components/EventPage";
 import { CreateEvent } from "./components/CreateEvent";
-import { Header } from "./components/Header";
+// import { Header } from "./components/Header";
 import { CreateLocation } from "./components/CreateLocation";
 import { Provider } from "react-redux";
 import store from "./store/store";
@@ -19,7 +19,7 @@ import { fetchAllUsers } from "./store/allUsersSlice";
 import { AppDispatch } from "./store/store";
 import theme from "./theme";
 import { ThemeProvider, Container, CssBaseline } from "@mui/material";
-import NavBar from "./components/NavBar";
+import  NavBar from "./components/NavBar";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();

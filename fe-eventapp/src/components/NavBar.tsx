@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../store/userSlice";
@@ -27,15 +26,16 @@ import { alpha, styled } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
 import MenuItem from "@mui/material/MenuItem";
 import LightModeIcon from "@mui/icons-material/LightModeRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import Divider from "@mui/material/Divider";
 import { gray } from "../shared-theme/themePrimitives";
-
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
   flexShrink: 0,
-  borderRadius: '8px',
+  borderRadius: "8px",
   //   backdropFilter: 'blur(24px)',
   border: "1px solid",
   borderColor: alpha(gray[300], 0.4),
@@ -88,24 +88,27 @@ export default function NavBar() {
         width: "100%",
       }}
     >
-      <Container maxWidth="lg" >
-        <StyledToolbar variant="dense" disableGutters  sx={{ boxShadow: 4 }}>
-           {/* Left Side - Brand Name */}
+      <Container maxWidth="lg">
+        <StyledToolbar variant="dense" disableGutters sx={{ boxShadow: 4 }}>
+          {/* Left Side - Brand Name */}
           <Box
-            sx={{ flexGrow: 1, display: "flex", alignItems: "center", ps: 0}}
+            sx={{ flexGrow: 1, display: "flex", alignItems: "center", ps: 0 }}
           >
-             <Button
+            <Button
               variant="text"
-              color="inherit"
               component={Link}
               to="/" // main page in future
-              sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+              sx={{
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+                color: "primary.dark",
+              }}
             >
               EventHub
             </Button>
 
-             {/* Desktop Menu - Hidden on Small Screens */}
-            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2}}>
+            {/* Desktop Menu - Hidden on Small Screens */}
+            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
               <Button
                 variant="text"
                 color="primary"
@@ -115,6 +118,7 @@ export default function NavBar() {
               >
                 Events
               </Button>
+
               <Button
                 variant="text"
                 color="primary"
@@ -150,7 +154,7 @@ export default function NavBar() {
             </Box>
           </Box>
 
-          {/*  next */}
+          {/*  LOGIn, LOGOUT .. */}
 
           <Box
             sx={{
@@ -168,10 +172,16 @@ export default function NavBar() {
               </>
             ) : (
               <>
-                <Button component={Link} to="/login" color="primary" 
-                variant="text" size="small">
+                <Button
+                  component={Link}
+                  to="/login"
+                  color="primary"
+                  variant="text"
+                  size="small"
+                >
                   Sign in
                 </Button>
+
                 <Button
                   component={Link}
                   to="/register"
@@ -179,10 +189,87 @@ export default function NavBar() {
                   color="secondary"
                   size="small"
                 >
-                  Register
+                  {" "}
+                  Register{" "}
                 </Button>
               </>
             )}
+          </Box>
+
+          {/* GO to SMALL screen mode */}
+          <Box sx={{ display: { xs: "flex", md: "none" }, gap: 1 }}>
+            <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
+              <MenuIcon />
+            </IconButton>
+            <Drawer
+              anchor="top"
+              open={open}
+              onClose={toggleDrawer(false)}
+              PaperProps={{
+                sx: {
+                  top: "var(--template-frame-height, 0px)",
+                },
+              }}
+            >
+              <Box sx={{ p: 2, backgroundColor: "background.default" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <IconButton onClick={toggleDrawer(false)}>
+                    <CloseRoundedIcon />
+                  </IconButton>
+                </Box>
+                <MenuItem component={Link} to="/events">Events</MenuItem>
+                <MenuItem component={Link} to="/events/create">Post Event</MenuItem>
+                <MenuItem component={Link} to="/locations">Venues</MenuItem>
+                <MenuItem component={Link} to="/groups">Groups</MenuItem>
+                <Divider sx={{ my: 3 }} />
+
+                {user ? (
+                  <>
+                    <MenuItem>
+                      <Button
+                        onClick={() => dispatch(logoutUser())}
+                        color="primary"
+                        variant="outlined"
+                        fullWidth
+                      >
+                        Logout
+                      </Button>
+                    </MenuItem>
+                  </>
+                ) : (
+                  <>
+                    <MenuItem>
+                      <Button
+                        component={Link}
+                        to="/login"
+                        color="primary"
+                        variant="contained"
+                        fullWidth
+                      >
+                        Sign in
+                      </Button>
+                    </MenuItem>
+
+                    <MenuItem>
+                      <Button
+                        component={Link}
+                        to="/register"
+                        color="secondary"
+                        variant="contained"
+                        fullWidth
+                      >
+                        Register
+                      </Button>
+                    </MenuItem>
+                  </>
+                )}
+              </Box>
+            </Drawer>
           </Box>
         </StyledToolbar>
       </Container>

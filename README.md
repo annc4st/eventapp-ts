@@ -19,6 +19,6 @@ Plantomeet is a full-stack web application designed to help users schedule and m
 ✅ Event creation & management  
 ✅ Group-based event planning  
 ✅ Optimistic rendering (comments, locations, groups)
-🚧 Google Calendar integration (Planned)  
+<!-- 🚧 Google Calendar integration (Planned)  
 🚧 Stripe payments (Planned)  
-🚧 Real-time chat (Planned)  
+🚧 Real-time chat (Planned)   -->

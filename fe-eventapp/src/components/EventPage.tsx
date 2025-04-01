@@ -149,7 +149,7 @@ export const EventPage: React.FC = () => {
               {participantCount > 0 ? (
                <Box sx={{mb: 2, mt: 2}}>
               
-                    <Typography> <GroupsIcon sx={{color: 'secondary.dark'}} /> 
+                    <Typography> <GroupsIcon size='lg' sx={{color: 'secondary.dark'}} /> 
                     {" "} {participantCount} {(participantCount == 1) ? "participant" : "participants"} 
                     </Typography>
                   </Box>
