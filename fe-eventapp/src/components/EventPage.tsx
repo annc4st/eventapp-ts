@@ -8,7 +8,7 @@ import { SignUpParticipant } from "./SignUpParticipant";
 import { fetchParticipants } from "../store/participantSlice";
 import { Comments } from "./Comments";
 
-import {Link as MuiLink} from '@mui/material/Link'
+import { Link as MuiLink } from "@mui/material/Link";
 import Person3Icon from "@mui/icons-material/Person3";
 import { Box, Container, Typography, Button } from "@mui/material";
 import Grid from "@mui/material/Grid2";
@@ -16,10 +16,8 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GroupsIcon from "@mui/icons-material/Groups";
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import RouteIcon from '@mui/icons-material/Route';
-
-
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import RouteIcon from "@mui/icons-material/Route";
 
 export const EventPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,6 +30,8 @@ export const EventPage: React.FC = () => {
     loading: singleEventLoading,
     error: singleEventError,
   } = useSelector((state: RootState) => state.singleEvent);
+
+ 
 
   const {
     locations,
@@ -69,53 +69,58 @@ export const EventPage: React.FC = () => {
 
   return (
     <>
-      
-      <Container maxWidth="lg" >
- 
-          {singleEvent && (
+      <Container maxWidth="lg">
+        {singleEvent && (
           <Grid container spacing={5}>
             <Grid size={{ xs: 12 }}>
-                <Typography variant="h2" gutterBottom sx={{mt: 2, color: "secondary.main"}}>
-                  {singleEvent.name}
-                </Typography>
+              <Typography
+                variant="h2"
+                gutterBottom
+                sx={{ mt: 2, color: "secondary.main" }}
+              >
+                {singleEvent.name}
+              </Typography>
 
-                {/* If user is author/owner of the event */}
-                {user?.id === singleEvent.userId && (
-                  <Box>
-               <Link to={`/events/${singleEvent.id}/update`} style={{textDecoration: 'none'}} >
+              {/* If user is author/owner of the event */}
+              {singleEvent?.userId === user?.id  && (
+                <Box>
+                  <Link
+                    to={`/events/${singleEvent.id}/update`}
+                    style={{ textDecoration: "none" }}
+                  >
                     <Button> Update Event</Button>
-                    </Link>
-             
-                  </Box>
-                )}
-
+                  </Link>
+                </Box>
+              )}
             </Grid>
 
-
-
             {/* Left Column: Event Details */}
-            <Grid size={{xs: 12, md: 6}}>  
-              <Box sx={{mb: 2, mt: 2}}>
-                <Typography  >
-                  <CalendarMonthIcon />{" "} Date {"  "}
-                  {new Date(singleEvent.date).toLocaleDateString()} {" "}
-                  </Typography>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Box sx={{ mb: 2 }}>
+                <Typography>
+                  <CalendarMonthIcon /> Date {"  "}
+                  {new Date(singleEvent.date).toLocaleDateString()}{" "}
+                </Typography>
               </Box>
 
-              <Box sx={{mb: 2, mt: 2}}>
-                    <Typography> <AccessTimeIcon />{" "}
-                    {new Date(singleEvent.date)
-                      .toLocaleTimeString("en-US", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      })
-                      .toLowerCase()}
-                  </Typography>
+              <Box sx={{ mb: 2, mt: 2 }}>
+                <Typography>
+                  {" "}
+                  <AccessTimeIcon />{" "}
+                  {new Date(singleEvent.date)
+                    .toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })
+                    .toLowerCase()}
+                </Typography>
               </Box>
 
-              <Box sx={{mb: 2, mt: 2}}>
-                  <Typography><RouteIcon/> {" "} Distance: {singleEvent.distance} km</Typography>
+              <Box sx={{ mb: 2, mt: 2 }}>
+                <Typography>
+                  <RouteIcon /> Distance: {singleEvent.distance} km
+                </Typography>
               </Box>
 
               <Box>
@@ -126,76 +131,93 @@ export const EventPage: React.FC = () => {
                 </Typography>
 
                 {location ? (
-                     <Box sx={{mb: 2, mt: 2}}>
-                      <Typography sx={{mb: 1, mt: 1}}> Address </Typography>
+                  <Box sx={{ mb: 2, mt: 2 }}>
+                    <Typography sx={{ mb: 1, mt: 1 }}> Address </Typography>
 
-                      <Typography sx={{color: 'secondary.main', border: 1, borderRadius: '16px', padding: "8px", borderColor: "primary.light"}}>
-                        <LocationOnIcon />{"  "} 
-                        {`${location.firstLine}, ${location.city}, ${location.postcode}`}
-                      </Typography>
+                    <Typography
+                      sx={{
+                        color: "secondary.main",
+                        border: 1,
+                        borderRadius: "16px",
+                        padding: "8px",
+                        borderColor: "primary.light",
+                      }}
+                    >
+                      <LocationOnIcon />
+                      {"  "}
+                      {`${location.firstLine}, ${location.city}, ${location.postcode}`}
+                    </Typography>
                   </Box>
                 ) : (
                   <Typography>Loading location details..</Typography>
                 )}
               </Box>
-
             </Grid>
 
+            {/* Right Column:   Registration */}
 
-  {/* Right Column:   Registration */}
- 
-            <Grid size={{xs: 12, md: 6}} >
+            <Grid size={{ xs: 12, md: 6 }}>
               {/*Participants */}
               {participantCount > 0 ? (
-               <Box sx={{mb: 2, mt: 2}}>
-              
-                    <Typography> <GroupsIcon size='lg' sx={{color: 'secondary.dark'}} /> 
-                    {" "} {participantCount} {(participantCount == 1) ? "participant" : "participants"} 
-                    </Typography>
-                  </Box>
-                ) : (
-                  <Box sx={{mb: 2, mt: 2}}>
+                <Box sx={{ mb: 2 }}>
+                  <Typography>
+                    {" "}
+                    <GroupsIcon
+                      sx={{ color: "secondary.dark", size: "lg" }}
+                    />{" "}
+                    {participantCount}{" "}
+                    {participantCount == 1 ? "participant" : "participants"}
+                  </Typography>
+                </Box>
+              ) : (
+                <Box sx={{ mb: 2, mt: 2 }}>
                   <Typography> No participants yet. </Typography>
-                  </Box>
-                )}
+                </Box>
+              )}
 
-             <Box sx={{mb: 2, mt: 2,
-              // color: 'secondary.main', border: 1, borderRadius: '16px', padding: "16px", 
-              // borderColor: "primary.light",
-              display: 'flex', 
-              gap: 2,
-      flexDirection: 'row', // Stack items vertically
-      alignItems: 'center', // Center items horizontally
-      // justifyContent: 'center', // Center items vertically
-      // textAlign: 'center', // Center text
-      spacing: 2
-      }}>
-             <Typography>Price  </Typography> 
-             <Typography sx ={{border: 1, borderRadius: '8px', pl: "16px", pr: '16px', 
-              borderColor: "primary.light", }}>£ {singleEvent.ticketPrice} </Typography>
-
+              <Box sx={{ mb: 2, mt: 2, display: "flex", gap: 2,
+                  flexDirection: "row", // Stack items vertically
+                  alignItems: "center", // Center items horizontally
+                  spacing: 2,
+                }}
+              >
+                <Typography>Price </Typography>
+                <Typography
+                  sx={{
+                    border: 1,
+                    borderRadius: "8px",
+                    pl: "16px",
+                    pr: "16px",
+                    borderColor: "primary.light",
+                  }}
+                >
+                  £ {singleEvent.ticketPrice}{" "}
+                </Typography>
               </Box>
-              <Box sx={{mb: 2, mt: 2}}>
-                <Typography  gutterBottom sx={{color: 'primary.main'}}
-                variant='h5'
-                >Buy ticket</Typography>
+              <Box sx={{ mb: 2, mt: 2 }}>
+                <Typography
+                  gutterBottom
+                  sx={{ color: "primary.main" }}
+                  variant="h5"
+                >
+                  Buy ticket
+                </Typography>
 
                 {user ? (
                   <SignUpParticipant eventId={singleEvent?.id ?? -1} />
                 ) : (
-                   
                   <Typography>
                     {" "}
-                    You need to <Link to={`/login`} style={{textDecoration: 'none', color:'#3698ad'}} >sign in </Link>to register for the event
+                    You need to{" "} <Link to={`/login`} style={{ textDecoration: "none", color: "#3698ad" }}
+                                  > sign in{" "} </Link>
+                    to register for the event
                   </Typography>
-               
                 )}
               </Box>
             </Grid>
           </Grid>
         )}
       </Container>
-
 
       <Comments eventId={singleEvent?.id} />
     </>

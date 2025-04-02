@@ -4,7 +4,7 @@ import { Register } from "./components/Register";
 import { EventList } from "./components/EventList";
 import { EventPage } from "./components/EventPage";
 import { CreateEvent } from "./components/CreateEvent";
-// import { Header } from "./components/Header";
+
 import { CreateLocation } from "./components/CreateLocation";
 import { Provider } from "react-redux";
 import store from "./store/store";
@@ -34,7 +34,6 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline>
           <Container maxWidth="lg">
-          {/* <Header /> */}
           <NavBar />
           <Routes>
             <Route path="/login" element={<Login />} />

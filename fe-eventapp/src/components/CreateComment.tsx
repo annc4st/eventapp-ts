@@ -81,6 +81,8 @@ export const CreateComment: React.FC<CommentProps> = ({ eventId }) => {
                  id="content" name="content" 
                  fullWidth
                  variant="outlined" 
+                 multiline
+                 rows={3}
                  required
                  />
                 <ErrorMessage

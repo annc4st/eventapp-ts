@@ -41,11 +41,12 @@ export const Comments: React.FC<CommentProps> = ({ eventId }) => {
         comments.map((c) => (
           <Box key={c.id} sx={{ mb: 2, mt: 2,
             border: '1px', borderRadius: '8px', bgcolor:'secondary.light', padding: '8px'}}>
-             <Box sx={{ mb: 2 }}><Typography>{c.content}</Typography></Box>
+             <Box sx={{ mb: 2 }}>
+              <Typography  color='secondary'>{c.content}</Typography></Box>
 
              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography sx={{color: 'secondary.main', fontSize: '12px'}}>{c.partEmail}</Typography>
-            <Typography sx={{color: 'secondary.main', fontSize: '12px', pr: '16px'}}>{new Date(c.createdAt).toLocaleDateString()}</Typography>
+            <Typography sx={{color: 'secondary.main', fontSize: '12px', fontStyle: 'oblique'}}>{c.partEmail}</Typography>
+            <Typography sx={{color: 'secondary.main', fontSize: '12px', pr: '16px', fontStyle: 'oblique'}}>{new Date(c.createdAt).toLocaleDateString()}</Typography>
             </Box>
           </Box>
         ))
