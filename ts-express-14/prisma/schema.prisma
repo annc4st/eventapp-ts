@@ -51,7 +51,9 @@ model Address {
   firstLine String
   city      String
   postcode  String
-  events    Event[] // Optional: If you want a back-reference
+  events    Event[] // Optional: for a back-reference
+
+  @@unique([firstLine, city, postcode]) // Compound uniqueness
 }
 
 model Comment {

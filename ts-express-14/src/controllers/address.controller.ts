@@ -18,11 +18,15 @@ export const createAddress = async (req: Request, res: Response) => {
     });
 
     res.status(201).json(newAddress);
-  } catch (err) {
+  } catch (err:any) {
     console.error("Error creating address:", err);
+    if (err.code === 'P2002') {
+      res.status(400).json({ message: 'Duplicate location detected.' });
+    } else {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+}
 
 export const getAddress = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -46,6 +50,7 @@ export const getAddress = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 export const getAllAddresses = async (req: Request, res: Response) => {
   try {

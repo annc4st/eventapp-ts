@@ -7,9 +7,9 @@ import * as Yup from "yup";
 import { object, string } from "yup";
 import { postcodeValidator } from "postcode-validator";
 import { optimisticAdd, createLocation } from "../store/locationSlice";
-import { AppDispatch } from "../store/store";
+import { AppDispatch, RootState } from "../store/store";
 
-import { Box, Button, Container, FormControl, InputAdornment, TextField,
+import { Box, Button, Container, FormControl, TextField,
   Typography } from "@mui/material";
 
 
@@ -22,13 +22,12 @@ interface ILocationData {
 
 export const CreateLocation: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  // add user usage later
-  // const {
-  //   user,
-  //   loading: userLoading,
-  //   error: userError,
-  // } = useSelector((state: RootState) => state.user);
-
+   const navigate = useNavigate();
+   const { locations } = useSelector(
+        (state: RootState) => state.locations
+      );
+    const { user } = useSelector((state: RootState) => state.user);
+ 
 
   const initialValues: ILocationData = {
     firstLine: "",
@@ -46,7 +45,21 @@ export const CreateLocation: React.FC = () => {
         if (!value) return false;
         // Validate the postcode
         return postcodeValidator(value, "GB");
-      }),
+      })
+      .test(
+        "is-duplicate",
+        "Location already exists. Cannot add it.",
+         function (value) {
+          const { firstLine, city } = this.parent;
+          if (!firstLine || !city || !value || !Array.isArray(locations)) return true;
+          return !locations.some(
+            (loc) =>
+              loc.firstLine?.toLowerCase().trim() === firstLine.toLowerCase().trim() &&
+              loc.city?.toLowerCase().trim() === city.toLowerCase().trim() &&
+              loc.postcode?.toLowerCase().replace(/\s/g, "") === value.toLowerCase().replace(/\s/g, "")
+          );
+        }
+      ),
   });
 
   const handleSubmit = async (
@@ -81,7 +94,7 @@ export const CreateLocation: React.FC = () => {
         validationSchema={locationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, isValid }) => (
           <Form style={{display:'flex', flexDirection: "column", 
           marginTop: "16px", gap: "16px"}}> 
 
@@ -126,6 +139,7 @@ export const CreateLocation: React.FC = () => {
                           fullWidth
                           variant="outlined"
                           required
+                      
                         />
                         <ErrorMessage
                           name="postcode"
@@ -133,10 +147,15 @@ export const CreateLocation: React.FC = () => {
                           style={{ color: "red" }}
                         />
                       </FormControl>
-
-            <Button  variant="contained" type="submit" disabled={isSubmitting}>
+                             <Button  variant="contained" type="submit" disabled={isSubmitting}
+                              onClick={() => {
+                                if (!user) navigate("/login"); // Redirect if user isn't logged in
+                                } 
+                              }
+                              >
               {" "}
-              {isSubmitting ? "Submitting..." : "Submit"}
+              {isSubmitting  ? "Submitting..." : "Submit"}
+ 
             </Button>
           </Form>
         )}
