@@ -4,12 +4,14 @@ import { fetchGroups } from "../store/groupSlice";
 import { RootState, AppDispatch } from "../store/store";
 import { CreateGroup } from "./CreateGroup";
 import { Link } from "react-router-dom";
+import { Box, Container, Typography, Button, Card, CardContent, CardHeader } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 
 
 
 export const GroupsList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  // Extract groups state from Redux
+ 
 
   const {
     groups,
@@ -23,35 +25,58 @@ export const GroupsList = () => {
   }, [dispatch]);
 
   return (
-    <div>
-      <h2> Groups</h2>
-      {groupsLoading && <p>Loading groups ...</p>}
+    <Container>
+       <Grid container spacing={5}>
+       <Grid sx={{ mt: 2 }} size={{ xs: 12, sm: 8, md: 6 }} >
+         <Typography
+                      component="h1"
+                      variant="h3"
+                      sx={{
+                        color: "primary.dark",
+                        align: "left",
+                        mb: 2,
+                        fontSize: "clamp(2rem, 10vw, 2.15rem)",
+                      }}
+                      gutterBottom
+                    >
+                      Groups
+                    </Typography>
+       
+      {groupsLoading && <Typography>Loading groups ...</Typography>}
 
-      {groupsError && <p>{groupsError}</p>}
+      {groupsError && <Typography style={{ color: "red" }}>{groupsError}</Typography>}
 
       {!groupsLoading && !groupsError && groups.length == 0 && (
-        <p> No groups created yet</p>
+        <Typography> No groups created yet</Typography>
       )}
 
       {!groupsLoading && !groupsError && groups.length > 0 && (
-        <ul>
+    <>
           {groups.map((g) => {
             return (
-              <div key={g.id}>
-                <h3>{g.groupName}</h3>
-                <p>{g.description}</p>
-               
-               {/* Number of members */}
-                <Link to={`/groups/${g.id}`}><button>To group page</button></Link>
-                {/* to add joining func */}
-              </div>
+              <Grid key={g.id} sx={{mb: 2}}>
+                 <Card  elevation={3}>
+                  <CardHeader title={g.groupName}
+                  sx={{color: 'primary.main'}}
+                  ></CardHeader>
+                {/* <Typography variant="h3">{g.groupName}</Typography> */}
+                <CardContent sx={{color: 'secondary.main'}}>{g.description}</CardContent>
+                <Box sx={{ display: "flex", flexDirection: 'row-reverse', p: 2 }}>
+                <Link to={`/groups/${g.id}`}><Button variant="contained">To group page</Button></Link>
+                </Box>
+             
+                </Card>
+              </Grid>
             );
           })}
-        </ul>
+        </>
       )}
-      <div>
+       </Grid>
+
+      <Box>
         <CreateGroup />
-      </div>
-    </div>
+      </Box>
+      </Grid>
+    </Container>
   );
 };

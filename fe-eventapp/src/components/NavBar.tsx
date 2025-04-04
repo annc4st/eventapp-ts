@@ -104,7 +104,7 @@ export default function NavBar() {
                 color: "primary.dark",
               }}
             >
-              EventHub
+              {/* EventHub */}Plan2Meet
             </Button>
 
             {/* Desktop Menu - Hidden on Small Screens */}

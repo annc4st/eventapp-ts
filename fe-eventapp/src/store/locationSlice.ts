@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
+import { RootState } from "./store";
 
 
 export interface Location {
@@ -43,13 +44,23 @@ export const fetchLocationById = createAsyncThunk("locations/fetchById", async (
     }
   });
 
-  // Thunk to Create a new lcation
+// Thunk to Create a new lcation
   export const createLocation = createAsyncThunk(
     "locations/create",
-    async (locationData: Omit<Location, "id">, { rejectWithValue }) => {
+    async (locationData: Omit<Location, "id">, { rejectWithValue, getState }) => {
       try {
-        const response = await api.post("/locations", locationData);
-        return response.data; // Expecting the created event
+        const state = getState() as RootState; 
+                const token = state.user?.token; 
+                if (!token) {
+                  return rejectWithValue("Unauthorized: No authentication token found");
+                }
+        
+        const response = await api.post("/locations", locationData,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+        }
+        );
+        return response.data; 
       } catch (error: any) {
         return rejectWithValue(error.response.data.message || "Failed to create location");
       }

@@ -20,6 +20,7 @@ import { AppDispatch } from "./store/store";
 import theme from "./theme";
 import { ThemeProvider, Container, CssBaseline } from "@mui/material";
 import  NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -49,6 +50,7 @@ function App() {
 
             <Route path="/groups/:groupId" element={<GroupPage />} />
           </Routes>
+          <Footer />
           </Container>
           </CssBaseline>
         </ThemeProvider>

@@ -13,7 +13,7 @@ import { useMediaQuery, useTheme } from "@mui/material";
 export const LocationsList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+ 
 
   const { locations, loading, error } = useSelector(
     (state: RootState) => state.locations
@@ -25,7 +25,7 @@ export const LocationsList: React.FC = () => {
 
   return (
     
-      <Container maxWidth="lg" mb={2}>
+      <Container >
         <Grid container spacing={5}>
           <Grid sx={{ mt: 2 }} size={{ xs: 12, md: 6 }}>
             <Typography

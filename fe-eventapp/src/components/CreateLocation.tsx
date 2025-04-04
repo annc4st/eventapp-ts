@@ -86,7 +86,7 @@ export const CreateLocation: React.FC = () => {
        <Typography
               component="h2"
               variant="h3"
-              sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2rem)", mt: 2, color:'primary.dark' }}
+              sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2rem)", color:'primary.dark' }}
             >Add New Location</Typography>
 
       <Formik

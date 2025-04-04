@@ -11,10 +11,11 @@ import {
   fetchingPendingRequests,
 } from "../store/groupMembershipSlice";
 import { logoutUser } from "../store/userSlice";
-import Button from '@mui/material/Button';
 import { GroupNewsList } from "./GroupNewsList";
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
+ 
+import Grid from "@mui/material/Grid2";
+import { Box, Paper, Container, styled, CardHeader, Card, Avatar,
+  CardContent, Typography, Button, AlertTitle, Alert } from "@mui/material";
 
 
 
@@ -116,11 +117,11 @@ export const GroupPage: React.FC = () => {
       <div>
         {singleGroup && (
           <>
-            <h2>{singleGroup.groupName}</h2>
-            <p>{singleGroup.description}</p>
+            <Typography variant='h3'>{singleGroup.groupName}</Typography>
+            <Typography>{singleGroup.description}</Typography>
 
             {/* Status of the user */}
-            <div className="user-status">
+            <Box>
               <p>Your status in this group: </p>
               {isAdmin && (
                 <p style={{ color: "blue" }}>
@@ -144,7 +145,7 @@ export const GroupPage: React.FC = () => {
                 <p style={{ color: "red" }}>You are not a member yet.</p>
               )}
               {!isUserLogged && <p>Please log in to send a request.</p>}
-            </div>
+            </Box>
 
             {/* User left */}
 
@@ -152,17 +153,17 @@ export const GroupPage: React.FC = () => {
             <div className="group-actions">
               {/* USer should be logged in */}
               {!isUserLogged && (
-                <button disabled className="btn-disabled">
+                <Button disabled>
                   {" "}
                   Log in to send request
-                </button>
+                </Button>
               )}
 
               {/* User is the admin */}
               {isAdmin && (
-                <button disabled className="btn-disabled">
+                <Button disabled  >
                   You are the admin
-                </button>
+                </Button>
               )}
 
               {/*  User is a member - show "Leave Group" button */}
@@ -200,21 +201,21 @@ export const GroupPage: React.FC = () => {
 
               {/* user has pending request */}
               {hasPendingRequest && (
-                <button disabled className="btn-disabled">
+                <Button disabled className="btn-disabled">
                   Your request to join is pending
-                </button>
+                </Button>
               )}
             </div>
 
-            <div>
+        
               <GroupNewsList groupId = {numericGroupId} />
-            </div>
+         
 
             {/* for admin eyes only - pending requests */}
             {isAdmin && (
-              <div>
+           
                 <PendingGroupRequests groupId={numericGroupId} />
-              </div>
+             
             )}
           </>
         )}

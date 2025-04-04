@@ -1,8 +1,17 @@
 import { Request, Response } from "express";
 import prisma from "../../prisma/client";
-import { validateAddress } from "../middlewares/validators"
+import { validateAddress, validateUser } from "../middlewares/validators"
+
 
 export const createAddress = async (req: Request, res: Response) => {
+
+  const userId = req.user?.id;
+      
+      const userExists = await validateUser(userId);
+      if (!userExists) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
   try {
     const { firstLine, city, postcode } = req.body;
     if (!firstLine || !city || !postcode) {
@@ -14,6 +23,7 @@ export const createAddress = async (req: Request, res: Response) => {
         firstLine,
         city,
         postcode,
+    
       },
     });
 
