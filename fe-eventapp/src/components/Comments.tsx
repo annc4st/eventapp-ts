@@ -34,7 +34,8 @@ export const Comments: React.FC<CommentProps> = ({ eventId }) => {
     <Container maxWidth="lg" >
       <Grid container spacing={2}>
        <Grid size={{xs: 12, md: 6}}>
-      <Typography variant="h4" sx={{ color: 'secondary.dark'}}>Comments</Typography>
+      <Typography variant="h4" sx={{ color: 'secondary.dark'}}
+      >Comments</Typography>
 
 
       {comments.length > 0 ? (

@@ -150,8 +150,7 @@ export const UpdateEvent: React.FC = () => {
         {({ handleSubmit, isSubmitting }) => (
         <Box 
           component="form" onSubmit={handleSubmit}
-   
-      sx={{display:'flex', flexDirection: "column", gap: 3, mt: 2, mb: 2,
+         sx={{display:'flex', flexDirection: "column", gap: 3, mt: 2, mb: 2,
         width: "100%", 
         maxWidth: { md: "50%" }, 
       }} >

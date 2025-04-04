@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Formik, FormikHelpers, Form,
-  Field, ErrorMessage,
-} from "formik";
+import { Formik, FormikHelpers, Form,
+  Field, ErrorMessage}  from "formik";
 import * as Yup from "yup";
 import { object, string } from "yup";
 import { postcodeValidator } from "postcode-validator";
 import { optimisticAdd, createLocation } from "../store/locationSlice";
 import { AppDispatch } from "../store/store";
+
+import { Box, Button, Container, FormControl, InputAdornment, TextField,
+  Typography } from "@mui/material";
+
 
 
 interface ILocationData {
@@ -56,7 +58,6 @@ export const CreateLocation: React.FC = () => {
 
     // Optimistic update
     dispatch(optimisticAdd(newLocation));
-    // create location in backend
     try {
       await dispatch(createLocation(values));
       await resetForm();
@@ -69,7 +70,11 @@ export const CreateLocation: React.FC = () => {
 
   return (
     <>
-      <h3> Create new location</h3>
+       <Typography
+              component="h2"
+              variant="h3"
+              sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2rem)", mt: 2, color:'primary.dark' }}
+            >Add New Location</Typography>
 
       <Formik
         initialValues={initialValues}
@@ -77,27 +82,62 @@ export const CreateLocation: React.FC = () => {
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
-          <Form>
-            <label htmlFor="firstLine">First Line of Address</label>
-            <Field
-              id="firstLine"
-              name="firstLine"
-              placeholder="1, King street"
-            />
-            <ErrorMessage name="firstLine" component="div" className="error" />
+          <Form style={{display:'flex', flexDirection: "column", 
+          marginTop: "16px", gap: "16px"}}> 
 
-            <label htmlFor="city">City or Town</label>
-            <Field id="city" name="city" placeholder="City" />
-            <ErrorMessage name="city" component="div" className="error" />
+          <FormControl>
+                        <Field as={TextField}
+                          label="First Line of Address"
+                          id="firstLine"
+                          name="firstLine"
+                          type="text"
+                          fullWidth
+                          variant="outlined"
+                          required
+                        />
+                        <ErrorMessage
+                          name="firstLine"
+                          component="div"
+                          style={{ color: "red" }}
+                        />
+                      </FormControl>
+             <FormControl>
+                        <Field as={TextField}
+                          label="City"
+                          id="city"
+                          name="city"
+                          type="text"
+                          fullWidth
+                          variant="outlined"
+                          required
+                        />
+                        <ErrorMessage
+                          name="city"
+                          component="div"
+                          style={{ color: "red" }}
+                        />
+                      </FormControl>
+             <FormControl>
+                        <Field as={TextField}
+                          label="Postcode"
+                          id="postcode"
+                          name="postcode"
+                          type="text"
+                          fullWidth
+                          variant="outlined"
+                          required
+                        />
+                        <ErrorMessage
+                          name="postcode"
+                          component="div"
+                          style={{ color: "red" }}
+                        />
+                      </FormControl>
 
-            <label htmlFor="postcode">Postcode</label>
-            <Field id="postcode" name="postcode" placeholder="SW1A 1AA" />
-            <ErrorMessage name="postcode" component="div" className="error" />
-
-            <button type="submit" disabled={isSubmitting}>
+            <Button  variant="contained" type="submit" disabled={isSubmitting}>
               {" "}
               {isSubmitting ? "Submitting..." : "Submit"}
-            </button>
+            </Button>
           </Form>
         )}
       </Formik>

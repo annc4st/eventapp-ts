@@ -22,6 +22,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import CreateLocationModal from "./CreateLocationModal";
 
 interface EventData {
   name: string;
@@ -260,16 +261,26 @@ export const CreateEvent: React.FC = () => {
         )}
       </Formik>
 
-      <Box>
+      <Box  
+      sx={{display: "flex", flexDirection: "column", 
+        alignItems: "center", 
+        width: "100%", maxWidth: { md: "50%" }, 
+        gap: 2,
+        mt: 2
+      }}
+      >
         <Typography>
-          If you cannot find the location,{" "}
-          <Link
+          If you cannot find the location{" "}
+          {/* <Link
             to={"/create-location"}
             style={{ textDecoration: "none", color: "#3698ad" }}
           >
             Add Location
-          </Link>
+          </Link> */}
+           
         </Typography>
+  
+      <CreateLocationModal />
       </Box>
     </Container>
   );
