@@ -136,7 +136,6 @@ export const EventPage: React.FC = () => {
 
                     <Typography
                       sx={{
-                        color: "secondary.main",
                         border: 1,
                         borderRadius: "16px",
                         padding: "8px",
@@ -154,7 +153,7 @@ export const EventPage: React.FC = () => {
               </Box>
             </Grid>
 
-            {/* Right Column:   Registration */}
+{/* Right Column:   Registration */}
 
             <Grid size={{ xs: 12, md: 6 }}>
               {/*Participants */}
@@ -163,7 +162,7 @@ export const EventPage: React.FC = () => {
                   <Typography>
                     {" "}
                     <GroupsIcon
-                      sx={{ color: "secondary.dark", size: "lg" }}
+                      sx={{ color: "secondary.main", size: "lg" }}
                     />{" "}
                     {participantCount}{" "}
                     {participantCount == 1 ? "participant" : "participants"}
@@ -197,7 +196,7 @@ export const EventPage: React.FC = () => {
               <Box sx={{ mb: 2, mt: 2 }}>
                 <Typography
                   gutterBottom
-                  sx={{ color: "primary.main" }}
+                  sx={{ color: "primary.light" }}
                   variant="h5"
                 >
                   Buy ticket

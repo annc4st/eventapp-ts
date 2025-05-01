@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import { RootState } from "./store"; // for update can only author/owner
+import { updateMembershipStatus, addMemberOptimistic } from "./groupMembershipSlice";
 
 
 export interface Group {
@@ -22,13 +23,15 @@ export interface Member {
   interface SingleGroupState {
     singleGroup: Group | null;
     members: Member [];
-    loading: boolean;
+    loadingGroup: boolean;
+    loadingMembers: boolean;
     error: string | null;
   }
   const initialState: SingleGroupState = {
     singleGroup: null,
     members: [],
-    loading: false,
+    loadingGroup: false,
+    loadingMembers: false,
     error: null,
   };
 
@@ -39,7 +42,7 @@ export const fetchSingleGroup = createAsyncThunk (
     async (groupId: number, { rejectWithValue}) => {
         try {
             const response = await api.get(`/groups/${groupId}`)
-            console.log("view single group ", response.data)
+            // console.log("view single group ", response.data)
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data.message || error.message)
@@ -72,27 +75,28 @@ const singleGroupSlice = createSlice(
         extraReducers: (builder) => {
             builder
             .addCase(fetchSingleGroup.pending, (state) => {
-                state.loading = true;
+                state.loadingGroup = true;
             })
             .addCase(fetchSingleGroup.fulfilled, (state, action) => {
-                state.loading = false;
+                state.loadingGroup = false;
                 state.singleGroup = action.payload;
             })
             .addCase(fetchSingleGroup.rejected, (state, action) => {
-                state.loading = false;
+                state.loadingGroup = false;
                 state.error = action.payload as string;
             })
             .addCase(fetchGroupMembers.pending, (state) => {
-                state.loading = true;
+                state.loadingMembers = true;
             })
             .addCase(fetchGroupMembers.fulfilled, (state, action) => {
-                state.loading = false;
+                state.loadingMembers = false;
                 state.members = action.payload;
             })
             .addCase(fetchGroupMembers.rejected, (state, action) => {
-                state.loading = false;
+                state.loadingMembers = false;
                 state.error = action.payload as string;
-            });
+            })
+           ;
 
         }
     }
@@ -100,3 +104,4 @@ const singleGroupSlice = createSlice(
 )
 
 export default singleGroupSlice.reducer;
+// export const { addMemberOptimistic } = singleGroupSlice.actions;

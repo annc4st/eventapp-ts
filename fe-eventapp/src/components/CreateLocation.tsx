@@ -59,7 +59,7 @@ export const CreateLocation: React.FC = () => {
               loc.postcode?.toLowerCase().replace(/\s/g, "") === value.toLowerCase().replace(/\s/g, "")
           );
         }
-      ),
+      ),     // onClick={() => handleApprove(request.userId)}
   });
 
   const handleSubmit = async (

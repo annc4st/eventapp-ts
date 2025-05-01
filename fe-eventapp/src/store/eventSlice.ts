@@ -56,8 +56,8 @@ export const createEvent = createAsyncThunk(
           headers: { Authorization: `Bearer ${token}` },
       }
       );
-              console.log("Posting Event:", eventData);
-console.log("Sending POST request to:", `/events/`);
+//               console.log("Posting Event:", eventData);
+// console.log("Sending POST request to:", `/events/`);
       return response.data; // Expecting the created event
     } catch (error: any) {
       console.error("Error posting event:", error.response?.data);

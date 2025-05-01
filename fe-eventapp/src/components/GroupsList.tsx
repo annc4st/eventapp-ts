@@ -4,8 +4,9 @@ import { fetchGroups } from "../store/groupSlice";
 import { RootState, AppDispatch } from "../store/store";
 import { CreateGroup } from "./CreateGroup";
 import { Link } from "react-router-dom";
-import { Box, Container, Typography, Button, Card, CardContent, CardHeader } from "@mui/material";
+import { Box, Container, Typography, Button, Card, CardContent, CardHeader, IconButton } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import ShareIcon from '@mui/icons-material/Share';
 
 
 
@@ -25,8 +26,8 @@ export const GroupsList = () => {
   }, [dispatch]);
 
   return (
-    <Container>
-       <Grid container spacing={5}>
+    <>
+       <Grid container >
        <Grid sx={{ mt: 2 }} size={{ xs: 12, sm: 8, md: 6 }} >
          <Typography
                       component="h1"
@@ -57,11 +58,16 @@ export const GroupsList = () => {
               <Grid key={g.id} sx={{mb: 2}}>
                  <Card  elevation={3}>
                   <CardHeader title={g.groupName}
-                  sx={{color: 'primary.main'}}
+                 
+                  sx={{color: 'primary.light', }}
                   ></CardHeader>
-                {/* <Typography variant="h3">{g.groupName}</Typography> */}
-                <CardContent sx={{color: 'secondary.main'}}>{g.description}</CardContent>
-                <Box sx={{ display: "flex", flexDirection: 'row-reverse', p: 2 }}>
+         
+                <CardContent sx={{color: 'text.primary'}}>{g.description}</CardContent>
+
+                <Box sx={{ display: "flex", flexDirection: 'row', justifyContent:"space-between", pr:2, pb: 2 , pl: 1}}>
+                <IconButton aria-label="share">
+          <ShareIcon />
+        </IconButton>
                 <Link to={`/groups/${g.id}`}><Button variant="contained">To group page</Button></Link>
                 </Box>
              
@@ -77,6 +83,6 @@ export const GroupsList = () => {
         <CreateGroup />
       </Box>
       </Grid>
-    </Container>
+    </>
   );
 };

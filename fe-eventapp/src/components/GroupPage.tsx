@@ -4,18 +4,19 @@ import { ToastContainer, toast } from "react-toastify";
 import { RootState, AppDispatch } from "../store/store";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchSingleGroup, fetchGroupMembers } from "../store/singleGroupSlice";
-import { PendingGroupRequests } from "./PendingGroupRequests";
-import {
-  requestToJoinGroup,
-  leaveGroup,
-  fetchingPendingRequests,
-} from "../store/groupMembershipSlice";
+ 
+
+import { fetchApprovedMembers, requestToJoinGroup, leaveGroup,
+  fetchPendingRequests } from "../store/groupMembershipSlice";
 import { logoutUser } from "../store/userSlice";
 import { GroupNewsList } from "./GroupNewsList";
+// import {selectPendingRequests} from '../store/groupMembershipSlice'
  
 import Grid from "@mui/material/Grid2";
-import { Box, Paper, Container, styled, CardHeader, Card, Avatar,
-  CardContent, Typography, Button, AlertTitle, Alert } from "@mui/material";
+import { Box,  Container, styled, CardHeader, Card, Avatar,
+ Typography, Button, AlertTitle, Alert, 
+  Stack} from "@mui/material";
+import { Link } from "react-router-dom";
 
 
 
@@ -37,13 +38,13 @@ export const GroupPage: React.FC = () => {
   );
   const userId = Number(user?.id);
 
-  const { singleGroup, members, loading, error } = useSelector(
+  const { singleGroup, members, loadingGroup, loadingMembers, error } = useSelector(
     (state: RootState) => state.singleGroup
   );
+  const { pendingRequests } = useSelector((state: RootState) => state.groupMembership);
 
-  const { pendingRequests } = useSelector(
-    (state: RootState) => state.groupMembership
-  );
+ 
+
 
   //  Check whether token is expired and compare with current time
   const isTokenExpired = (tokenExpiresAt: string | null) => {
@@ -61,11 +62,12 @@ export const GroupPage: React.FC = () => {
     }
     if (numericGroupId > 0) {
       dispatch(fetchSingleGroup(numericGroupId));
-      dispatch(fetchGroupMembers(numericGroupId));
-      dispatch(fetchingPendingRequests(numericGroupId));
+      dispatch(fetchApprovedMembers(numericGroupId));
+      dispatch(fetchPendingRequests(numericGroupId));
     }
   }, [dispatch, tokenExpiresAt, numericGroupId]);
 
+ 
   //  check is user has pending request
   const hasPendingRequest = pendingRequests.some((r) => r.userId == userId);
 
@@ -80,7 +82,7 @@ export const GroupPage: React.FC = () => {
 
   const handleRequestJoin = async (numericGroupId: number) => {
     await dispatch(requestToJoinGroup(numericGroupId));
-    dispatch(fetchingPendingRequests(numericGroupId)); //   update pending requests
+    dispatch(fetchPendingRequests(numericGroupId)); //   update pending requests
     toast.success("Request to join sent!");
     
   };
@@ -104,7 +106,7 @@ export const GroupPage: React.FC = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loadingGroup) return <div>Loading...</div>;
   if (error){
     return ( <Alert severity="error">
       <AlertTitle>Error</AlertTitle>{error}
@@ -113,39 +115,46 @@ export const GroupPage: React.FC = () => {
 
 
   return (
-    <>
-      <div>
+    <> 
+      <Container>
         {singleGroup && (
           <>
-            <Typography variant='h3'>{singleGroup.groupName}</Typography>
-            <Typography>{singleGroup.description}</Typography>
+          <Box sx={{justifyItems: "center", mb: 2}} >
+            <Typography variant='h3' sx={{ my: 2, color: "secondary.main"}}>{singleGroup.groupName}</Typography>
+            <Typography sx={{color: 'text.secondary'}}>{singleGroup.description}</Typography>
+            <Typography sx={{color: 'primary.main', mt: 2}}>Number of active members: {members.length}</Typography>
+            </Box>
 
             {/* Status of the user */}
-            <Box>
-              <p>Your status in this group: </p>
+            <Stack direction="row"         
+               spacing={2} mb={2}
+            >
+              <Typography  sx={{color: "text.secondary"}}>Your status : </Typography>
               {isAdmin && (
-                <p style={{ color: "blue" }}>
-                  You are the admin of this group.
-                </p>
+                <Typography sx={{color: "text.primary"}}>
+                  Admin</Typography>
               )}
+
               {!leaveSuccess && isMember && !isAdmin && (
-                <p style={{ color: "green" }}>You are an approved member.</p>
+                 <Typography sx={{color: "text.primary"}}>
+                  Approved</Typography>
               )}
 
               {leaveSuccess && (
-                <p style={{ color: "brown" }}>You have left the group.</p>
+                <Typography sx={{color: "text.primary"}}>You have left the group</Typography>
               )}
 
               {hasPendingRequest && (
-                <p style={{ color: "orange" }}>
-                  Your request to join is pending approval.
-                </p>
+                <Typography sx={{color: "text.primary"}}>
+                  Pending approval
+                </Typography>
               )}
               {!isMember && !hasPendingRequest && isUserLogged && !isAdmin && (
-                <p style={{ color: "red" }}>You are not a member yet.</p>
+                <Typography sx={{color: "text.primary" }}>You are not a member.</Typography>
               )}
-              {!isUserLogged && <p>Please log in to send a request.</p>}
-            </Box>
+              {!isUserLogged &&  <Typography sx={{color: "text.primary"}}>
+                Please log in.</Typography>}
+            </Stack>
 
             {/* User left */}
 
@@ -153,24 +162,27 @@ export const GroupPage: React.FC = () => {
             <div className="group-actions">
               {/* USer should be logged in */}
               {!isUserLogged && (
-                <Button disabled>
+                <Link to={`/login`}><Button  
+                sx={{backgroundColor: "primary.main", color: "secondary.main"}}
+                >
                   {" "}
-                  Log in to send request
-                </Button>
+                  To login
+                </Button></Link>
               )}
 
-              {/* User is the admin */}
-              {isAdmin && (
-                <Button disabled  >
-                  You are the admin
-                </Button>
+      {/* User is the admin */}
+      {/* for admin eyes only - sends  to admin page */}
+              {isAdmin &&  (
+                <Link to={`/groups/${groupId}/admin`}>
+                  <Button size="medium">Go to Admin page</Button>
+                </Link>
               )}
 
               {/*  User is a member - show "Leave Group" button */}
               {isMember && !isAdmin && (
                 <Button variant="outlined"
                   onClick={() => handleLeaveGroup(numericGroupId)}
-                  className="btn-delete"
+         
                   disabled={isLeaving || leaveSuccess}
                   style={{
                     opacity: isLeaving ? 0.7 : 1,
@@ -201,25 +213,15 @@ export const GroupPage: React.FC = () => {
 
               {/* user has pending request */}
               {hasPendingRequest && (
-                <Button disabled className="btn-disabled">
+                <Button disabled>
                   Your request to join is pending
                 </Button>
               )}
             </div>
-
-        
               <GroupNewsList groupId = {numericGroupId} />
-         
-
-            {/* for admin eyes only - pending requests */}
-            {isAdmin && (
-           
-                <PendingGroupRequests groupId={numericGroupId} />
-             
-            )}
           </>
         )}
-      </div>
+      </Container>
     </>
   );
 };

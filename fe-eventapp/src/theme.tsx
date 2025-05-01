@@ -2,33 +2,35 @@ import { createTheme } from '@mui/material/styles';
 import { grey, red } from '@mui/material/colors';
 
 
-const theme = createTheme({
+export const lightTheme = createTheme({
   
   cssVariables: true,
   palette: {
+    mode: 'light',
+
     primary: {
       main:  '#015668', //dark teal
-      light: '#3698ad', //yellow #3698ad
-      dark: '#263F44' //dark
-    
+      light: '#3698ad', // #3698ad
     },
     secondary: {
-      main: '#575456', //gray
+      main: '#f0aa32',   //dark yellow
       light:'#FFF1CF', //light yellow
-       dark: '#f0aa32', //'#FFD369', //dark yellow
-      contrastText: '#FFA725'
     },
     error: {
       main: red.A400,
     },
+    
     background: {
       default: '#fff',  
       paper: '#f8f9fa',
     },
-    grey: {
-      500: grey[500],
+    text: {
+      primary: '#263F44',
+      secondary: grey[900],
     },
-  },
+    },
+ 
+  
   typography: {
     fontFamily: 'Roboto',
     fontWeightLight: 400,
@@ -37,6 +39,9 @@ const theme = createTheme({
     fontWeightBold: 700,
   },
   spacing: 8,
+  shape: {
+    borderRadius: 8,
+  },
 
   // ✅ Add a custom spacing object
   // customSpacing: {
@@ -46,10 +51,7 @@ const theme = createTheme({
   //   lg: 24, // 24px
   //   xl: 32, // 32px
   // },
-
-  shape: {
-    borderRadius: 8, // Medium border-radius
-  },
+ 
   components: {
     MuiPaper: {
       styleOverrides: {
@@ -66,4 +68,59 @@ const theme = createTheme({
   },
 });
 
-export default theme;
+export const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+
+    primary: {
+      main: '#3698ad', 
+      light:  '#90caf9',  
+ 
+    },
+    secondary: {
+      main: '#f0aa32', //dark yellow
+      light:'#FFF1CF', //light yellow
+      // main: '#f48fb1', // pinkish
+      
+    },
+    background: {
+      default: '#121212', // dark background
+      paper: '#242323',    // slightly lighter
+    },
+    text: {
+      // primary: '#ffffff',
+      primary: grey[50],
+      secondary: grey[300],
+    },
+    error: {
+      main: red.A400,
+    },
+    
+  },
+  typography: {
+    fontFamily: 'Roboto',
+    fontWeightLight: 400,
+    fontWeightRegular: 500,
+    fontWeightMedium: 600,
+    fontWeightBold: 700,
+  },
+  spacing: 8,
+  shape: {
+    borderRadius: 8,
+  },
+
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'background.paper', // Matches `panelBackground="solid"`
+         "& input:-webkit-autofill": {
+                      "-webkit-box-shadow": "0 0 0px 100px #424242 inset", //  autofill bg  
+                      "-webkit-text-fill-color": " #757575 !important", // autofill text color 
+                      caretColor:  '#fafafa', // Cursor color
+          },
+        },
+      },
+    },
+  },
+});

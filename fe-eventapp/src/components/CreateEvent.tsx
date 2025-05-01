@@ -106,7 +106,7 @@ export const CreateEvent: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{mb: 4}}>
       <Typography
         component="h1"
         variant="h3"

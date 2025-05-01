@@ -83,12 +83,15 @@ export const CreateComment: React.FC<CommentProps> = ({ eventId }) => {
                  variant="outlined" 
                  multiline
                  rows={3}
+                 focused
+                 color="warning"
                  required
                  />
                 <ErrorMessage
                   name="content"
                   component="div"
                   style={{ color: "red" }}
+       
                 />
                     </FormControl>
                 <Button  variant="contained" type="submit" disabled={isSubmitting}>

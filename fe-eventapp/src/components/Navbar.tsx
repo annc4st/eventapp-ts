@@ -3,32 +3,23 @@ import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../store/userSlice";
 import { RootState, AppDispatch } from "../store/store";
-import { red } from "@mui/material/colors";
 
-import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
-import {
-  Avatar,
-  AppBar,
-  Toolbar,
-  Box,
-  IconButton,
-  Typography,
-  Container,
+import { Avatar, Button,  AppBar, Toolbar, Box, IconButton, Typography, Container,
 } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
+
 import GroupsIcon from "@mui/icons-material/Groups";
 import EventIcon from "@mui/icons-material/Event";
 import AddIcon from "@mui/icons-material/Add";
-import Person3Icon from "@mui/icons-material/Person3";
 import MenuIcon from "@mui/icons-material/Menu";
 import { alpha, styled } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
 import MenuItem from "@mui/material/MenuItem";
-import LightModeIcon from "@mui/icons-material/LightModeRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import Divider from "@mui/material/Divider";
 import { gray } from "../shared-theme/themePrimitives";
+import { DarkLightToggle } from "./DarkLightToggle";
+
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
@@ -44,7 +35,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: "8px 12px",
 }));
 
-export default function NavBar() {
+export const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -101,17 +92,20 @@ export default function NavBar() {
               sx={{
                 fontSize: "1.2rem",
                 fontWeight: "bold",
-                color: "primary.dark",
+                color: "primary.main",
               }}
             >
               {/* EventHub */}Plan2Meet
             </Button>
+            <Box sx={{display: {xs: "flex", md: "none"}}}>
+            <DarkLightToggle />
+            </Box>
 
             {/* Desktop Menu - Hidden on Small Screens */}
             <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
               <Button
                 variant="text"
-                color="primary"
+                sx={{color:"primary.light" }}
                 size="small"
                 component={Link}
                 to="/events"
@@ -121,7 +115,8 @@ export default function NavBar() {
 
               <Button
                 variant="text"
-                color="primary"
+                // color="primary"
+                sx={{color:"primary.light" }}
                 startIcon={<AddIcon />}
                 size="small"
                 component={Link}
@@ -132,7 +127,8 @@ export default function NavBar() {
 
               <Button
                 variant="text"
-                color="primary"
+                // color="primary"
+                sx={{color:"primary.light" }}
                 startIcon={<EventIcon />}
                 size="small"
                 component={Link}
@@ -143,7 +139,8 @@ export default function NavBar() {
 
               <Button
                 variant="text"
-                color="primary"
+                // color="primary"
+                sx={{color:"primary.light" }}
                 component={Link}
                 to="/groups"
                 startIcon={<GroupsIcon />}
@@ -163,6 +160,7 @@ export default function NavBar() {
               alignItems: "center",
             }}
           >
+            <DarkLightToggle />
             {user ? (
               <>
                 <Avatar sx={{ bgcolor: theme.palette.secondary.main }}>
@@ -186,7 +184,7 @@ export default function NavBar() {
                   component={Link}
                   to="/register"
                   variant="contained"
-                  color="secondary"
+                  sx={{color: "text.secondary", backgroundColor: "secondary.main"}}
                   size="small"
                 >
                   {" "}

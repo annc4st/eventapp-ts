@@ -10,6 +10,8 @@ import { Link as MuiLink } from "@mui/icons-material/Link";
 
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid2";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
 import {
   Box,
   Paper,
@@ -23,18 +25,11 @@ import {
   Button,
 } from "@mui/material";
 
-// const Item = styled(Paper)(({ theme }) => ({
-//   backgroundColor: '#fff',
-//   ...theme.typography.body2,
-//   padding: theme.spacing(1),
-//   textAlign: 'center',
-//   color: theme.palette.text.secondary,
-//   ...theme.applyStyles('dark', {
-//     backgroundColor: '#1A2027',
-//   }),
-// }));
+import CardEvent from "./CardEvent";
 
-export const EventList: React.FC = () => {
+ 
+
+export const EventList = () => {
   const dispatch = useDispatch<AppDispatch>();
   // Extract events state from Redux
   const {
@@ -43,11 +38,10 @@ export const EventList: React.FC = () => {
     error: eventsError,
   } = useSelector((state: RootState) => state.events);
 
-  const {
-    locations,
-    loading: locationsLoading,
-    error: locationsError,
-  } = useSelector((state: RootState) => state.locations);
+  const { locations,
+          loading: locationsLoading,
+          error: locationsError,
+    } = useSelector((state: RootState) => state.locations);
 
   // Fetch events when component mounts
   useEffect(() => {
@@ -64,82 +58,44 @@ export const EventList: React.FC = () => {
     return locations.find((location) => location.id === locationId);
   };
 
-  return (
-   <>
-   
-      {loading && <p color="gray">Loading events...</p>}
-      {error && <p color="red">{error}</p>}
-      {!loading && !error && events.length === 0 && <p>No events available.</p>}
+  if (loading) return <Typography color="text.secondary">Loading events...</Typography>;
+  if (error) return <Typography color="error">{error}</Typography>;
+  if (events.length === 0) return <Typography>No events available.</Typography>;
 
-      {!loading && !error && events.length > 0 && (
-        <div>
-        <Container maxWidth="lg">
+
+  return (
+ <>
+         {/* <Container maxWidth="lg" sx={{mb: 4}}> */}
           <Typography variant="h3" component="h1" sx={{color: 'primary.dark', mt: 2}}
-            align="center"
-            
-            gutterBottom
-            > Events </Typography>
+            align="center" gutterBottom> 
+            Events </Typography>
   
             <Typography sx={{color: 'secondary.main', align: 'left', mb: 2 }}  
             gutterBottom >
-              Here you can find all events that we have and and you can sign up for one or more of them.
+             Browse and sign up for upcoming events!
             </Typography>
           
-  
-
           <Box sx={{ flexGrow: 1 }}>
                 <Grid container 
                   spacing={{xs: 2, md: 3}}
                   columns={{ xs: 4, sm: 8, md: 12 }}
                 >
                   {events.map((event) => {
-                    const location = getLocationDetails(event.locationId);
+                    // const location = getLocationDetails(event.locationId);
                     return (
            
-                      <Grid key={event.id} size={{ xs: 2, sm: 4, md: 4 }} > 
-                      <Card  elevation={3}
-                      > 
-                        <CardHeader
-                          avatar={
-                            <Avatar
-                              sx={{ bgcolor: 'primary.light' }}
-                              aria-label="category"
-                            > Cat
-                            </Avatar>
-                          }
-                          sx={{color: 'primary.dark' }}
-                          title={event.name}
-                          subheader={`Distance: ${event.distance} km `}
-                        ></CardHeader>
-{/* sx={{ flexGrow: 1 }} */}
-                        <CardContent >
-                          {location ? (
-                            <Typography variant="body2" sx={{ color: "text.secondary" }} >
-                              <LocationOnIcon sx={{color: "secondary.contrastText"}}/>
-                              {`${location.firstLine}, ${location.city}, ${location.postcode}`}
-                            </Typography>
-                          ) : (
-                            <Typography>Loading location details...</Typography>
-                          )}
-                        </CardContent>
-                         {/* Flex container for button and icon */}
-                          <Box sx={{ display: "flex", justifyContent: "space-between", p: 1 }}>
-                            <Link to={`/events/${event.id}`}>
-                              <Button size="medium">Go to Event</Button>
-                            </Link>
-                            <FavoriteIcon sx={{marginRight:2}}/>
-                        </Box>
-                      </Card>
+                      <Grid key={event.id} size={{ xs: 6, sm: 4, md: 4 }} > 
+                      <CardEvent event={event} location={getLocationDetails(event.locationId)} />
                       </Grid>
                     );
                   })}
                   
                 </Grid>
                 </Box>
-                </Container>
-                </div>
-               )}
-                </>
+          
+                
+            
+          </>
          
   );
 };
