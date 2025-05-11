@@ -24,7 +24,7 @@ export const Footer = () => {
     >
       <Container
        maxWidth="lg"  
-       sx={{  bgcolor: "primary.light" }}
+       sx={{  bgcolor: "primary.main" }}
       
       //  sx={{ display: 'flex', flexDirection: "column", alignItems:"center"  }} 
      >
@@ -32,7 +32,7 @@ export const Footer = () => {
             <Box sx={{ display: 'flex', 
             flexDirection: "column", mt: 1
             }} >
-            <Typography variant="h6" gutterBottom sx={{ color: "text.primary"}}>
+            <Typography variant="h6" gutterBottom sx={{ color: "#fff"}}>
             <DirectionsRunIcon /> Plan2Meet 
             </Typography>
             {/* <Typography variant="body2" sx={{ display: 'flex', flexDirection: "column"}}>
@@ -41,21 +41,21 @@ export const Footer = () => {
             </Box>
        
           <Box sx={{ display: 'flex', flexDirection: "row", alignItems:"center", gap: 2}} >
-              <Link href="/"  sx={{ color: "text.primary"}} underline="hover" display="block">
+              <Link href="/" sx={{ color: "#fff"}} underline="hover" display="block">
                 Home
               </Link>
-              <Link href="/events"  sx={{ color: "text.primary"}} underline="hover" display="block">
+              <Link href="/events"  sx={{ color: "#fff"}}  underline="hover" display="block">
                 Events
               </Link>
-              <Link href="/groups"  sx={{ color: "text.primary"}}underline="hover" display="block">
+              <Link href="/groups"  sx={{ color: "#fff"}} underline="hover" display="block">
                 Groups
               </Link>
-              <Link href="/locations"  sx={{ color: "text.primary"}} underline="hover" display="block">
+              <Link href="/locations" sx={{ color: "#fff"}} underline="hover" display="block">
                 Venues
               </Link>
             </Box>
           <Box sx={{ display: 'flex', flexDirection: "column", mt: 2, mb: 2}} >
-            <Typography variant="body2"   sx={{ color: "text.primary"}}>
+            <Typography variant="body2"   sx={{ color: "grey[300]"}}>
               © {new Date().getFullYear()} Plan2Meet. All rights reserved.
             </Typography>
           </Box>

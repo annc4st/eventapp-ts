@@ -8,8 +8,6 @@ import { SignUpParticipant } from "./SignUpParticipant";
 import { fetchParticipants } from "../store/participantSlice";
 import { Comments } from "./Comments";
 
-import { Link as MuiLink } from "@mui/material/Link";
-import Person3Icon from "@mui/icons-material/Person3";
 import { Box, Container, Typography, Button } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -18,6 +16,9 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import RouteIcon from "@mui/icons-material/Route";
+import { NotFoundEventPage } from "./NotFoundEventPage";
+
+
 
 export const EventPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -64,6 +65,10 @@ export const EventPage: React.FC = () => {
 
   const location = getLocationDetails(singleEvent?.locationId ?? -1);
 
+  if (!loading && !singleEvent) {
+    return < NotFoundEventPage />
+  }
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -98,7 +103,7 @@ export const EventPage: React.FC = () => {
             <Grid size={{ xs: 12, md: 6 }}>
               <Box sx={{ mb: 2 }}>
                 <Typography>
-                  <CalendarMonthIcon /> Date {"  "}
+                  <CalendarMonthIcon sx={{color: 'primary.main'}} /> Date {"  "}
                   {new Date(singleEvent.date).toLocaleDateString()}{" "}
                 </Typography>
               </Box>
@@ -106,7 +111,7 @@ export const EventPage: React.FC = () => {
               <Box sx={{ mb: 2, mt: 2 }}>
                 <Typography>
                   {" "}
-                  <AccessTimeIcon />{" "}
+                  <AccessTimeIcon sx={{color: 'primary.main'}} />{" "}
                   {new Date(singleEvent.date)
                     .toLocaleTimeString("en-US", {
                       hour: "2-digit",
@@ -119,7 +124,7 @@ export const EventPage: React.FC = () => {
 
               <Box sx={{ mb: 2, mt: 2 }}>
                 <Typography>
-                  <RouteIcon /> Distance: {singleEvent.distance} km
+                  <RouteIcon sx={{color: 'primary.main'}}/> Distance: {singleEvent.distance} km
                 </Typography>
               </Box>
 
@@ -142,7 +147,7 @@ export const EventPage: React.FC = () => {
                         borderColor: "primary.light",
                       }}
                     >
-                      <LocationOnIcon />
+                      <LocationOnIcon sx={{color: 'primary.main'}}/>
                       {"  "}
                       {`${location.firstLine}, ${location.city}, ${location.postcode}`}
                     </Typography>

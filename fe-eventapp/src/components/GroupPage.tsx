@@ -17,6 +17,7 @@ import { Box,  Container, styled, CardHeader, Card, Avatar,
  Typography, Button, AlertTitle, Alert, 
   Stack} from "@mui/material";
 import { Link } from "react-router-dom";
+import { NotFoundGroupPage } from "./NotFoundGroupPage";
 
 
 
@@ -33,10 +34,6 @@ export const GroupPage: React.FC = () => {
     return <div>Error: Invalid group ID</div>;
   }
 
-  // if() {
-  //   console.error("Group ID does not exist", groupId);
-  //   return <div>Error: Group ID does not exist</div>;
-  // }
 
   const { user, tokenExpiresAt } = useSelector(
     (state: RootState) => state.user
@@ -48,11 +45,7 @@ export const GroupPage: React.FC = () => {
   );
  
   const { pendingRequests, approvedMembers } = useSelector((state: RootState) => state.groupMembership);
-  console.log("pending >> ", pendingRequests)
-  console.log("approved members >> ", approvedMembers)
-
  
-
 
   //  Check whether token is expired and compare with current time
   const isTokenExpired = (tokenExpiresAt: string | null) => {
@@ -74,6 +67,12 @@ export const GroupPage: React.FC = () => {
       dispatch(fetchPendingRequests(numericGroupId));
     }
   }, [dispatch, tokenExpiresAt, numericGroupId]);
+
+
+  if(!loadingGroup && !singleGroup){
+    return <NotFoundGroupPage />
+  }
+
 
  
   //  check is user has pending request

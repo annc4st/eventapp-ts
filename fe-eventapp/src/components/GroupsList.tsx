@@ -27,7 +27,7 @@ export const GroupsList = () => {
 
   return (
     <>
-       <Grid container >
+       <Grid container spacing={5}>
        <Grid sx={{ mt: 2 }} size={{ xs: 12, sm: 8, md: 6 }} >
          <Typography
                       component="h1"
@@ -42,6 +42,12 @@ export const GroupsList = () => {
                     >
                       Groups
                     </Typography>
+
+                     {/* Modal only for small screens */}
+                     <Grid sx={{ display: { md: "none" } }}>
+              {/* <CreateGroupModal /> */}
+            </Grid>
+
        
       {groupsLoading && <Typography>Loading groups ...</Typography>}
 
@@ -55,7 +61,7 @@ export const GroupsList = () => {
     <>
           {groups.map((g) => {
             return (
-              <Grid key={g.id} sx={{mb: 2}}>
+              <Box key={g.id} sx={{mb: 2}}>
                  <Card  elevation={3}>
                   <CardHeader title={g.groupName}
                  
@@ -72,16 +78,22 @@ export const GroupsList = () => {
                 </Box>
              
                 </Card>
-              </Grid>
+              </Box>
             );
           })}
         </>
       )}
        </Grid>
-
+<Grid sx={{
+              display: { xs: "none", md: "flex", flexDirection: "column" },
+              mt:2
+            }}
+            size={{ md: 6 }}
+            >
       <Box>
         <CreateGroup />
       </Box>
+      </Grid>
       </Grid>
     </>
   );

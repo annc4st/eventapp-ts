@@ -12,7 +12,7 @@ import { useMediaQuery, useTheme } from "@mui/material";
 
 export const LocationsList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const theme = useTheme();
+  // const theme = useTheme();
  
 
   const { locations, loading, error } = useSelector(
@@ -104,8 +104,6 @@ export const LocationsList: React.FC = () => {
             </Box>
           </Grid>
         </Grid>
-
-        {/* <CreateLocationModal /> */}
       </>
     
   );
