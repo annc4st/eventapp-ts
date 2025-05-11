@@ -34,7 +34,6 @@ export const SignUpParticipant: React.FC<SignUpParticipantProps> = ({ eventId })
     dispatch(optimisticAdd(newParticipant));
     try {
       await dispatch(signUpForEvent(eventId));
-       
     } catch (error) {
       console.error(error);
  

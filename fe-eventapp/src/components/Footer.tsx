@@ -9,27 +9,29 @@ import { alpha, styled } from "@mui/material/styles";
 
 export const Footer = () => {
   return (
-    // <Box
+  
     <AppBar
       component="footer"
       enableColorOnDark
        position="relative"
       sx={{
- 
         boxShadow: 0,
-        bgcolor: "primary.light",
+        bgcolor: "transparent",
         backgroundImage: "none",
-        mt: "calc(var(--template-frame-height, 0px) + 28px)",
         padding: 0,
         width: "100%",  
-        mb: 4
       }}
     >
-      <Container maxWidth="lg" 
-      // sx={{ display: 'flex', flexDirection: "column", alignItems:"center"  }} 
-      >
+      <Container
+       maxWidth="lg"  
+       sx={{  bgcolor: "primary.light" }}
       
-            <Box sx={{ display: 'flex', flexDirection: "column", mt: 2}} >
+      //  sx={{ display: 'flex', flexDirection: "column", alignItems:"center"  }} 
+     >
+      
+            <Box sx={{ display: 'flex', 
+            flexDirection: "column", mt: 1
+            }} >
             <Typography variant="h6" gutterBottom sx={{ color: "text.primary"}}>
             <DirectionsRunIcon /> Plan2Meet 
             </Typography>
@@ -39,13 +41,7 @@ export const Footer = () => {
             </Box>
        
           <Box sx={{ display: 'flex', flexDirection: "row", alignItems:"center", gap: 2}} >
-              {/* <Typography variant="subtitle1" gutterBottom>
-                Links
-              </Typography> */}
-               {/* <Typography variant="h6" gutterBottom sx={{ color: "text.primary"}}>
-            <DirectionsRunIcon /> Plan2Meet 
-            </Typography> */}
-              <Link href="/"  sx={{ color: "text.primary"}}underline="hover" display="block">
+              <Link href="/"  sx={{ color: "text.primary"}} underline="hover" display="block">
                 Home
               </Link>
               <Link href="/events"  sx={{ color: "text.primary"}} underline="hover" display="block">
@@ -58,15 +54,13 @@ export const Footer = () => {
                 Venues
               </Link>
             </Box>
-        {/* <Divider sx={{ bgcolor: "white", my: 2 }} /> */}
-{/* align="center" */}
           <Box sx={{ display: 'flex', flexDirection: "column", mt: 2, mb: 2}} >
             <Typography variant="body2"   sx={{ color: "text.primary"}}>
               © {new Date().getFullYear()} Plan2Meet. All rights reserved.
             </Typography>
           </Box>
       </Container>
-    {/* </Box> */}
+
     </AppBar>
   );
 };

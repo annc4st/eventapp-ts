@@ -12,7 +12,7 @@ import { logoutUser } from "../store/userSlice";
 import { GroupNewsList } from "./GroupNewsList";
 // import {selectPendingRequests} from '../store/groupMembershipSlice'
  
-import Grid from "@mui/material/Grid2";
+
 import { Box,  Container, styled, CardHeader, Card, Avatar,
  Typography, Button, AlertTitle, Alert, 
   Stack} from "@mui/material";
@@ -33,6 +33,11 @@ export const GroupPage: React.FC = () => {
     return <div>Error: Invalid group ID</div>;
   }
 
+  // if() {
+  //   console.error("Group ID does not exist", groupId);
+  //   return <div>Error: Group ID does not exist</div>;
+  // }
+
   const { user, tokenExpiresAt } = useSelector(
     (state: RootState) => state.user
   );
@@ -41,7 +46,10 @@ export const GroupPage: React.FC = () => {
   const { singleGroup, members, loadingGroup, loadingMembers, error } = useSelector(
     (state: RootState) => state.singleGroup
   );
-  const { pendingRequests } = useSelector((state: RootState) => state.groupMembership);
+ 
+  const { pendingRequests, approvedMembers } = useSelector((state: RootState) => state.groupMembership);
+  console.log("pending >> ", pendingRequests)
+  console.log("approved members >> ", approvedMembers)
 
  
 
@@ -62,7 +70,7 @@ export const GroupPage: React.FC = () => {
     }
     if (numericGroupId > 0) {
       dispatch(fetchSingleGroup(numericGroupId));
-      dispatch(fetchApprovedMembers(numericGroupId));
+      dispatch(fetchGroupMembers(numericGroupId));
       dispatch(fetchPendingRequests(numericGroupId));
     }
   }, [dispatch, tokenExpiresAt, numericGroupId]);
@@ -73,6 +81,7 @@ export const GroupPage: React.FC = () => {
 
   // Check if user is already a member of the group ~ singlegroupSlice
   const isMember = members.some((member) => member.id === userId);
+
 
   // Check if user is logged in
   const isUserLogged = Boolean(user?.id);
@@ -106,6 +115,31 @@ export const GroupPage: React.FC = () => {
     }
   };
 
+
+  const renderUserStatus = () => {
+    if (!isUserLogged) {
+      return <Typography sx={{color: "text.primary"}}>Please log in.</Typography>;
+    }
+  
+    if (leaveSuccess) {
+      return <Typography sx={{color: "text.primary"}}>You have left the group</Typography>;
+    }
+  
+    if (isAdmin) {
+      return <Typography sx={{color: "text.primary"}}>Admin</Typography>;
+    }
+  
+    if (isMember && !leaveSuccess) {
+      return <Typography sx={{color: "text.primary"}}>Approved</Typography>;
+    }
+  
+    if (hasPendingRequest) {
+      return <Typography sx={{color: "text.primary"}}>Pending approval</Typography>;
+    }
+  
+    return <Typography sx={{color: "text.primary"}}>You are not a member.</Typography>;
+  };
+
   if (loadingGroup) return <div>Loading...</div>;
   if (error){
     return ( <Alert severity="error">
@@ -125,38 +159,12 @@ export const GroupPage: React.FC = () => {
             <Typography sx={{color: 'primary.main', mt: 2}}>Number of active members: {members.length}</Typography>
             </Box>
 
-            {/* Status of the user */}
-            <Stack direction="row"         
-               spacing={2} mb={2}
-            >
-              <Typography  sx={{color: "text.secondary"}}>Your status : </Typography>
-              {isAdmin && (
-                <Typography sx={{color: "text.primary"}}>
-                  Admin</Typography>
-              )}
-
-              {!leaveSuccess && isMember && !isAdmin && (
-                 <Typography sx={{color: "text.primary"}}>
-                  Approved</Typography>
-              )}
-
-              {leaveSuccess && (
-                <Typography sx={{color: "text.primary"}}>You have left the group</Typography>
-              )}
-
-              {hasPendingRequest && (
-                <Typography sx={{color: "text.primary"}}>
-                  Pending approval
-                </Typography>
-              )}
-              {!isMember && !hasPendingRequest && isUserLogged && !isAdmin && (
-                <Typography sx={{color: "text.primary" }}>You are not a member.</Typography>
-              )}
-              {!isUserLogged &&  <Typography sx={{color: "text.primary"}}>
-                Please log in.</Typography>}
+            <Stack direction="row" spacing={2} mb={2}>
+              <Typography sx={{color: "text.secondary"}}>Your status:</Typography>
+              {renderUserStatus()}
             </Stack>
 
-            {/* User left */}
+              {/* User left */}
 
             {/* Action Buttons */}
             <div className="group-actions">

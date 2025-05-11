@@ -17,6 +17,7 @@ export interface Group {
 export interface Member {
     id: number;
     email: string;
+    userId: number;
   }
 
 // Define the shape of the slice's state
@@ -91,6 +92,7 @@ const singleGroupSlice = createSlice(
             .addCase(fetchGroupMembers.fulfilled, (state, action) => {
                 state.loadingMembers = false;
                 state.members = action.payload;
+                // console.log("Group members from slice >> ",   state.members)
             })
             .addCase(fetchGroupMembers.rejected, (state, action) => {
                 state.loadingMembers = false;

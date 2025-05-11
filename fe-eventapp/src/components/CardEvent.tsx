@@ -42,7 +42,6 @@ export const CardEvent: React.FC<CardEventProps> = ({event, location}) => {
          </Avatar>
        }
           
-      //  title={event.name}
       title={
         <Tooltip title={event.name}>
           <span>{event.name}</span>

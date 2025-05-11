@@ -15,8 +15,8 @@ groupRouter.post("/:groupId/join", authenticateToken, requestJoin)
 groupRouter.get("/:groupId/members", getMembersByGroup); // add to groupslice
 groupRouter.post("/:groupId/invite", authenticateToken, adminInviteToJoin);
 groupRouter.patch("/:groupId/approve/:userId", authenticateToken, memberApprovedByAdmin);
-groupRouter.get("/:groupId/membership", authenticateToken, groupMembershipStats);
-groupRouter.get("/:groupId/pending-requests", authenticateToken, getPendingRequests);
+groupRouter.get("/:groupId/membership", groupMembershipStats);
+groupRouter.get("/:groupId/pending-requests", getPendingRequests);
 groupRouter.patch("/:groupId/reject/:userId", authenticateToken, rejectMember );
 groupRouter.delete("/:groupId/leave", authenticateToken, leaveGroup)
 // if i want to remove from queue (db) >> delete

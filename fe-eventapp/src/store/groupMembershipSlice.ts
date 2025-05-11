@@ -72,7 +72,8 @@ export const fetchApprovedMembers = createAsyncThunk<
 {members: IGroupMembership[]}, // Expected return type
   number, // Payload type (groupId)
   { state: RootState }
-  >("groupMembership/fetchApprovedMembers",  async (groupId, {rejectWithValue, getState } ) => {
+  >("groupMembership/fetchApprovedMembers",  
+    async (groupId, {rejectWithValue, getState } ) => {
     try {
       const token = getState().user?.token;
       if (!token) return rejectWithValue("Unauthorized");
@@ -80,9 +81,11 @@ export const fetchApprovedMembers = createAsyncThunk<
       console.log(`Fetching approved members for group ${groupId}`);
   
 
-      const response = await api.get(`/groups/${groupId}/members`, {
+      const response = await api.get(`/groups/${groupId}/members`, 
+        {
         headers: { Authorization: `Bearer ${token}` },
-      });
+      }
+    );
       console.log("Fetched approved members(API Response):", response.data.members);
       return response.data.members;  
 
@@ -270,13 +273,14 @@ const groupMembershipSlice = createSlice({
           console.log("Updated Redux state with pending requests:", state.pendingRequests);
         })
 
-    // Approved members
+    // fetching Approved members
     .addCase(fetchApprovedMembers.pending, (state) => {
       state.loading = true;
     })
     .addCase(fetchApprovedMembers.fulfilled, (state, action) => {
       state.loading = false;
-      state.approvedMembers = action.payload.members;
+      state.approvedMembers = action.payload;
+      console.log("fetching approved members >> ", state.approvedMembers)
     })
     .addCase(fetchApprovedMembers.rejected, (state, action) => {
       state.loading = false;

@@ -74,9 +74,9 @@ export const Navbar = () => {
         boxShadow: 0,
         bgcolor: "transparent",
         backgroundImage: "none",
-        mt: "calc(var(--template-frame-height, 0px) + 28px)",
         padding: 0,
         width: "100%",
+        mt: 2
       }}
     >
       <Container maxWidth="lg">
@@ -176,6 +176,7 @@ export const Navbar = () => {
                   color="primary"
                   variant="text"
                   size="small"
+                  
                 >
                   Sign in
                 </Button>
@@ -203,11 +204,11 @@ export const Navbar = () => {
               anchor="top"
               open={open}
               onClose={toggleDrawer(false)}
-              PaperProps={{
-                sx: {
-                  top: "var(--template-frame-height, 0px)",
-                },
-              }}
+              // PaperProps={{
+              //   sx: {
+              //     top: "var(--template-frame-height, 0px)",
+              //   },
+              // }}
             >
               <Box sx={{ p: 2, backgroundColor: "background.default" }}>
                 <Box

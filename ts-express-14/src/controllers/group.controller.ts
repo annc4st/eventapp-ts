@@ -450,11 +450,11 @@ export const groupMembershipStats = async (
     // console.log("Group admin ID from DB >>", groupExists.adminId);
 
     //  Check if requester is the group admin
-    if (groupExists.adminId !== adminId) {
-      return res.status(403).json({
-        error: "Only the admin can check membership status for this group",
-      });
-    }
+    // if (groupExists.adminId !== adminId) {
+    //   return res.status(403).json({
+    //     error: "Only the admin can check membership status for this group",
+    //   });
+    // }
 
     const stats = await prisma.groupMembership.findMany({
       where: {

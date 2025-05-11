@@ -24,6 +24,7 @@
     "axios": "^1.7.9",
     "formik": "^2.4.6",
     "framer-motion": "^12.6.3",
+    "motion": "^12.10.0",
     "postcode-validator": "^3.10.2",
     "radix-ui": "^1.1.2",
     "react": "^18.3.1",

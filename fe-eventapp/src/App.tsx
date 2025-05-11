@@ -22,6 +22,8 @@ import { AppDispatch } from "./store/store";
 import { Container } from "@mui/material";
 import { ThemeProvider } from './context/ThemeContext';
 import { Layout } from "./components/Layout";
+import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
 
 
 function App() {
@@ -38,7 +40,7 @@ function App() {
       <Provider store={store}>
         <ThemeProvider>
          
-            {/* <Navbar /> */}
+           
             <Routes>
             <Route element={<Layout />}>
               <Route path="/login" element={<Login />} />
@@ -56,10 +58,11 @@ function App() {
                 <GroupAdmin />
               // </ProtectedRoute>
               } />
+      
               <Route path="/unauthorized" element={<div>🚫 You are not allowed here</div>} />
               </Route>
             </Routes>
-            {/* <Footer /> */}
+       
         </ThemeProvider>
       </Provider>
 
