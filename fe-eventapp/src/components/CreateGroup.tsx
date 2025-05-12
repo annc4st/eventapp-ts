@@ -83,7 +83,7 @@ export const CreateGroup: React.FC = () => {
             
             <FormControl>
             <Field as={TextField}
-            label="groupName"
+            label="Name"
               id="groupName"
               name="groupName"
               type="text"
@@ -98,7 +98,7 @@ export const CreateGroup: React.FC = () => {
                 
             {/* <label htmlFor="description">Description</label> */}
             <Field as={TextField}
-            label="description"
+            label="Description"
               id="description"
               name="description"
               type="text"

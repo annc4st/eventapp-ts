@@ -24,6 +24,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { Layout } from "./components/Layout";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
+import { CreateGroup } from "./components/CreateGroup";
 
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
               <Route path="/locations" element={<LocationsList />} />
               <Route path="/locations/create" element={<CreateLocation />} />
               <Route path="/groups" element={<GroupsList />} />
+              <Route path="/groups/create" element={<CreateGroup />} />
               <Route path="/groups/:groupId" element={<GroupPage />} />
               <Route path="/groups/:groupId/admin" element={
                 // <ProtectedRoute isAllowed={isAdmin}>
