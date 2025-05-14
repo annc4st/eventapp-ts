@@ -22,7 +22,6 @@ export const CreateGroup: React.FC = () => {
   if (!user) return null; // Prevent rendering if user is not logged in
 
   //   add user
-
   const initialValues: IGroupData = {
     groupName: "",
     description: "",

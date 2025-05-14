@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "leaflet/dist/leaflet.css";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { EventList } from "./components/EventList";

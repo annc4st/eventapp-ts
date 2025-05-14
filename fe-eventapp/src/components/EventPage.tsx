@@ -8,15 +8,19 @@ import { SignUpParticipant } from "./SignUpParticipant";
 import { fetchParticipants } from "../store/participantSlice";
 import { Comments } from "./Comments";
 
-import { Box, Container, Typography, Button } from "@mui/material";
+import { Box, Container, Typography, Button, Tooltip } from "@mui/material";
+import MuiLink from "@mui/material/Link";
 import Grid from "@mui/material/Grid2";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import MapIcon from '@mui/icons-material/Map';
 import GroupsIcon from "@mui/icons-material/Groups";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import RouteIcon from "@mui/icons-material/Route";
 import { NotFoundEventPage } from "./NotFoundEventPage";
+ 
+import { MapPreview } from "./MapPreview";
 
 
 
@@ -137,8 +141,16 @@ export const EventPage: React.FC = () => {
 
                 {location ? (
                   <Box sx={{ mb: 2, mt: 2 }}>
-                    <Typography sx={{ mb: 1, mt: 1 }}> Address </Typography>
+                    {/* <Typography sx={{ mb: 1, mt: 1 }}> Address</Typography> */}
 
+                  <Tooltip  title="Open this location in Google Maps" placement="top">
+                    <MuiLink 
+                    href={`https://www.google.com/maps/search/?api=1&query=${location.firstLine}+${location.city}+${location.postcode}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="hover"
+                    color="secondary.main"
+                    > 
                     <Typography
                       sx={{
                         border: 1,
@@ -151,10 +163,17 @@ export const EventPage: React.FC = () => {
                       {"  "}
                       {`${location.firstLine}, ${location.city}, ${location.postcode}`}
                     </Typography>
+                    </MuiLink>
+                    </Tooltip>
+                
                   </Box>
                 ) : (
                   <Typography>Loading location details..</Typography>
                 )}
+              </Box>
+              <Box>
+                {/* Map preview */}
+                <MapPreview lat={53.3251} lng={ -2.2367} locationName={`${location?.firstLine}`}/>
               </Box>
             </Grid>
 
