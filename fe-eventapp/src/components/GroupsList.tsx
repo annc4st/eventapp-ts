@@ -5,8 +5,7 @@ import { RootState, AppDispatch } from "../store/store";
 import { CreateGroup } from "./CreateGroup";
 import CreateGroupModal from "./CreateGroupModal";
 import { Link } from "react-router-dom";
-import { Box, Container, Typography, Button, Card, CardContent, CardHeader, IconButton } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Box, Container, Grid, Typography, Button, Card, CardContent, CardHeader, IconButton } from "@mui/material";
 import ShareIcon from '@mui/icons-material/Share';
 
 

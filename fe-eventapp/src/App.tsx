@@ -19,12 +19,9 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchAllUsers } from "./store/allUsersSlice";
 import { AppDispatch } from "./store/store";
- 
-import { Container } from "@mui/material";
 import { ThemeProvider } from './context/ThemeContext';
 import { Layout } from "./components/Layout";
-import { Navbar } from "./components/Navbar";
-import { Footer } from "./components/Footer";
+
 import { CreateGroup } from "./components/CreateGroup";
 
 

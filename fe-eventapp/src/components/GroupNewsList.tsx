@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { fetchGroupNewsByGroupId } from "../store/groupNewsSlice";
 import { Box, Container, Flex, Heading, Text } from "@radix-ui/themes";
-import Typography from "@mui/material/Typography";
+import {Typography} from "@mui/material";
 
 interface GroupNewsListProps {
   groupId: number; // or string, depending on your actual type

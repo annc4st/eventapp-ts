@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { RootState, AppDispatch } from "../store/store";
 import { fetchCommentsByEventId } from "../store/commentSlice";
 import { CreateComment } from "./CreateComment";
-import { Box, Button, Container, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Box, Container, Typography, Grid } from "@mui/material";
+
 
 
 
@@ -26,8 +26,8 @@ export const Comments: React.FC<CommentProps> = ({ eventId }) => {
     dispatch(fetchCommentsByEventId(eventId));
   }, [dispatch, eventId]);
 
-  if (loading) return <p>Loading comments...</p>;
-  if (error) return <p>Error loading comments: {error}</p>;
+  if (loading) return <Typography>Loading comments...</Typography>;
+  if (error) return <Typography>Error loading comments: {error}</Typography>;
 
   return (
  

@@ -1,6 +1,5 @@
 import React from 'react'
-import {  Box,  Paper, Container,
-    styled, CardHeader, Card, Avatar,
+import {  Box, CardHeader, Card, Avatar,
     CardContent, Typography, Button, 
     Tooltip} from "@mui/material";
     import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -10,7 +9,7 @@ import {  Box,  Paper, Container,
     interface Event {
         id: number,
         name: string,
-        distance: number,
+        distance?: number,
         date: string,
         locationId: number,
     }

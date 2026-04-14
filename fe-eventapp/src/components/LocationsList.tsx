@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchLocations } from "../store/locationSlice";
 import { RootState, AppDispatch } from "../store/store";
 import { CreateLocation } from "./CreateLocation";
-import { Box, Container, Typography, Button } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Box, Container, Typography, Grid} from "@mui/material";
 import CreateLocationModal from "./CreateLocationModal";
 import { useMediaQuery, useTheme } from "@mui/material";
 

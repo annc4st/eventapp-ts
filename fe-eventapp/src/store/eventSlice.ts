@@ -32,6 +32,7 @@ export const fetchEvents = createAsyncThunk(
     try {
       const response = await api.get("/events");
       return response.data; // Expecting an array of events
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       return rejectWithValue(
         error.response.data.message || "Failed to fetch events"
@@ -59,6 +60,7 @@ export const createEvent = createAsyncThunk(
 //               console.log("Posting Event:", eventData);
 // console.log("Sending POST request to:", `/events/`);
       return response.data; // Expecting the created event
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Error posting event:", error.response?.data);
       return rejectWithValue(
