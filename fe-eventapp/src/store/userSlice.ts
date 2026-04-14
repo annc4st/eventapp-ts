@@ -23,7 +23,7 @@ export const registerUser = createAsyncThunk(
   async ( userData: { email: string; password: string },
     { rejectWithValue }) => {
     try {
-      const response = await api.post("/auth/register", userData);
+      const response = await api.post("/auth/register", userData); //api.post("/auth/register", userData) move to authService 
       console.log("response register: ", response.data);
       return response.data; // Expecting JWT and user info
     } catch (error: any) {
