@@ -1,79 +1,68 @@
 import React from "react";
-import { Box, Container, Typography, Link, Divider } from "@mui/material";
+import { Box, Container, Typography, Link, Divider, Toolbar, AppBar } from "@mui/material";
 import Grid from '@mui/material/Grid2'
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
- 
+import { useTheme } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 
 
-const Footer = () => {
+
+export const Footer = () => {
   return (
-    <Box
+  
+    <AppBar
       component="footer"
+      enableColorOnDark
+       position="relative"
       sx={{
-        mt: 6,
-        py: 4,
-        mx: 2,
-        mr: 2, 
-        bgcolor: "primary.light",
+        boxShadow: 0,
+        bgcolor: "transparent",
+        backgroundImage: "none",
+        padding: 0,
+        width: "100%",  
       }}
     >
-      <Container sx={{ display: 'flex', flexDirection: "column", alignItems:"center"
-         
-        
-      }} >
+      <Container
+       maxWidth="lg"  
+       sx={{  bgcolor: "primary.main" }}
       
-            <Box sx={{ display: 'flex', flexDirection: "column", alignItems:"center"}} >
-            <Typography variant="h6" gutterBottom sx={{alignSelf: "center", color: "#fafafa"}}>
+      //  sx={{ display: 'flex', flexDirection: "column", alignItems:"center"  }} 
+     >
+      
+            <Box sx={{ display: 'flex', 
+            flexDirection: "column", mt: 1
+            }} >
+            <Typography variant="h6" gutterBottom sx={{ color: "#fff"}}>
             <DirectionsRunIcon /> Plan2Meet 
             </Typography>
-            <Typography variant="body2" sx={{ display: 'flex', flexDirection: "column"}}>
+            {/* <Typography variant="body2" sx={{ display: 'flex', flexDirection: "column"}}>
               Helping users organize their locations and events with ease.
-            </Typography>
+            </Typography> */}
             </Box>
        
-          <Box sx={{ display: 'flex', flexDirection: "row", alignItems:"center", gap: 2, mt: 2}} >
-            {/* <Typography variant="subtitle1" gutterBottom>
-              Links
-            </Typography> */}
-            <Link href="/" color="inherit" underline="hover" display="block">
-              Home
-            </Link>
-            <Link href="/events" color="inherit" underline="hover" display="block">
-              Events
-            </Link>
-            <Link href="/groups" color="inherit" underline="hover" display="block">
-              Groups
-            </Link>
-            <Link href="/locations" color="inherit" underline="hover" display="block">
-              Venues
-            </Link>
+          <Box sx={{ display: 'flex', flexDirection: "row", alignItems:"center", gap: 2}} >
+              <Link href="/" sx={{ color: "#fff"}} underline="hover" display="block">
+                Home
+              </Link>
+              <Link href="/events"  sx={{ color: "#fff"}}  underline="hover" display="block">
+                Events
+              </Link>
+              <Link href="/groups"  sx={{ color: "#fff"}} underline="hover" display="block">
+                Groups
+              </Link>
+              <Link href="/locations" sx={{ color: "#fff"}} underline="hover" display="block">
+                Venues
+              </Link>
             </Box>
-          {/* </Grid> */}
-
-          {/* Legal */}
-          {/* <Grid size={{ xs: 12, md: 6 }}> */}
-          {/* <Box sx={{ display: 'flex', flexDirection: "row", alignItems:"center", gap: 2}} >
-            <Typography variant="subtitle1" gutterBottom>
-              Legal
+          <Box sx={{ display: 'flex', flexDirection: "column", mt: 2, mb: 2}} >
+            <Typography variant="body2"   sx={{ color: "grey[300]"}}>
+              © {new Date().getFullYear()} Plan2Meet. All rights reserved.
             </Typography>
-            <Link href="/privacy" color="inherit" underline="hover" display="block">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" color="inherit" underline="hover" display="block">
-              Terms of Service
-            </Link>
-            </Box> */}
-          {/* </Grid>
-        </Grid> */}
-
-        <Divider sx={{ bgcolor: "white", my: 2 }} />
-
-        <Typography variant="body2" align="center" sx={{ opacity: 0.75 }}>
-          © {new Date().getFullYear()} Plan2Meet. All rights reserved.
-        </Typography>
+          </Box>
       </Container>
-    </Box>
+
+    </AppBar>
   );
 };
 
-export default Footer;
+

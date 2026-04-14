@@ -95,8 +95,8 @@ export const UpdateEvent: React.FC = () => {
       ),
     ticketPrice: number()
       .min(0, "Ticket price must be a positive number")
-      .required("Ticket price is required")
-      .positive(),
+      .required("Ticket price is required"),
+      // .positive(),
     locationId: number().required("Location is required"),
   });
 

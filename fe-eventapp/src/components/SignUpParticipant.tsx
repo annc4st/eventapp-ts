@@ -34,7 +34,6 @@ export const SignUpParticipant: React.FC<SignUpParticipantProps> = ({ eventId })
     dispatch(optimisticAdd(newParticipant));
     try {
       await dispatch(signUpForEvent(eventId));
-       
     } catch (error) {
       console.error(error);
  
@@ -48,7 +47,7 @@ export const SignUpParticipant: React.FC<SignUpParticipantProps> = ({ eventId })
         onClick={handleSignUp} disabled={!user || isAlreadySignedUp} 
         startIcon={<DirectionsRunIcon />}
         >
-           {isAlreadySignedUp ? 'Already Registered' : 'Sign Up'}
+           {isAlreadySignedUp ? 'Registered' : 'Sign Up'}
         </Button>
         </Box>
   );

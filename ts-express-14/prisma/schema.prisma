@@ -11,6 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+
 }
 
 model User {
@@ -51,6 +52,8 @@ model Address {
   firstLine String
   city      String
   postcode  String
+  latitude    Float?
+  longitude   Float?
   events    Event[] // Optional: for a back-reference
 
   @@unique([firstLine, city, postcode]) // Compound uniqueness

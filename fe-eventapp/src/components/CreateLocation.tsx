@@ -9,7 +9,7 @@ import { postcodeValidator } from "postcode-validator";
 import { optimisticAdd, createLocation } from "../store/locationSlice";
 import { AppDispatch, RootState } from "../store/store";
 
-import { Box, Button, Container, FormControl, TextField,
+import { Button, FormControl, TextField,
   Typography } from "@mui/material";
 
 
@@ -59,7 +59,7 @@ export const CreateLocation: React.FC = () => {
               loc.postcode?.toLowerCase().replace(/\s/g, "") === value.toLowerCase().replace(/\s/g, "")
           );
         }
-      ),
+      ),     // onClick={() => handleApprove(request.userId)}
   });
 
   const handleSubmit = async (

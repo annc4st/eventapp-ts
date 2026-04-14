@@ -106,7 +106,7 @@ export const CreateEvent: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{ mb: 4 }}>
       <Typography
         component="h1"
         variant="h3"
@@ -261,78 +261,23 @@ export const CreateEvent: React.FC = () => {
         )}
       </Formik>
 
-      <Box  
-      sx={{display: "flex", flexDirection: "column", 
-        alignItems: "center", 
-        width: "100%", maxWidth: { md: "50%" }, 
-        gap: 2,
-        mt: 2
-      }}
+      <Box
+        sx={{
+          display: "flex", flexDirection: "column",
+          alignItems: "center",
+          width: "100%", maxWidth: { md: "50%" },
+          gap: 2,
+          mt: 2
+        }}
       >
         <Typography>
           If you cannot find the location{" "}
-          {/* <Link
-            to={"/create-location"}
-            style={{ textDecoration: "none", color: "#3698ad" }}
-          >
-            Add Location
-          </Link> */}
-           
+
+
         </Typography>
-  
-      <CreateLocationModal />
+
+        <CreateLocationModal />
       </Box>
     </Container>
   );
 };
-
-// without MUI
-/* return (
-  <div>
-    { user ? (
-    <h3> Create new event</h3>
-    <Formik
-      initialValues={initialValues}
-      validationSchema={eventSchema}
-      onSubmit={handleSubmit}
-    >
-      {({ isSubmitting }) => (
-      <Form>
-          <label htmlFor="name">Event Name</label>
-          <Field id="name" name="name" placeholder="Event name" />
-          <ErrorMessage name="name" component="div" className="error" />
-          <label htmlFor="distance">Distance</label>
-          <Field type="number" id="distance" name="distance" placeholder="Distance" />
-          <ErrorMessage name="distance" component="div" className="error" />
-          
-          <label htmlFor="date">Date</label>
-          <Field type="datetime-local" id="date" name="date" placeholder="date" />
-          <ErrorMessage name="date" component="div" className="error" />
-
-          <label htmlFor="ticketPrice">TicketPrice</label>
-          <Field type="number"  id="ticketPrice" name="ticketPrice" placeholder="ticketPrice" />
-          <ErrorMessage name="ticketPrice" component="div" className="error" />
-
-          <label htmlFor="locationId">Choose location</label>
-          <Field  type="number" as="select" id="locationId" name="locationId" placeholder="Location" >
-          <option value="" label="Select Location" />
-          {locations.map((location) => (
-            <option key={location.id} value={location.id}>
-              {`${location.firstLine}, ${location.city} ${location.postcode}`}
-            </option>
-          ))}
-          </Field>
-          <ErrorMessage name="locationId" component="div" className="error" />
-
-          <button type="submit" disabled={isSubmitting || locationsLoading}> {isSubmitting ? "Submitting..." : "Submit"}</button> 
-      </Form>
-      )}
-
-    </Formik>
-    <div><p>
-            If you cannot find the location, <Link to={"/create-location"}>Add Location</Link>
-          </p></div>
-  </div>
-);
-};
-**/

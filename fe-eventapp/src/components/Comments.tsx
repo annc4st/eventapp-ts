@@ -34,26 +34,26 @@ export const Comments: React.FC<CommentProps> = ({ eventId }) => {
     <Container maxWidth="lg" >
       <Grid container spacing={2}>
        <Grid size={{xs: 12, md: 6}}>
-      <Typography variant="h4" sx={{ color: 'secondary.dark'}}
+      <Typography variant="h4" sx={{ color: 'primary.light'}}
       >Comments</Typography>
 
 
       {comments.length > 0 ? (
         comments.map((c) => (
           <Box key={c.id} sx={{ mb: 2, mt: 2,
-            border: '1px', borderRadius: '8px', bgcolor:'secondary.light', padding: '8px'}}>
+            border: '1px', borderRadius: '8px', bgcolor:'background.paper', padding: '8px'}}>
              <Box sx={{ mb: 2 }}>
-              <Typography  color='secondary'>{c.content}</Typography></Box>
+              <Typography  color='text' >{c.content}</Typography></Box>
 
              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography sx={{color: 'secondary.main', fontSize: '12px', fontStyle: 'oblique'}}>{c.partEmail}</Typography>
-            <Typography sx={{color: 'secondary.main', fontSize: '12px', pr: '16px', fontStyle: 'oblique'}}>{new Date(c.createdAt).toLocaleDateString()}</Typography>
+            <Typography sx={{color: 'text.secondary', fontSize: '12px', fontStyle: 'oblique'}}>{c.partEmail}</Typography>
+            <Typography sx={{color: 'primary.main', fontSize: '12px', pr: '16px', fontStyle: 'oblique'}}>{new Date(c.createdAt).toLocaleDateString()}</Typography>
             </Box>
           </Box>
         ))
       ) : (
         <Box sx={{ mb: 2, mt: 2,
-        borderRadius: '8px', bgcolor:'secondary.light', padding: '8px'}}>
+        borderRadius: '8px',  bgcolor:'background.paper', padding: '8px'}}>
         <Typography>No comments yet. Be the first to comment!</Typography>
         </Box>
       )}
@@ -61,8 +61,7 @@ export const Comments: React.FC<CommentProps> = ({ eventId }) => {
 
       {user ? ( <CreateComment eventId={eventId} />
       ) : (
-        <Typography sx={{color: 'secondary.main', 
-          border: 1, borderRadius: '8px', borderColor: "primary.light", padding: '8px'
+        <Typography sx={{  border: 1, borderRadius: '8px', borderColor: "primary.light", padding: '8px'
         }}>
           You need to <Link to={`/login`} style={{textDecoration: 'none', color:'#3698ad'}}
          >sign in</Link> to post a comment</Typography>

@@ -6,6 +6,9 @@ import { object, string } from "yup";
 import { Formik, FormikHelpers, Form, Field, ErrorMessage } from "formik";
 import { optimisticAdd, createGroup } from "../store/groupSlice";
 import { RootState, AppDispatch } from "../store/store";
+import { Button, FormControl, TextField,
+  Typography } from "@mui/material";
+
 
 interface IGroupData {
   groupName: string;
@@ -19,7 +22,6 @@ export const CreateGroup: React.FC = () => {
   if (!user) return null; // Prevent rendering if user is not logged in
 
   //   add user
-
   const initialValues: IGroupData = {
     groupName: "",
     description: "",
@@ -61,37 +63,57 @@ export const CreateGroup: React.FC = () => {
 
   return (
     <>
+    <Typography
+              component="h2"
+              variant="h3"
+              sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2rem)", color:'primary.dark' }}
+            >Add New Group</Typography>
+     
       <Formik
         initialValues={initialValues}
         validationSchema={groupSchema}
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
-          <Form>
-            <label htmlFor="groupName">Name</label>
-            <Field
+          <Form style={{display:'flex', flexDirection: "column", 
+            marginTop: "16px", gap: "16px"}} >
+            {/* <label htmlFor="groupName">Name</label> */}
+            
+            
+            <FormControl>
+            <Field as={TextField}
+            label="Name"
               id="groupName"
               name="groupName"
-              placeholder= 'i.e. "Fast Runners" '
+              type="text"
+                          fullWidth
+                          variant="outlined"
+                          required
             />
-            <ErrorMessage name="groupName" 
+            <ErrorMessage 
+            name="groupName" 
                 component="div" className="error" />
+                </FormControl>
                 
-            <label htmlFor="description">Description</label>
-            <Field
+            {/* <label htmlFor="description">Description</label> */}
+            <Field as={TextField}
+            label="Description"
               id="description"
               name="description"
-              placeholder="Describe your group"
+              type="text"
+              fullWidth
+              variant="outlined"
+              required
             />
             <ErrorMessage
               name="description"
               component="div"
               className="error"
             />
-            <button type="submit" disabled={isSubmitting}>
+            <Button variant="contained"  type="submit" disabled={isSubmitting}>
               {" "}
               {isSubmitting ? "Submitting..." : "Submit"}
-            </button>
+            </Button>
           </Form>
         )}
       </Formik>

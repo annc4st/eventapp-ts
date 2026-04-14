@@ -12,7 +12,7 @@ import { useMediaQuery, useTheme } from "@mui/material";
 
 export const LocationsList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const theme = useTheme();
+  // const theme = useTheme();
  
 
   const { locations, loading, error } = useSelector(
@@ -25,14 +25,14 @@ export const LocationsList: React.FC = () => {
 
   return (
     
-      <Container >
+      <>
         <Grid container spacing={5}>
           <Grid sx={{ mt: 2 }} size={{ xs: 12, md: 6 }}>
             <Typography
               component="h1"
               variant="h3"
               sx={{
-                color: "primary.dark",
+                color: "secondary.main",
                 align: "left",
                 mb: 2,
                 fontSize: "clamp(2rem, 10vw, 2.15rem)",
@@ -62,26 +62,26 @@ export const LocationsList: React.FC = () => {
                         mt: 2,
                         border: "1px",
                         borderRadius: "8px",
-                        bgcolor: "secondary.light",
+                        bgcolor: "background.paper",
                         padding: "8px",
                       }}
                     >
                       <Typography
                         sx={{
-                          color: "secondary.main",
+                          color: "text.primary",
                           border: "1px",
                           borderRadius: "8px",
-                          bgcolor: "secondary.light",
+                          // bgcolor: "background.paper",
                         }}
                       >
                         {l.firstLine}
                       </Typography>
                       <Typography
                         sx={{
-                          color: "secondary.main",
+                          color: "text.primary",
                           border: "1px",
                           borderRadius: "8px",
-                          bgcolor: "secondary.light",
+                          // bgcolor: "background.paper",
                         }}
                       >
                         {l.city}, {l.postcode}
@@ -104,9 +104,7 @@ export const LocationsList: React.FC = () => {
             </Box>
           </Grid>
         </Grid>
-
-        {/* <CreateLocationModal /> */}
-      </Container>
+      </>
     
   );
 };
