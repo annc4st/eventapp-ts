@@ -3,7 +3,6 @@ import prisma from "../../prisma/client";
 import {validateUser,  validateEvent } from "../middlewares/validators";
 
 
-
 export const getAllEvents = async (
   req: Request,
   res: Response,
@@ -15,7 +14,7 @@ export const getAllEvents = async (
         location: true,
       },
     });
-    console.log("Retrieved events:", events);
+
     res.status(200).json(events);
   } catch (err) {
     console.error(err);
@@ -83,8 +82,12 @@ export const createEvent = async (
 ) => {
 
     const { name, date, distance, ticketPrice, locationId } = req.body;
-    // console.log("user found ?? ", req.user?.id)
-    const userId = req.user?.id;
+    console.log("user found ?? ", req.user?.id)
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+   const { id: userId } = req.user;
     
     const userExists = await validateUser(userId);
     if (!userExists) {
