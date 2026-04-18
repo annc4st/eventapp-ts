@@ -1,92 +1,75 @@
 import React from 'react'
-import {  Box,  Paper, Container,
-    styled, CardHeader, Card, Avatar,
-    CardContent, Typography, Button, 
-    Tooltip} from "@mui/material";
-    import LocationOnIcon from "@mui/icons-material/LocationOn";
-    import FavoriteIcon from "@mui/icons-material/Favorite";
-    import { Link } from "react-router-dom";
+import {
+  Box, CardHeader, Card, Avatar,
+  CardContent, Typography, Button,
+  Tooltip
+} from "@mui/material";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { Link } from "react-router-dom";
+import { Event} from "../types"; 
 
-    interface Event {
-        id: number,
-        name: string,
-        distance: number,
-        date: string,
-        locationId: number,
-    }
+interface CardEventProps {
+  event: Event;
+}
 
-    interface Location {
-      id: number;
-      firstLine: string;
-      city: string;
-      postcode: string;
-    }
 
-    interface CardEventProps {
-      event: Event;
-      location?: Location;  
-    }
-  
-
-export const CardEvent: React.FC<CardEventProps> = ({event, location}) => {
+export const CardEvent: React.FC<CardEventProps> = ({ event }) => {
   return (
-    <Card  elevation={3} 
-    // style={{minHeight: '200px'}} 
-   > 
-     <CardHeader
-       avatar={
-         <Avatar
-           sx={{ bgcolor: 'primary.light' }}
-           aria-label="category"
-         > {`${event.distance}`}
-         </Avatar>
-       }
-          
-      title={
-        <Tooltip title={event.name}>
-          <span>{event.name}</span>
-        </Tooltip>
-      }
-       
-   
-       slotProps = {{
-        title: {
-          sx: {
-            color: 'primary.main',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            maxWidth: '100%', // Optional: you can also set a specific width like '200px'
-          }
-
+    <Card elevation={3}
+    >
+      <CardHeader
+        avatar={
+          <Avatar
+            sx={{ bgcolor: 'primary.light' }}
+            aria-label="category"
+          > {event.distance ? event.distance : '?'}
+          </Avatar>
         }
-       }}
-       subheader={ new Date(event.date).toLocaleDateString()}
-     ></CardHeader>
 
-     <CardContent >
-       {location ? (
-         <Box sx={{alignItems: "center" }}>
-         <Typography variant="body2" sx={{ color: "text.primary" }} >
-           <LocationOnIcon sx={{color: "secondary.main"}}/>
-           {`${location.firstLine}, `}
-         </Typography>
-         <Typography sx={{color: "text.primary"}}
-         > {`${location.city}, ${location.postcode}`}
-         </Typography>
-         </Box>
-       ) : (
-         <Typography>Loading location details...</Typography>
-       )}
-     </CardContent>
-      {/* Flex container for button and icon */}
-       <Box sx={{ display: "flex", justifyContent: "space-between", p: 1 }}>
-         <Link to={`/events/${event.id}`}>
-           <Button size="medium">Go to Event</Button>
-         </Link>
-         <FavoriteIcon sx={{marginRight:2}}/>
-     </Box>
-   </Card>
+        title={
+          <Tooltip title={event.name}>
+            <span>{event.name}</span>
+          </Tooltip>
+        }
+
+        slotProps={{
+          title: {
+            sx: {
+              color: 'primary.main',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              maxWidth: '100%',
+            }
+
+          }
+        }}
+        subheader={new Date(event.date).toLocaleDateString()}
+      ></CardHeader>
+
+      <CardContent >
+        {location ? (
+          <Box sx={{ alignItems: "center" }}>
+            <Typography variant="body2" sx={{ color: "text.primary" }} >
+              <LocationOnIcon sx={{ color: "secondary.main" }} />
+              {`${event.location.firstLine}, `}
+            </Typography>
+            <Typography sx={{ color: "text.primary" }}
+            > {`${event.location.city}, ${event.location.postcode}`}
+            </Typography>
+          </Box>
+        ) : (
+          <Typography>Location to be determined</Typography>
+        )}
+      </CardContent>
+      <Box sx={{ display: "flex", justifyContent: "space-between", p: 1 }}>
+        <Link to={`/events/${event.id}`}>
+          <Button size="medium">Go to Event</Button>
+        </Link>
+        <FavoriteIcon sx={{ marginRight: 2 }} />
+      </Box>
+    </Card>
   )
 }
 

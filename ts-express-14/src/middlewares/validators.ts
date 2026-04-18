@@ -19,7 +19,6 @@ export const validateAddress = [
 ];
 
 
-//valudate user, event
 export const validateEvent = async (eventId: number) => {
     const event = await prisma.event.findUnique({ where: { id: eventId } });
     return event;

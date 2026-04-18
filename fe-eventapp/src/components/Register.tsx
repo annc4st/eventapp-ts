@@ -6,8 +6,8 @@ import { registerUser } from '../store/userSlice';
 import { RootState, AppDispatch } from '../store/store';
 import { useNavigate, Link } from "react-router-dom";
 
-import { Paper, Avatar, Box, TextField, 
-  Card, Stack, Button, Typography, Container, FormControl, FormLabel} from '@mui/material' // link
+import { TextField, 
+  Card, Stack, Button, Typography, FormControl, FormLabel} from '@mui/material' // link
 
 import { Link as MuiLink}  from '@mui/material';
 import { styled } from '@mui/material/styles';

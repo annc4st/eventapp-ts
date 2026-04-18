@@ -8,9 +8,8 @@ import { SignUpParticipant } from "./SignUpParticipant";
 import { fetchParticipants } from "../store/participantSlice";
 import { Comments } from "./Comments";
 
-import { Box, Container, Typography, Button, Tooltip } from "@mui/material";
+import { Box, Container, Typography, Button, Tooltip, Grid} from "@mui/material";
 import MuiLink from "@mui/material/Link";
-import Grid from "@mui/material/Grid2";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import LocationOnIcon from "@mui/icons-material/LocationOn";

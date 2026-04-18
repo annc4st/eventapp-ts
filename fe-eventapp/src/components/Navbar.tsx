@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../store/userSlice";
 import { RootState, AppDispatch } from "../store/store";
 
 import { useTheme } from "@mui/material/styles";
-import { Avatar, Button,  AppBar, Toolbar, Box, IconButton, Typography, Container,
+import { Avatar, Button,  AppBar, Toolbar, Box, IconButton, Container,
 } from "@mui/material";
 
 import GroupsIcon from "@mui/icons-material/Groups";
