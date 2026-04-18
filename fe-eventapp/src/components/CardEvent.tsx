@@ -7,27 +7,10 @@ import {
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Link } from "react-router-dom";
-
 import { Event} from "../types"; 
-
-// interface Event {
-//   id: number,
-//   name: string,
-//   distance?: number,
-//   date: string,
-//   locationId: number,
-// }
-
-// interface Location {
-//   id: number;
-//   firstLine: string;
-//   city: string;
-//   postcode: string;
-// }
 
 interface CardEventProps {
   event: Event;
-  // location?: Location;
 }
 
 
@@ -49,7 +32,6 @@ export const CardEvent: React.FC<CardEventProps> = ({ event }) => {
             <span>{event.name}</span>
           </Tooltip>
         }
-
 
         slotProps={{
           title: {

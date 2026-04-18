@@ -6,15 +6,10 @@ import { fetchCommentsByEventId } from "../store/commentSlice";
 import { CreateComment } from "./CreateComment";
 import { Box, Container, Typography, Grid } from "@mui/material";
 
-
-
-
 interface CommentProps {
     eventId: number;
   }
 
-
-  
 export const Comments: React.FC<CommentProps> = ({ eventId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.user);
