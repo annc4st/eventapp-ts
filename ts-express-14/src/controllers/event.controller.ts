@@ -10,7 +10,12 @@ export const getAllEvents = async (
   next: NextFunction
 ) => {
   try {
-    const events = await prisma.event.findMany();
+    const events = await prisma.event.findMany({
+      include: {
+        location: true,
+      },
+    });
+    console.log("Retrieved events:", events);
     res.status(200).json(events);
   } catch (err) {
     console.error(err);
@@ -26,6 +31,9 @@ export const getFutureEvents = async (
 ) => {
   try {
     const events = await prisma.event.findMany({
+      include: {
+        location: true,
+      },
       where: {
         date: {
           gte: new Date(),

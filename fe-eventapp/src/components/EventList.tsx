@@ -1,35 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
 import { Box, Typography, Grid } from "@mui/material";
-
 import CardEvent from "./CardEvent";
-import { getLocations } from "../services/locationService";
-import { getEvents } from "../services/eventService";
+import { useEvents } from "../hooks/useEvents";
 
 export const EventList = () => {
+
   const {
     data: events = [],
     isLoading: eventsLoading,
     error: eventsError,
-  } = useQuery({ queryKey: ["events"], queryFn: getEvents });
+  } = useEvents();
 
-  // Fetch locations
-  const {
-    data: locations = [],
-    isLoading: locationsLoading,
-    error: locationsError,
-  } = useQuery({ queryKey: ["locations"], queryFn: getLocations });
-
-  // Combined loading states and errors
-  const loading = eventsLoading || locationsLoading;
-  const error = eventsError || locationsError;
-
-  const getLocationDetails = (locationId: number) => {
-    return locations.find((location) => location.id === locationId);
-  };
-
-  if (loading)
+  if (eventsLoading)
     return <Typography color="text.secondary">Loading events...</Typography>;
-  if (error) return <Typography color="error">{error.message}</Typography>;
+  if (eventsError) return <Typography color="error">{eventsError.message}</Typography>;
   if (events.length === 0) return <Typography>No events available.</Typography>;
 
   return (
@@ -44,13 +27,6 @@ export const EventList = () => {
         Events
       </Typography>
 
-      <Typography
-        sx={{ color: "secondary.main", align: "left", mb: 2 }}
-        gutterBottom
-      >
-        Browse and sign up for upcoming events!
-      </Typography>
-
       <Box sx={{ flexGrow: 1 }}>
         <Grid
           container
@@ -58,12 +34,10 @@ export const EventList = () => {
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
           {events.map((event) => {
-            // const location = getLocationDetails(event.locationId);
             return (
               <Grid key={event.id} size={{ xs: 6, sm: 4, md: 4 }}>
                 <CardEvent
                   event={event}
-                  location={getLocationDetails(event.locationId)}
                 />
               </Grid>
             );

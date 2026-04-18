@@ -9,8 +9,9 @@ import { getLikesOfEvent, toggleLike } from '../controllers/likes.controller';
 
 const eventRouter = Router();
 
-eventRouter.get("/", getFutureEvents )
-eventRouter.get("/past", getAllEvents)
+// eventRouter.get("/", getFutureEvents )
+// eventRouter.get("/past", getAllEvents)
+eventRouter.get("/", getAllEvents )
 eventRouter.get("/:id", getSingleEvent)
 eventRouter.post("/", authenticateToken, createEvent ) //authenticateToken
 eventRouter.patch("/:id", authenticateToken, updateEvent)
