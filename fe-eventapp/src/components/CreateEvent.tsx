@@ -70,7 +70,7 @@ export const CreateEvent: React.FC = () => {
     ticketPrice: number()
       .min(0, "Ticket price must be a positive number")
       .required("Ticket price is required"), // ".positive," -- removed to allow 0 price
-      
+
     locationId: number().required("Location is required"),
   });
 
@@ -83,7 +83,7 @@ export const CreateEvent: React.FC = () => {
 
   const handleSubmit = async (
     values: CreateEventDto,
-    { setSubmitting, resetForm }: FormikHelpers<CreateEventDto>
+    { setSubmitting }: FormikHelpers<CreateEventDto>
   ) => {
     const parsedValues = {
       ...values,
@@ -107,6 +107,7 @@ export const CreateEvent: React.FC = () => {
 
   if (locationsLoading)
     return <Typography color="text.secondary">Loading locations...</Typography>;
+  
   if (locationsError) return <Typography color="error">{locationsError.message}</Typography>;
   if (locations.length === 0) return <Typography>No locations available.</Typography>;
 
@@ -156,11 +157,13 @@ export const CreateEvent: React.FC = () => {
                 variant="outlined"
                 required
               />
-              <ErrorMessage
-                name="name"
-                component="div"
-                style={{ color: "red" }}
-              />
+              <ErrorMessage name="name">
+                {(msg) => (
+                  <Typography color="error" variant="body2">
+                    {msg}
+                  </Typography>
+                )}
+              </ErrorMessage>
             </FormControl>
 
             <FormControl>
@@ -180,11 +183,13 @@ export const CreateEvent: React.FC = () => {
                 variant="outlined"
                 required
               />
-              <ErrorMessage
-                name="distance"
-                component="div"
-                style={{ color: "red" }}
-              />
+              <ErrorMessage name="distance">
+                {(msg) => (
+                  <Typography color="error" variant="body2">
+                    {msg}
+                  </Typography>
+                )}
+              </ErrorMessage>
             </FormControl>
             <FormControl>
               <Field
@@ -197,11 +202,14 @@ export const CreateEvent: React.FC = () => {
                 variant="outlined"
                 required
               />
-              <ErrorMessage
-                name="date"
-                component="div"
-                style={{ color: "red" }}
-              />
+              <ErrorMessage name="date">
+                {(msg) => (
+                  <Typography color="error" variant="body2">
+                    {msg}
+                  </Typography>
+                )}
+              </ErrorMessage>
+
             </FormControl>
             <FormControl>
               <Field
@@ -221,10 +229,14 @@ export const CreateEvent: React.FC = () => {
                 required
               />
               <ErrorMessage
-                name="ticketPrice"
-                component="div"
-                style={{ color: "red" }}
-              />
+                name="ticketPrice">
+                {(msg) => (
+                  <Typography color="error" variant="body2">
+                    {msg}
+                  </Typography>
+                )}
+              </ErrorMessage>
+
             </FormControl>
 
             <FormControl>
@@ -249,10 +261,14 @@ export const CreateEvent: React.FC = () => {
                 ))}
               </Field>
               <ErrorMessage
-                name="locationId"
-                component="div"
-                style={{ color: "red" }}
-              />
+                name="locationId">
+                {(msg) => (
+                  <Typography color="error" variant="body2">
+                    {msg}
+                  </Typography>
+                )}
+              </ErrorMessage>
+
             </FormControl>
 
             <Button
@@ -278,8 +294,6 @@ export const CreateEvent: React.FC = () => {
       >
         <Typography>
           If you cannot find the location{" "}
-
-
         </Typography>
 
         <CreateLocationModal />
