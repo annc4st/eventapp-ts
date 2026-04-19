@@ -57,8 +57,7 @@ export const createEvent = createAsyncThunk(
           headers: { Authorization: `Bearer ${token}` },
       }
       );
-//               console.log("Posting Event:", eventData);
-// console.log("Sending POST request to:", `/events/`);
+
       return response.data; // Expecting the created event
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

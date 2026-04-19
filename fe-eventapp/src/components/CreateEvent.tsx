@@ -1,18 +1,13 @@
-import React, { useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   Formik,
   FormikHelpers,
-  FormikProps,
-  Form,
   Field,
   ErrorMessage,
 } from "formik";
 import { object, string, number } from "yup";
-import { createEvent } from "../store/eventSlice";
-import { RootState, AppDispatch } from "../store/store";
-import { fetchLocations } from "../store/locationSlice";
+import { RootState } from "../store/store";
 import {
   Box,
   Button,
@@ -23,29 +18,28 @@ import {
   Typography,
 } from "@mui/material";
 import CreateLocationModal from "./CreateLocationModal";
+import { useLocations } from "../hooks/useLocations";
+import { CreateEventDto } from "../types";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createEventService } from "../services/eventService";
 
-interface EventData {
-  name: string;
-  distance?: number;
-  ticketPrice?: number;
-  date: string;
-  locationId: number;
-  userId?: number;
-}
 
 export const CreateEvent: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.user);
-  const {
-    locations,
-    loading: locationsLoading,
-    error: locationsError,
-  } = useSelector((state: RootState) => state.locations);
-  const navigate = useNavigate();
 
+  const queryClient = useQueryClient();
+
+  const createEventMutation = useMutation({
+    mutationFn: createEventService, // POST request
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] }); // Invalidate events query to refetch updated list
+    },
+  });
+
+  const navigate = useNavigate();
   if (!user) navigate("/login"); // Prevent rendering if user is not logged in
 
-  const initialValues: EventData = {
+  const initialValues: CreateEventDto = {
     name: "",
     distance: 0,
     ticketPrice: 0,
@@ -57,6 +51,7 @@ export const CreateEvent: React.FC = () => {
   const eventSchema = object().shape({
     name: string().required("Event name is required"),
     distance: number().required("Distance is required").positive(),
+
     date: string()
       .required("Start date is required")
       .test(
@@ -71,20 +66,24 @@ export const CreateEvent: React.FC = () => {
         currentDate.setHours(0, 0, 0, 0);
         return selectedDate >= currentDate; // Ensure the selected date is not in the past
       }),
+
     ticketPrice: number()
       .min(0, "Ticket price must be a positive number")
-      .required("Ticket price is required"), // ".positive()," -- removed to allow 0 price
+      .required("Ticket price is required"), // ".positive," -- removed to allow 0 price
+      
     locationId: number().required("Location is required"),
   });
 
-  // Fetch events when component mounts
-  useEffect(() => {
-    dispatch(fetchLocations());
-  }, [dispatch]);
+
+  const {
+    data: locations = [],
+    isLoading: locationsLoading,
+    error: locationsError
+  } = useLocations();
 
   const handleSubmit = async (
-    values: EventData,
-    { setSubmitting, resetForm }: FormikHelpers<EventData>
+    values: CreateEventDto,
+    { setSubmitting, resetForm }: FormikHelpers<CreateEventDto>
   ) => {
     const parsedValues = {
       ...values,
@@ -95,7 +94,8 @@ export const CreateEvent: React.FC = () => {
     console.log("Submitting parsed values:", parsedValues);
 
     try {
-      await dispatch(createEvent(values));
+      // await dispatch(createEvent(values)); --> useMutation from tanstack
+      await createEventMutation.mutateAsync(parsedValues);
       // await resetForm();
       navigate("/events");
       setSubmitting(false);
@@ -104,6 +104,12 @@ export const CreateEvent: React.FC = () => {
       setSubmitting(false);
     }
   };
+
+  if (locationsLoading)
+    return <Typography color="text.secondary">Loading locations...</Typography>;
+  if (locationsError) return <Typography color="error">{locationsError.message}</Typography>;
+  if (locations.length === 0) return <Typography>No locations available.</Typography>;
+
 
   return (
     <Container maxWidth="lg" sx={{ mb: 4 }}>

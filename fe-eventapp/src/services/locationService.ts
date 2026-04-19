@@ -1,5 +1,5 @@
 import api from "../utils/api";
-import { EventLocation } from "../types/eventLocation";
+import { EventLocation } from "../types";
 
 
 export const getLocations = async (): Promise<EventLocation[]> => {

@@ -1,2 +1,3 @@
-export * from "./Event";
-export * from "./EventLocation";
+export * from "./event";
+export * from "./eventLocation";
+export * from "./createEventDTO";

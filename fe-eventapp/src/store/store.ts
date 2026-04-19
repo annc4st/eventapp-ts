@@ -15,7 +15,6 @@ import allUsersReducer from './allUsersSlice'
 
  const store = configureStore({
     reducer: {
-      // user: persistedReducer,
       user: userReducer,
       users: allUsersReducer,
       events: eventReducer,
