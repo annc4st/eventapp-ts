@@ -1,10 +1,7 @@
-import React from "react";
 import { Box, Container, Typography, Link, Divider, Toolbar, AppBar } from "@mui/material";
-import Grid from '@mui/material/Grid2'
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
-import { useTheme } from "@mui/material/styles";
-import { alpha, styled } from "@mui/material/styles";
-
+// import { useTheme } from "@mui/material/styles";
+// import { alpha, styled } from "@mui/material/styles";
 
 
 export const Footer = () => {
@@ -25,8 +22,6 @@ export const Footer = () => {
       <Container
        maxWidth="lg"  
        sx={{  bgcolor: "primary.main" }}
-      
-      //  sx={{ display: 'flex', flexDirection: "column", alignItems:"center"  }} 
      >
       
             <Box sx={{ display: 'flex', 
@@ -35,9 +30,6 @@ export const Footer = () => {
             <Typography variant="h6" gutterBottom sx={{ color: "#fff"}}>
             <DirectionsRunIcon /> Plan2Meet 
             </Typography>
-            {/* <Typography variant="body2" sx={{ display: 'flex', flexDirection: "column"}}>
-              Helping users organize their locations and events with ease.
-            </Typography> */}
             </Box>
        
           <Box sx={{ display: 'flex', flexDirection: "row", alignItems:"center", gap: 2}} >

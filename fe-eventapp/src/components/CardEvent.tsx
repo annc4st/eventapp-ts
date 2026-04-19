@@ -42,7 +42,6 @@ export const CardEvent: React.FC<CardEventProps> = ({ event }) => {
               whiteSpace: 'nowrap',
               maxWidth: '100%',
             }
-
           }
         }}
         subheader={new Date(event.date).toLocaleDateString()}
