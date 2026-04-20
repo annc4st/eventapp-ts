@@ -1,13 +1,8 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { fetchSingleEvent } from "../store/singleEventSlice";
-import { RootState, AppDispatch } from "../store/store";
-import { SignUpParticipant } from "./SignUpParticipant";
-import { fetchParticipants } from "../store/participantSlice";
-import { Comments } from "./Comments";
-import { Box, Container, Typography, Button, Tooltip, Grid} from "@mui/material";
-import MuiLink from "@mui/material/Link";
+import { useSelector } from "react-redux";
+import { Box, Container, Typography, Button, Tooltip, Grid, Link as MuiLink } from "@mui/material";
+
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -16,59 +11,39 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import RouteIcon from "@mui/icons-material/Route";
 import { NotFoundEventPage } from "./NotFoundEventPage";
 import { MapPreview } from "./MapPreview";
+import { useSingleEvent } from "../hooks/useSingleEvent";
+import { useParticipants } from "../hooks/useParticipants";
+import {Event, EventLocation} from "../types";
+import { RootState } from "../store/store";
+import { SignUpParticipant } from "./SignUpParticipant";
+import { Comments } from "./Comments";
 
-// Old event page - to be refactored to use react-query and hooks for data fetching, and to add map preview and better error handling
+export const EventPage2: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const eventId = Number(id);
+    const { user } = useSelector((state: RootState) => state.user);
+    
+    const { data: event, isLoading: isEventLoading, error: eventError } = useSingleEvent(eventId);
+    const { data: participants, isLoading: isParticipantsLoading, error: participantsError } = useParticipants(eventId);
+// console.log("participants", participants)  
 
-export const EventPage: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { id } = useParams<{ id: string }>();
-  const eventId = Number(id);
-  const { user } = useSelector((state: RootState) => state.user);
+const participantCount = participants ? participants.length : 0;
 
-  const {
-    singleEvent,
-    loading: singleEventLoading,
-    error: singleEventError,
-  } = useSelector((state: RootState) => state.singleEvent);
+    const loading = isEventLoading || isParticipantsLoading;
+    const error = eventError || participantsError;
 
- 
-
-  const {
-    locations,
-    loading: locationsLoading,
-    error: locationsError,
-  } = useSelector((state: RootState) => state.locations);
-
-  const {
-    participants,
-    participantCount,
-    loading: participantLoading,
-    error: participantError,
-  } = useSelector((state: RootState) => state.participants);
-
-  // Fetch event when component mounts
-  useEffect(() => {
-    dispatch(fetchSingleEvent(eventId));
-    // dispatch(fetchLocations());
-    dispatch(fetchParticipants(eventId));
-  }, [dispatch, eventId]);
-
-  // Combine loading states and errors;
-  const loading = singleEventLoading || participantLoading;
-  const error = singleEventError || participantError;
-
-
-  if (!loading && !singleEvent) {
+ if (!loading && !event) {
     return < NotFoundEventPage />
   }
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+ if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <>
-      <Container maxWidth="lg">
-        {singleEvent && (
+
+    <Container maxWidth="lg">
+        {event && (
           <Grid container spacing={5}>
             <Grid size={{ xs: 12 }}>
               <Typography
@@ -76,13 +51,13 @@ export const EventPage: React.FC = () => {
                 gutterBottom
                 sx={{ mt: 2, color: "secondary.main" }}
               >
-                {singleEvent.name}
+                {event.name}
               </Typography>
 
-              {singleEvent?.userId === user?.id  && (
+              {event?.userId === user?.id  && (
                 <Box>
                   <Link
-                    to={`/events/${singleEvent.id}/update`}
+                    to={`/events/${event.id}/update`}
                     style={{ textDecoration: "none" }}
                   >
                     <Button> Update Event</Button>
@@ -96,7 +71,7 @@ export const EventPage: React.FC = () => {
               <Box sx={{ mb: 2 }}>
                 <Typography>
                   <CalendarMonthIcon sx={{color: 'primary.main'}} /> Date {"  "}
-                  {new Date(singleEvent.date).toLocaleDateString()}{" "}
+                  {new Date(event.date).toLocaleDateString()}{" "}
                 </Typography>
               </Box>
 
@@ -104,7 +79,7 @@ export const EventPage: React.FC = () => {
                 <Typography>
                   {" "}
                   <AccessTimeIcon sx={{color: 'primary.main'}} />{" "}
-                  {new Date(singleEvent.date)
+                  {new Date(event.date)
                     .toLocaleTimeString("en-US", {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -116,7 +91,7 @@ export const EventPage: React.FC = () => {
 
               <Box sx={{ mb: 2, mt: 2 }}>
                 <Typography>
-                  <RouteIcon sx={{color: 'primary.main'}}/> Distance: {singleEvent.distance} km
+                  <RouteIcon sx={{color: 'primary.main'}}/> Distance: {event.distance} km
                 </Typography>
               </Box>
 
@@ -127,13 +102,13 @@ export const EventPage: React.FC = () => {
                   Category: <DirectionsRunIcon />
                 </Typography>
 
-                {location ? (
+                {event.location ? (
                   <Box sx={{ mb: 2, mt: 2 }}>
-                    <Typography sx={{ mb: 1, mt: 1 }} variant="h6"> Address</Typography>
+                    <Typography sx={{ mb: 1, mt: 1 }}> Address</Typography>
 
                   <Tooltip  title="Open this location in Google Maps" placement="top">
                     <MuiLink 
-                    href={`https://www.google.com/maps/search/?api=1&query=${location.firstLine}+${location.city}+${location.postcode}`}
+                    href={`https://www.google.com/maps/search/?api=1&query=${event.location.firstLine}+${event.location.city}+${event.location.postcode}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     underline="hover"
@@ -149,7 +124,7 @@ export const EventPage: React.FC = () => {
                     >
                       <LocationOnIcon sx={{color: 'primary.main'}}/>
                       {"  "}
-                      {`${location.firstLine}, ${location.city}, ${location.postcode}`}
+                      {`${event.location.firstLine}, ${event.location.city}, ${event.location.postcode}`}
                     </Typography>
                     </MuiLink>
                     </Tooltip>
@@ -161,7 +136,7 @@ export const EventPage: React.FC = () => {
               </Box>
               <Box>
                 {/* Map preview */}
-                <MapPreview lat={53.3251} lng={ -2.2367} locationName={`${location?.firstLine}`}/>
+                <MapPreview lat={53.3251} lng={ -2.2367} locationName={`${event.location?.firstLine}`}/>
               </Box>
             </Grid>
 
@@ -202,7 +177,7 @@ export const EventPage: React.FC = () => {
                     borderColor: "primary.light",
                   }}
                 >
-                  £ {singleEvent.ticketPrice}{" "}
+                  £ {event.ticketPrice}{" "}
                 </Typography>
               </Box>
               <Box sx={{ mb: 2, mt: 2 }}>
@@ -215,7 +190,7 @@ export const EventPage: React.FC = () => {
                 </Typography>
 
                 {user ? (
-                  <SignUpParticipant eventId={singleEvent?.id ?? -1} />
+                  <SignUpParticipant eventId={event?.id ?? -1} />
                 ) : (
                   <Typography>
                     {" "}
@@ -231,6 +206,8 @@ export const EventPage: React.FC = () => {
       </Container>
 
       <Comments eventId={eventId} />
-    </>
+
+
+   </>
   );
-};
+}

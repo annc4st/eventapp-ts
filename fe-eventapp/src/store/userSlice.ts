@@ -102,7 +102,7 @@ const userSlice = createSlice({
         state.user = { id: action.payload.id, email: action.payload.email };
         state.token = action.payload.token;
         state.tokenExpiresAt = action.payload.expiresAt;  // <-- Store expiration time
-        console.log("Login success: User updated", state.user); // Debug log
+        console.log("Login success: User updated", state.token); // Debug log
         console.log("tokenExpiresAt ", state.tokenExpiresAt)
       })
       .addCase(loginUser.rejected, (state, action) => {

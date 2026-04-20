@@ -3,7 +3,8 @@ import "leaflet/dist/leaflet.css";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { EventList } from "./components/EventList";
-import { EventPage } from "./components/EventPage";
+// import { EventPage } from "./components/EventPage";
+import { EventPage2 } from "./components/EventPage2";
 import { CreateEvent } from "./components/CreateEvent";
 
 import { CreateLocation } from "./components/CreateLocation";
@@ -45,7 +46,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/events" element={<EventList />} />
-              <Route path="/events/:id" element={<EventPage />} />
+              <Route path="/events/:id" element={<EventPage2 />} />
               <Route path="/events/:id/update" element={<UpdateEvent />} />
               <Route path="/events/create" element={<CreateEvent />} />
               <Route path="/locations" element={<LocationsList />} />

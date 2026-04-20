@@ -1,29 +1,16 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchLocations } from "../store/locationSlice";
-import { RootState, AppDispatch } from "../store/store";
 import { CreateLocation } from "./CreateLocation";
-import { Box, Container, Typography, Grid} from "@mui/material";
+import { Box, Typography, Grid} from "@mui/material";
 import CreateLocationModal from "./CreateLocationModal";
-import { useMediaQuery, useTheme } from "@mui/material";
-
+import { useLocations } from "../hooks/useLocations";
 
 
 export const LocationsList: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  // const theme = useTheme();
- 
 
-  const { locations, loading, error } = useSelector(
-    (state: RootState) => state.locations
-  );
-
-  useEffect(() => {
-    dispatch(fetchLocations());
-  }, [dispatch]);
+  const {data: locations = [],
+    isLoading: locationsLoading,
+    error: locationsError} = useLocations();
 
   return (
-    
       <>
         <Grid container spacing={5}>
           <Grid sx={{ mt: 2 }} size={{ xs: 12, md: 6 }}>
@@ -44,13 +31,13 @@ export const LocationsList: React.FC = () => {
             <Grid sx={{ display: { md: "none" } }}>
               <CreateLocationModal />
             </Grid>
-            {loading && <Typography>Loading locations ...</Typography>}
-            {error && <Typography style={{ color: "red" }}>{error}</Typography>}
+            {locationsLoading && <Typography>Loading locations ...</Typography>}
+            {locationsError && <Typography style={{ color: "red" }}>{locationsError.message}</Typography>}
 
-            {!loading && !error && locations.length === 0 && (
+            {!locationsLoading && !locationsError && locations.length === 0 && (
               <Typography>No locations available.</Typography>
             )}
-            {!loading && !error && locations.length > 0 && (
+            {!locationsLoading && !locationsError && locations.length > 0 && (
               <>
                 {locations.map((l) => {
                   return (

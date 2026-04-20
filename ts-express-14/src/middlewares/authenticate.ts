@@ -25,8 +25,7 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
 
   try {
     // Verify the JWT token
-    const decoded = jwt.verify(token, jwtSecret) as { id: number; email: string };
-    // console.log("Token verified, user ID:", decoded.id);
+    const decoded = jwt.verify(token, jwtSecret ) as { id: number; email: string };
 
  //fetch usr from db
     const user = await prisma.user.findUnique({where: { id: decoded.id}});

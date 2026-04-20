@@ -10,10 +10,8 @@ export const signUpForEvent = async (
   next: NextFunction
 )  => {
      
-  const { eventId } = req.params; //id of the event
-  const userId = req.user?.id; // Assuming `req.user` is populated by authentication middleware
-  // checking whether user exists
-   
+  const { eventId } = req.params; 
+  const userId = req.user?.id; 
   const userExists = await validateUser(userId);
   if (!userExists) {
     return res.status(404).json({ error: "User not found" });
@@ -70,10 +68,20 @@ export const getParticipantsByEvent = async (
   }
 
   try {
-    const participants =  await prisma.participant.findMany({
-        where: { eventId: numericEventId},
-        include: { user: true },
-    });
+   const participants = await prisma.participant.findMany({
+  where: { eventId: numericEventId },
+  select: {
+    id: true,
+    eventId: true,
+    userId: true,
+    user: {
+      select: {
+        id: true,
+        email: true,
+      },
+    },
+  },
+});
     res.status(200).json(participants);
   } catch (err) {
     console.error("Error retrieving participants:", err);
@@ -81,6 +89,32 @@ export const getParticipantsByEvent = async (
     next(err);
   }
 }
+
+
+export const getParticipantsCountByEvent = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { eventId } = req.params;
+      const numericEventId = parseInt(eventId, 10);
+
+      if (isNaN(numericEventId)) {
+        return res.status(400).json({ error: "Invalid event ID format" });
+      }
+
+      const count = await prisma.participant.count({
+        where: { eventId: numericEventId },
+      });
+
+      res.status(200).json({ count });
+    } catch (err) {
+      console.error("Error retrieving participants count:", err);
+      res.status(500).json({ error: "Internal server error" });
+      next(err);
+    }
+  };
 
 // user cancels his particpation
 // userId is taken from auth token

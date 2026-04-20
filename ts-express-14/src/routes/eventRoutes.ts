@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {getAllEvents, getFutureEvents, getSingleEvent, createEvent, updateEvent} from '../controllers/event.controller'
 import { createComment, getComments  } from '../controllers/comment.controller';
 import { authenticateToken } from '../middlewares/authenticate';
-import { signUpForEvent, getParticipantsByEvent, unsignFromEvent } from '../controllers/participant.controller';
+import { signUpForEvent, getParticipantsByEvent, getParticipantsCountByEvent, unsignFromEvent } from '../controllers/participant.controller';
 
 import { getLikesOfEvent, toggleLike } from '../controllers/likes.controller';
 
@@ -23,6 +23,7 @@ eventRouter.get("/:eventId/comments", getComments)
 
 //particpants
 eventRouter.get("/:eventId/participants", getParticipantsByEvent);
+eventRouter.get("/:eventId/count", getParticipantsCountByEvent);
 eventRouter.post("/:eventId/participants", authenticateToken, signUpForEvent);
 eventRouter.delete("/:eventId/participants", authenticateToken, unsignFromEvent);// user cancels his particpation
 

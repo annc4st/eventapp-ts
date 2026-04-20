@@ -1,3 +1,5 @@
 export * from "./event";
 export * from "./eventLocation";
-export * from "./createEventDTO";
+export * from "./createEventDto";
+export * from "./createLocationDto";
+export * from "./participant";

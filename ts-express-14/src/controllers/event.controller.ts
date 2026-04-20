@@ -63,10 +63,14 @@ export const getSingleEvent = async (
     }
     const eventExists = await prisma.event.findUnique({
       where: { id: numericId },
+      include: {
+        location: true,
+      },
     });
     if (!eventExists) {
       return res.status(401).json({ error: "Invalid event id" });
     }
+
     res.status(200).json(eventExists);
   } catch (err) {
     console.error("Error retrieving event:", err);
