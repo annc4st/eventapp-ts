@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+/* import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { fetchSingleEvent } from "../store/singleEventSlice";
@@ -92,7 +92,7 @@ export const EventPage: React.FC = () => {
             </Grid>
 
             {/* Left Column: Event Details */}
-            <Grid size={{ xs: 12, md: 6 }}>
+          {/*  <Grid size={{ xs: 12, md: 6 }}>
               <Box sx={{ mb: 2 }}>
                 <Typography>
                   <CalendarMonthIcon sx={{color: 'primary.main'}} /> Date {"  "}
@@ -161,15 +161,15 @@ export const EventPage: React.FC = () => {
               </Box>
               <Box>
                 {/* Map preview */}
-                <MapPreview lat={53.3251} lng={ -2.2367} locationName={`${location?.firstLine}`}/>
+             {/*    <MapPreview lat={53.3251} lng={ -2.2367} locationName={`${location?.firstLine}`}/>
               </Box>
             </Grid>
 
 {/* Right Column:   Registration */}
 
-            <Grid size={{ xs: 12, md: 6 }}>
+            {/*   <Grid size={{ xs: 12, md: 6 }}>
               {/*Participants */}
-              {participantCount > 0 ? (
+           {/*      {participantCount > 0 ? (
                 <Box sx={{ mb: 2 }}>
                   <Typography>
                     {" "}
@@ -233,4 +233,4 @@ export const EventPage: React.FC = () => {
       <Comments eventId={eventId} />
     </>
   );
-};
+};*/}

@@ -68,12 +68,16 @@ export const getComments = async (req: Request, res: Response, next: NextFunctio
           }
         });
 
-        // Trim emails 
-        const trimmedComments = comments.map(comment => ({
-          ...comment,
-          partEmail:  comment.user?.email?.split('@')[0] || "Anonymous"
+        const response = comments.map((comment) => ({
+          id: comment.id,
+          content: comment.content,
+          createdAt: comment.createdAt,
+          eventId: comment.eventId,
+          userId: comment.userId,
+          authorName: comment.user?.email?.split("@")[0] ?? "Anonymous",
         }));
-        res.status(200).json(trimmedComments);
+
+        res.status(200).json(response);
     } catch (err) {
         console.error(err);
         res.status(400).json({ error: err });
