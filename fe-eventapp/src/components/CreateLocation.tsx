@@ -187,7 +187,6 @@ export const CreateLocation: React.FC = () => {
             <Button variant="contained"
               type="submit"
               disabled={isSubmitting || createLocationMutation.isPending || !isValid || !dirty}
-              // onClick={() => {if (!user) navigate("/login"); }}
             >
               {" "}
               {createLocationMutation.isPending ? "Submitting..." : "Submit"}

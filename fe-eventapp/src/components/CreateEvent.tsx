@@ -30,15 +30,14 @@ export const CreateEvent: React.FC = () => {
   const queryClient = useQueryClient();
 
   const createEventMutation = useMutation({
-    mutationFn: createEventService, // POST request
+    mutationFn: createEventService, // API function
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] }); // Invalidate events query to refetch updated list
     },
   });
 
   const navigate = useNavigate();
-  if (!user) navigate("/login"); // Prevent rendering if user is not logged in
-
+  if (!user) navigate("/login"); 
   const initialValues: CreateEventDto = {
     name: "",
     distance: 0,
@@ -69,7 +68,7 @@ export const CreateEvent: React.FC = () => {
 
     ticketPrice: number()
       .min(0, "Ticket price must be a positive number")
-      .required("Ticket price is required"), // ".positive," -- removed to allow 0 price
+      .required("Ticket price is required"),
 
     locationId: number().required("Location is required"),
   });
@@ -94,9 +93,7 @@ export const CreateEvent: React.FC = () => {
     console.log("Submitting parsed values:", parsedValues);
 
     try {
-      // await dispatch(createEvent(values)); --> useMutation from tanstack
       await createEventMutation.mutateAsync(parsedValues);
-      // await resetForm();
       navigate("/events");
       setSubmitting(false);
     } catch (error) {

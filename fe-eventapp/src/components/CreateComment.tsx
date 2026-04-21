@@ -1,29 +1,31 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Formik, FormikHelpers, Form,
   Field, ErrorMessage, } from "formik";
 import { object, string } from "yup";
-import { optimisticAdd, addComment } from "../store/commentSlice";
-import { RootState, AppDispatch } from "../store/store";
-import { Button, FormControl, FormLabel, TextField } from "@mui/material";
-
-
-interface ICommentData {
-  content: string;
-  eventId: number;
-  userId: number;
-}
+import { RootState } from "../store/store";
+import { Button, FormControl, FormLabel, TextField, Typography } from "@mui/material";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { CommentDto } from "../types";
+import { createCommentService } from "../services/commentService";
 
 interface CommentProps {
   eventId: number;
 }
 
 export const CreateComment: React.FC<CommentProps> = ({ eventId }) => {
-  const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.user);
 
-  if (!user) return null; // Prevent rendering if user is not logged in
+  if (!user) return null;
+  const queryClient = useQueryClient();
+  const createCommentMutation = useMutation({
+    mutationFn: createCommentService,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comments"] }); 
+    },
+  });
 
-  const initialValues: ICommentData = {
+
+  const initialValues: CommentDto = {
     content: "",
     eventId,
     userId: user?.id,
@@ -34,45 +36,44 @@ export const CreateComment: React.FC<CommentProps> = ({ eventId }) => {
   });
 
   const handleSubmit = async (
-    values: ICommentData,
-    { setSubmitting, resetForm }: FormikHelpers<ICommentData>
+    values: CommentDto,
+    { setSubmitting, resetForm }: FormikHelpers<CommentDto>
   ) => {
 
-    const tempId = Date.now(); // Generate a temporary unique ID
-    const tempUserEmail = user.email.split('@')[0]; // temporary author
-    //userId: tempUser,
+    const tempId = Date.now();  
+    const tempUserEmail = user.email.split('@')[0]; 
+ 
     const newComment = {
       id: tempId, 
-      partEmail: tempUserEmail, // Add partEmail
+      authorName: tempUserEmail,
       createdAt: new Date().toISOString(), 
       ...values
     };
 
     console.log("Crating comment : ", newComment)
 
-    // Optimistic update
-    dispatch(optimisticAdd(newComment));
     try {
-      await dispatch(addComment(newComment));
+      await createCommentMutation.mutateAsync(values);
       await resetForm();
       setSubmitting(false);
+
     } catch (error) {
-      console.error(error);
+      console.error("Error creating comment:", error);
       setSubmitting(false);
     }
   };
+
 
   return (
     <>
       {user && (
         <div>
-          {/* <h3>Post a Comment</h3> */}
           <Formik
             initialValues={initialValues}
             validationSchema={commentSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, isValid, dirty }) => (
               <Form style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <FormControl > 
                 <FormLabel htmlFor="content">Post Comment</FormLabel>
@@ -88,14 +89,18 @@ export const CreateComment: React.FC<CommentProps> = ({ eventId }) => {
                  required
                  />
                 <ErrorMessage
-                  name="content"
-                  component="div"
-                  style={{ color: "red" }}
-       
-                />
+                  name="content">
+                    {(msg) => (
+                  <Typography color="error" variant="body2">
+                    {msg}
+                  </Typography>
+                )}
+                 </ErrorMessage>
                     </FormControl>
-                <Button  variant="contained" type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Submitting..." : "Submit"}
+                <Button  variant="contained" type="submit" 
+                disabled={isSubmitting || createCommentMutation.isPending || !isValid || !dirty}
+                >
+                  {createCommentMutation.isPending ? "Submitting..." : "Submit"}
                 </Button>
               </Form>
             )}
