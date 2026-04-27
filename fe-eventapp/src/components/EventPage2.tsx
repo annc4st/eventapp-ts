@@ -13,7 +13,6 @@ import { NotFoundEventPage } from "./NotFoundEventPage";
 import { MapPreview } from "./MapPreview";
 import { useSingleEvent } from "../hooks/useSingleEvent";
 import { useParticipants } from "../hooks/useParticipants";
-import {Event, EventLocation} from "../types";
 import { RootState } from "../store/store";
 import { SignUpParticipant } from "./SignUpParticipant";
 import { Comments } from "./Comments";
@@ -25,7 +24,6 @@ export const EventPage2: React.FC = () => {
     
     const { data: event, isLoading: isEventLoading, error: eventError } = useSingleEvent(eventId);
     const { data: participants, isLoading: isParticipantsLoading, error: participantsError } = useParticipants(eventId);
-// console.log("participants", participants)  
 
 const participantCount = participants ? participants.length : 0;
 

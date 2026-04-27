@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate, } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -9,37 +10,61 @@ import { object, string } from "yup";
 import { postcodeValidator } from "postcode-validator";
 import { RootState } from "../store/store";
 import {
+  Box,
   Button, FormControl, TextField,
   Typography
 } from "@mui/material";
 import { createLocation } from "../services/locationService";
 import { useLocations } from "../hooks/useLocations";
-import { CreateLocationDto } from "../types";
+import { CreateLocationDto, EventLocation } from "../types";
 
 
 export const CreateLocation: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const queryClient = useQueryClient();
 
+  const { data: locations = [] } = useLocations();
+
   const createLocationMutation = useMutation({
     mutationFn: createLocation,
+
+    onMutate: async (newLoc) => {
+      await queryClient.cancelQueries({ queryKey: ['locations'] })
+      //Snapshot the previous value
+      const previousLocs = queryClient.getQueryData<EventLocation[]>(['locations'])
+      // Optimistically update to the new value
+      queryClient.setQueryData<EventLocation[]>(['locations'], (old = []) => [...old, newLoc as EventLocation])
+
+      // Return a result with the snapshotted value
+      return { previousLocs }
+    },
+    onError: (error, newLoc, context) => {
+      console.error("Error creating location:", error);
+
+      if (context?.previousLocs) {
+        queryClient.setQueryData(['locations'], context.previousLocs);
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["locations"] });
     },
   });
 
-  const { error: createError } = createLocationMutation; // server/API error
+  const {
+    error,
+    isPending,
+    isError,
+    isSuccess,
+    reset,
+  } = createLocationMutation; // server/API error
 
-  const { data: locations = [],
-    isLoading: locationsLoading,
-    error: locationsError 
-  } = useLocations();
 
   const navigate = useNavigate();
-  if (!user) {
-    navigate("/login");
-    return;
-    }
+  useEffect(() => {
+    if (!user) navigate("/login");
+  }, [user, navigate]);
+
+  if (!user) return null;
 
   const initialValues: CreateLocationDto = {
     firstLine: "",
@@ -70,13 +95,12 @@ export const CreateLocation: React.FC = () => {
         function (value) {
           const { firstLine, city } = this.parent;
 
-          if (locationsLoading) return true;
+          if (isPending) return true;
           if (!firstLine || !city || !value) return true;
 
           const normalizedFirstLine = normalizeText(firstLine);
           const normalizedCity = normalizeText(city);
           const normalizedPostcode = normalizePostcode(value);
-
 
           return !locations.some((loc) => {
             if (!loc.firstLine || !loc.city || !loc.postcode) return false;
@@ -124,6 +148,8 @@ export const CreateLocation: React.FC = () => {
             display: 'flex', flexDirection: "column",
             marginTop: "16px", gap: "16px"
           }}>
+
+            {isSuccess && !dirty && <Box><Typography> Submitted Successfully</Typography></Box>}
 
             <FormControl>
               <Field as={TextField}
@@ -186,17 +212,17 @@ export const CreateLocation: React.FC = () => {
             </FormControl>
             <Button variant="contained"
               type="submit"
-              disabled={isSubmitting || createLocationMutation.isPending || !isValid || !dirty}
+              disabled={isSubmitting || isPending || !isValid || !dirty}
             >
               {" "}
-              {createLocationMutation.isPending ? "Submitting..." : "Submit"}
+              {isPending ? "Submitting..." : "Submit"}
 
             </Button>
-{/* server error */}
-            {createError && (
+            {/* server error */}
+            {isError && (
               <Typography color="error">
-                {createError instanceof Error
-                  ? createError.message
+                {error
+                  ? error.message
                   : "Failed to create location"}
               </Typography>
             )}

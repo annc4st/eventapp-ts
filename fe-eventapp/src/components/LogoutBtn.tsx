@@ -11,7 +11,6 @@ export const LogoutBtn: React.FC = () => {
     // const { loading, error } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
   
-
   const handleLogout = async () => {
     try {
         await dispatch(logoutUser())
@@ -19,7 +18,6 @@ export const LogoutBtn: React.FC = () => {
     } catch (error) {
         console.log("Logout failed:", error);
     }
- 
   };
 
   return (

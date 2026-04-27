@@ -7,7 +7,7 @@ import { useLocations } from "../hooks/useLocations";
 export const LocationsList: React.FC = () => {
 
   const {data: locations = [],
-    isLoading: locationsLoading,
+    isPending: locationsPending,
     error: locationsError} = useLocations();
 
   return (
@@ -31,13 +31,13 @@ export const LocationsList: React.FC = () => {
             <Grid sx={{ display: { md: "none" } }}>
               <CreateLocationModal />
             </Grid>
-            {locationsLoading && <Typography>Loading locations ...</Typography>}
+            {locationsPending && <Typography>Loading locations ...</Typography>}
             {locationsError && <Typography style={{ color: "red" }}>{locationsError.message}</Typography>}
 
-            {!locationsLoading && !locationsError && locations.length === 0 && (
+            {!locationsPending && !locationsError && locations.length === 0 && (
               <Typography>No locations available.</Typography>
             )}
-            {!locationsLoading && !locationsError && locations.length > 0 && (
+            {!locationsPending && !locationsError && locations.length > 0 && (
               <>
                 {locations.map((l) => {
                   return (
