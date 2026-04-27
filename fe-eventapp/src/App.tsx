@@ -7,10 +7,10 @@ import { EventList } from "./components/EventList";
 import { EventPage2 } from "./components/EventPage2";
 import { CreateEvent } from "./components/CreateEvent";
 
-import { CreateLocation } from "./components/CreateLocation";
+import { CreateLocation } from "./components/locations/CreateLocation";
 import { Provider } from "react-redux";
 import store from "./store/store";
-import { LocationsList } from "./components/LocationsList";
+import { LocationsList } from "./components/locations/LocationsList";
 import { UpdateEvent } from "./components/UpdateEvent";
 import { GroupsList } from "./components/GroupsList";
 import { GroupPage } from "./components/GroupPage";

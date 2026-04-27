@@ -1,7 +1,7 @@
 import { CreateLocation } from "./CreateLocation";
 import { Box, Typography, Grid} from "@mui/material";
-import CreateLocationModal from "./CreateLocationModal";
-import { useLocations } from "../hooks/useLocations";
+import CreateLocationModal from "../CreateLocationModal";
+import { useLocations } from "../../hooks/useLocations";
 
 
 export const LocationsList: React.FC = () => {
